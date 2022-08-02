@@ -1,6 +1,7 @@
 from __future__ import annotations
 import copy
 import json
+import numpy as np
 import os
 
 
@@ -133,15 +134,26 @@ class BipartiteGraph:
         """        
         return copy.deepcopy(self)
 
-    def remove_edges_from(self, edge_subset: list):
-        """Remove all edges specified in edge_subset.
+    def remove_edges_at(self, edge_subset_idx: list):
+        """Remove all edges specified in edge_subset. Edge attributes are removed as well.
 
         Parameters
         ----------
-        edge_subset : list
-            Edges to remove.
-        """        
-        self.E = list(set(self.E).difference(set(edge_subset)))
+        edge_subset_idx : list
+            Indexes of edges to remove.
+        """       
+        # Mask
+        mask = np.zeros(self.number_of_edges()).astype(bool)
+        mask[edge_subset_idx] = True
+
+        # Filter edges and corresponding attributes
+        self.E = list(np.array(self.E)[~mask])
+        self.edge_attr = list(np.array(self.edge_attr)[~mask])
+
+    def add_edges_from(self, edge_subset: list, edge_attr: list = None, node_attr: dict = None):
+        # TODO: implement
+        self.E = list()
+        pass
 
     def number_of_edges(self) -> int:
         """Return number of edges in the graph.
