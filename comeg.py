@@ -29,13 +29,12 @@ if __name__ == '__main__':
     print(len(g.E))
     print(len(g.edge_attr))
 
-    edge_subset_idx = random.sample(range(m), k=int(TEST_SIZE * m))
-    g.remove_edges_at(edge_subset_idx)
+    train_g, test_g = g.train_test_split(test_size=TEST_SIZE)
     
-    print(f"Number of users: {len(g.V.get('left'))}")
-    print(f"Number of books: {len(g.V.get('right'))}")
-    print(f"Number of reviews: {len(g.E)}")
-    print(f"Number of edge attributes: {len(g.edge_attr)}")
+    print(f"Number of users in train-test: {len(train_g.V.get('left'))}-{len(test_g.V.get('left'))}")
+    print(f"Number of books in train-test: {len(train_g.V.get('right'))}-{len(test_g.V.get('right'))}")
+    print(f"Number of reviews in train-test: {len(train_g.E)}-{len(test_g.E)}")
+    print(f"Number of edge attributes in train-test: {len(train_g.edge_attr)}-{len(test_g.edge_attr)}")
 
     #g_test = BipartiteGraph()
     #g_test.add_edges_from(edge_subset)

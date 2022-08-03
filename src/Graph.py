@@ -1,8 +1,11 @@
 from __future__ import annotations
+
 import copy
 import json
 import numpy as np
 import os
+import random
+from typing import Tuple
 
 
 class BipartiteGraph:
@@ -132,28 +135,53 @@ class BipartiteGraph:
         -------
         BipartiteGraph deep copy
         """        
+        #TODO: Deepcopy needs to be faster
         return copy.deepcopy(self)
 
-    def remove_edges_at(self, edge_subset_idx: list):
-        """Remove all edges specified in edge_subset. Edge attributes are removed as well.
+    def train_test_split(self, test_size: float = 0.3) -> Tuple:
+        """Split graph into train and test subgraphs.
 
         Parameters
         ----------
-        edge_subset_idx : list
-            Indexes of edges to remove.
-        """       
+        test_size : float, optional
+            Proportion of edges to keep in test graph, by default 0.3
+
+        Returns
+        -------
+        Tuple
+            Tuple of `BipartiteGraph` corresponding to train and test subgraphs.
+        """        
+        m = self.number_of_edges()
+        train_g = self.copy()
+        test_g = self.copy()
+
+        # Sample edge indexes
+        edge_subset_idx = random.sample(range(m), k=int(test_size * m))
+        
         # Mask
         mask = np.zeros(self.number_of_edges()).astype(bool)
         mask[edge_subset_idx] = True
 
+        # Remove edges from train graph
+        train_g.remove_edges_at(mask)
+        
+        # Create test graph with remaining edges
+        test_g.remove_edges_at(~mask)
+
+        return train_g, test_g
+        
+
+    def remove_edges_at(self, mask: np.ndarray):
+        """Remove all edges according to mask. Edge attributes are removed as well.
+
+        Parameters
+        ----------
+        mask : np.ndarray
+            Mask with `True` values at index of edge to remove.
+        """       
         # Filter edges and corresponding attributes
         self.E = list(np.array(self.E)[~mask])
         self.edge_attr = list(np.array(self.edge_attr)[~mask])
-
-    def add_edges_from(self, edge_subset: list, edge_attr: list = None, node_attr: dict = None):
-        # TODO: implement
-        self.E = list()
-        pass
 
     def number_of_edges(self) -> int:
         """Return number of edges in the graph.
