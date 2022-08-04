@@ -6,6 +6,7 @@ import numpy as np
 import os
 import random
 from sknetwork.data.parse import from_edge_list
+from scipy import sparse
 from typing import Tuple
 
 
@@ -217,7 +218,7 @@ class BipartiteGraph:
 
         Returns
         -------
-        list
+        List
             List of neigbors for target node.
         """        
         if self.adjacency_csr is None:
@@ -227,13 +228,34 @@ class BipartiteGraph:
             self.names_col = bunch.names_col
         
         if transpose:
-            matrix = self.adjacency_csr.T
+            matrix = sparse.csr_matrix(self.adjacency_csr.T)
             idx = np.where(self.names_col == node)[0][0]
-            names = self.names_col
+            names = self.names_row
         else:
             matrix = self.adjacency_csr
             idx = np.where(self.names_row == node)[0][0]
-            names = self.names_row
+            names = self.names_col
 
-        return names[matrix.indices[matrix.indptr[idx]:matrix.indptr[idx + 1]]]
+        return list(names[matrix.indices[matrix.indptr[idx]:matrix.indptr[idx + 1]]])
         
+    def get_neighbors_2hops(self, node: str, transpose: bool = False) -> list:
+        """Get 2-hop neighbors of a node.
+
+        Parameters
+        ----------
+        node : str
+            Target node
+        transpose : bool, optional
+            If `True`, transpose the adjacency matrix, by default False
+
+        Returns
+        -------
+        List
+            List of 2-hops neighbors
+        """        
+        n_2hops = []
+        neighbors_1hop = self.get_neighbors(node, transpose)
+        for n in neighbors_1hop:
+            n_2hops += self.get_neighbors(n, ~transpose)
+        
+        return n_2hops
