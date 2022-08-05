@@ -1,3 +1,4 @@
+from re import sub
 from src.algorithms import AdamicAdar
 from src.graph import BipartiteGraph
 
@@ -40,6 +41,28 @@ if __name__ == '__main__':
     print(f"Number of books: {len(g.V.get('right'))}")
     print(f"Number of reviews: {len(g.E)}")
 
+    # Subgraph in vicinity of an edge
+    res = os.path.join(PATH_RES, 'adamic_adar.json')
+    results = json.load(open(res))
+
+    pred_scores, pred_edges = zip(*[(values[2], (values[0], values[1])) for _, values in results.items()])
+    max_score_edge = pred_edges[np.argmax(pred_scores)]
+    print(f'Predicted edge: {max_score_edge}')
+    subgraph = g.subgraph_vicinity(max_score_edge)
+    print(f"# nodes in subgraph: {len(subgraph.V['left'])}, {len(subgraph.V['right'])}")
+    print(f'# edges in subgraph: {len(subgraph.E)}')
+    print(f"# of edge attributes: {len(subgraph.edge_attr)}")
+    print(f"# of node attributes right: {len(subgraph.node_attr['right'])}")
+    raise Exception('end')
+
+    edge = g.E[3]
+    print(f'Edge: {edge}')
+    subgraph = g.subgraph_vicinity(edge)
+    print(f"# nodes in subgraph: {len(subgraph.V['left'])}, {len(subgraph.V['right'])}")
+    print(f'# edges in subgraph: {len(subgraph.E)}')
+    print(f"# of edge attributes: {len(subgraph.edge_attr)}")
+    print(f"# of node attributes right: {len(subgraph.node_attr['right'])}")
+    
     
     # Link prediction
     # ----------------------
