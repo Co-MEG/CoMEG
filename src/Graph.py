@@ -8,7 +8,8 @@ import random
 from sknetwork.data.parse import from_edge_list
 from scipy import sparse
 from typing import Tuple
-
+import time
+from tqdm import tqdm
 
 class BipartiteGraph:
     """Bipartite graph class.
@@ -295,3 +296,44 @@ class BipartiteGraph:
         except IndexError:
             print(f'u, v: {u}, {v}')
         return v in neighbors
+
+    def subgraph_vicinity(self, edge: Tuple) -> BipartiteGraph:
+        """Build subgraph in the vicinity of an edge (u, v). The subgraph is made of the edge itself, as well as all 
+        the edges (x, y) such that x is in N(u) and y is in N(v).
+
+        Parameters
+        ----------
+        edge : Tuple
+            Edge on which subgraph is built.
+
+        Returns
+        -------
+        BipartiteGraph
+            Subgraph 
+        """        
+        subgraph = BipartiteGraph()
+        u, v = edge[0], edge[1]
+
+        # Get subgraph nodes and node attributes
+        n_u = self.get_neighbors(u, transpose=False)
+        n_v = self.get_neighbors(v, transpose=True)
+        subgraph.V['left'] = n_u
+        subgraph.V['right'] = n_v
+        #subgraph.node_attr['left'] = {x: self.node_attr['left'].get(x) for x in n_u}
+        subgraph.node_attr['right'] = {x: self.node_attr['right'].get(x) for x in n_v}
+        
+        # Get subgraph edges and edge attributes
+        edges_u = set([(u, x) for x in n_u])
+        edges_v = set([(x, v) for x in n_v])
+        subgraph.E = list(edges_u.union(edges_v))
+        # TODO : retrieve edge information is too long
+        for e in tqdm(subgraph.E):
+            idx = np.where(np.array(self.E)==e)[0][0]
+            subgraph.edge_attr.append(self.edge_attr[idx])
+
+        # Build adjacency matrix of the subgraph
+        subgraph._build_csr()
+
+        assert(np.all([x in self.E for x in subgraph.E]))
+
+        return subgraph
