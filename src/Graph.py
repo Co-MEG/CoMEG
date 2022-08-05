@@ -32,6 +32,7 @@ class BipartiteGraph:
         self.node_attr = {'left': {}, 'right': {}}
         self.edge_attr = []
         self.adjacency_csr = None
+        self.degrees = {}
 
     def load_data(self, path: str, use_cache: bool = True):
         """Load data and save information as json object.
@@ -92,15 +93,29 @@ class BipartiteGraph:
             self.E = links
             self.node_attr = {'left': [], 'right': books}
             self.edge_attr = edge_attrs
+            self._build_csr()
 
             # Save json
             self._save_json(out_path)
             print(f"Saved data to '{out_path}'.")
+
         elif os.path.isdir(in_path_preproc):
             self._load_json(out_path)
+            self._build_csr()
             print(f"Loaded data from '{out_path}'.")
+
         else:
             raise FileExistsError(f"'use_cache is set to True but {in_path_preproc}' doest not exists.")
+
+    def _build_csr(self):
+        """Build csr adjacency matrix.
+        """        
+        bunch = from_edge_list(self.E, bipartite=True)
+        self.adjacency_csr = bunch.biadjacency
+        self.names_row = bunch.names_row
+        self.names_col = bunch.names_col
+        self.label2idx_rows = {lab: idx for idx, lab in enumerate(self.names_row)}
+        self.label2idx_cols = {lab: idx for idx, lab in enumerate(self.names_col)}
 
     def _load_json(self, path: str):
         """Load data from preprocessed json file.
@@ -173,7 +188,6 @@ class BipartiteGraph:
 
         return train_g, test_g
         
-
     def remove_edges_at(self, mask: np.ndarray):
         """Remove all edges according to mask. Edge attributes are removed as well.
 
@@ -184,6 +198,7 @@ class BipartiteGraph:
         """       
         # Filter edges and corresponding attributes
         self.E = list(np.array(self.E)[~mask])
+        self.adjacency_csr.data[mask] = 0
         self.edge_attr = list(np.array(self.edge_attr)[~mask])
 
     def number_of_edges(self) -> int:
@@ -220,23 +235,23 @@ class BipartiteGraph:
         -------
         List
             List of neigbors for target node.
-        """        
-        if self.adjacency_csr is None:
-            bunch = from_edge_list(self.E, bipartite=True)
-            self.adjacency_csr = bunch.biadjacency
-            self.names_row = bunch.names_row
-            self.names_col = bunch.names_col
-        
+        """                
         if transpose:
             matrix = sparse.csr_matrix(self.adjacency_csr.T)
-            idx = np.where(self.names_col == node)[0][0]
+            idx = self.label2idx_cols.get(node)
+            #idx = np.where(self.names_col == node)[0][0]
             names = self.names_row
         else:
             matrix = self.adjacency_csr
-            idx = np.where(self.names_row == node)[0][0]
+            idx = self.label2idx_rows.get(node)
+            #idx = np.where(self.names_row == node)[0][0]
             names = self.names_col
 
-        return list(names[matrix.indices[matrix.indptr[idx]:matrix.indptr[idx + 1]]])
+        neighbors = list(names[matrix.indices[matrix.indptr[idx]:matrix.indptr[idx + 1]]])
+        if node not in self.degrees:
+            self.degrees[node] = len(neighbors) # save degree of node
+        
+        return neighbors
         
     def get_neighbors_2hops(self, node: str, transpose: bool = False) -> list:
         """Get 2-hop neighbors of a node.
@@ -259,3 +274,24 @@ class BipartiteGraph:
             n_2hops += self.get_neighbors(n, ~transpose)
         
         return n_2hops
+
+    def has_edge(self, u: str, v: str) -> bool:
+        """Return `True` if (u, v) is an edge in the graph.
+
+        Parameters
+        ----------
+        u : str
+            Source node
+        v : str
+            Destination node
+
+        Returns
+        -------
+        bool
+            `True` if (u, v) is an edge.
+        """        
+        try:
+            neighbors = self.get_neighbors(u)
+        except IndexError:
+            print(f'u, v: {u}, {v}')
+        return v in neighbors
