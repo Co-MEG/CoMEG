@@ -1,7 +1,7 @@
 import numpy as np
-import itertools
 import random
 from tqdm import tqdm
+import time
 
 from src.graph import BipartiteGraph
 
@@ -26,7 +26,11 @@ class AdamicAdar:
         weight = 0
 
         for c in commons:
-            degree = len(g.get_neighbors(c))
+            if c in g.degrees:
+                degree = g.degrees.get(c)
+            else:
+                degree = len(g.get_neighbors(c))
+            
             if degree > 1:
                 weight += 1 / (np.log(degree))
             else:
@@ -34,6 +38,37 @@ class AdamicAdar:
         
         return weight
 
+    def predict_edges(self, g: BipartiteGraph, edges: list, transpose: bool = False) -> dict:
+        """Predict Adamic Adar index for selected edges.
+
+        Parameters
+        ----------
+        g : BipartiteGraph
+            Bipartite graph
+        edges : list
+            List of edges on which predict index
+        transpose : bool, optional
+            If `True`, transpose adjacency matrix, by default False
+
+        Returns
+        -------
+        dict
+            Scores for predicted edges. Each entry is a list [u, v, s], with (u, v) the edge and s the predicted score.
+        """        
+        cpt = 0
+        for e in tqdm(edges):
+            u, v = e[0], e[1]
+            
+            n_2hops = g.get_neighbors_2hops(u, transpose=transpose)
+            n_opp = g.get_neighbors(v, transpose=~transpose)
+            
+            score = self._compute_index(g, n_2hops, n_opp)
+            self.scores.update({cpt: (u, v, score)})
+            
+            cpt += 1
+
+        return self.scores
+    
     def predict_sample(self, g: BipartiteGraph, nodes: list, transpose: bool = False, alpha: float = 0.0001) -> dict:
         """Predict Adamic Adar index for sampled pairs of nodes.
 
@@ -70,9 +105,9 @@ class AdamicAdar:
         cpt = 0
         # Compute index
         for node in tqdm(nodes):
-            hops2 = g.get_neighbors_2hops(node, transpose)
+            n_2hops = g.get_neighbors_2hops(node, transpose)
             for i, opp_nodes in tqdm(enumerate(neighbs_opps)):
-                score = self._compute_index(g, hops2, opp_nodes)
+                score = self._compute_index(g, n_2hops, opp_nodes)
                 self.scores.update({cpt: (node, samp_opp_nodes[i], score)})
                 cpt += 1
         
