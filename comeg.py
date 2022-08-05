@@ -14,9 +14,9 @@ import matplotlib.pyplot as plt
 # Data path
 IN_PATH = 'goodreads_poetry'
 USE_CACHE = True
-TEST_SIZE = 0.1
-TRAIN_TEST_SPLIT = False
-PATH_RES = os.path.join(os.getcwd(), 'data', 'goodreads_poetry', 'result', 'adamic_adar.json')
+TEST_SIZE = 0.05
+TRAIN_TEST_SPLIT = True
+PATH_RES = os.path.join(os.getcwd(), 'data', 'goodreads_poetry', 'result')
 
 
 def plot_roc_auc(y_true, y_pred, ax):
@@ -51,12 +51,21 @@ if __name__ == '__main__':
         print(f'Number of right nodes used: {len(set([e[1] for e in test_g.E]))}')
 
     # Adamic Adar
-    """
     print('Adamic Adar index...')
     aa = AdamicAdar()
+
+    # predict edges
+    scores = aa.predict_edges(train_g, test_g.E, transpose=False)
+    print(f'Number of predictions: {len(scores)}')
+    # Save results for AA index
+    res = os.path.join(PATH_RES, 'adamic_adar_test_graph.json')
+    with open(res, "w") as f:
+        json.dump(scores , f) 
+
+    # predict nodes
+    """
     n_nodes_predict = 100
     first_node = g.V['left'][0]
-    
     if TRAIN_TEST_SPLIT:
         neighbors = train_g.get_neighbors(first_node)
         scores = aa.predict_sample(train_g, train_g.V['left'][:n_nodes_predict])
@@ -72,7 +81,7 @@ if __name__ == '__main__':
     # Evaluation
     # ----------
 
-    results = json.load(open(PATH_RES))
+    results = json.load(open(res))
 
     # ground truth label
     y_pred, y_true = zip(*[(values[2], g.has_edge(values[0], values[1])) for _, values in results.items()])
