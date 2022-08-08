@@ -34,6 +34,8 @@ class BipartiteGraph:
         self.edge_attr = []
         self.adjacency_csr = None
         self.degrees = {}
+        self.neighbors_2hops = {}
+        self.neighbors = {}
 
     def load_data(self, path: str, use_cache: bool = True):
         """Load data and save information as json object.
@@ -248,6 +250,9 @@ class BipartiteGraph:
             #idx = np.where(self.names_row == node)[0][0]
             names = self.names_col
 
+        #if node in self.neighbors:
+        #    neighbors = self.neighbors.get(node)
+        #else:
         neighbors = list(names[matrix.indices[matrix.indptr[idx]:matrix.indptr[idx + 1]]])
         if node not in self.degrees:
             self.degrees[node] = len(neighbors) # save degree of node
@@ -270,9 +275,13 @@ class BipartiteGraph:
             List of 2-hops neighbors
         """        
         n_2hops = []
-        neighbors_1hop = self.get_neighbors(node, transpose)
-        for n in neighbors_1hop:
-            n_2hops += self.get_neighbors(n, ~transpose)
+        if node in self.neighbors_2hops:
+            n_2hops = self.neighbors_2hops.get(node)
+        else:    
+            neighbors_1hop = self.get_neighbors(node, transpose)
+            for n in neighbors_1hop:
+                n_2hops += self.get_neighbors(n, ~transpose)
+            #self.neighbors_2hops[node] = n_2hops
         
         return n_2hops
 
@@ -299,7 +308,7 @@ class BipartiteGraph:
 
     def subgraph_vicinity(self, edge: Tuple) -> BipartiteGraph:
         """Build subgraph in the vicinity of an edge (u, v). The subgraph is made of the edge itself, as well as all 
-        the edges (x, y) such that x is in N(u) and y is in N(v).
+        the edges (y, x) such that x is in N(u) and y is in N(v).
 
         Parameters
         ----------
@@ -317,23 +326,20 @@ class BipartiteGraph:
         # Get subgraph nodes and node attributes
         n_u = self.get_neighbors(u, transpose=False)
         n_v = self.get_neighbors(v, transpose=True)
-        subgraph.V['left'] = n_u
-        subgraph.V['right'] = n_v
-        #subgraph.node_attr['left'] = {x: self.node_attr['left'].get(x) for x in n_u}
-        subgraph.node_attr['right'] = {x: self.node_attr['right'].get(x) for x in n_v}
+        subgraph.V['right'] = n_u
+        subgraph.V['left'] = n_v
+        subgraph.node_attr['right'] = {x: self.node_attr['right'].get(x) for x in n_u}
         
         # Get subgraph edges and edge attributes
         edges_u = set([(u, x) for x in n_u])
         edges_v = set([(x, v) for x in n_v])
         subgraph.E = list(edges_u.union(edges_v))
         # TODO : retrieve edge information is too long
-        for e in tqdm(subgraph.E):
-            idx = np.where(np.array(self.E)==e)[0][0]
-            subgraph.edge_attr.append(self.edge_attr[idx])
+        #for e in tqdm(subgraph.E):
+        #    idx = np.where(np.array(self.E)==e)[0][0]
+        #    subgraph.edge_attr.append(self.edge_attr[idx])
 
         # Build adjacency matrix of the subgraph
         subgraph._build_csr()
-
-        assert(np.all([x in self.E for x in subgraph.E]))
 
         return subgraph
