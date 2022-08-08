@@ -78,6 +78,14 @@ class FormalContext:
         
         return res
 
+    def _check_attr(self, attr: str):
+        if not attr in self.M2idx:
+            raise TypeError(f'Attribute {attr} is not known.')
+    
+    def _check_obj(self, obj: str) -> bool:
+        if not obj in self.G2idx:
+            raise TypeError(f'Object {obj} is not known.')
+
     def extension(self, attributes: list) -> list:
         """Return maximal set of objects which share ``attributes``.
 
@@ -95,6 +103,7 @@ class FormalContext:
         
         ext_is = set()
         for attr in attributes:
+            self._check_attr(attr)
             ext_i = set(self._deriv_operator(self.M2idx.get(attr), type='ext'))
             if len(ext_is) == 0:
                 ext_is.update(ext_i)
@@ -102,3 +111,29 @@ class FormalContext:
                 ext_is &= ext_i
         
         return list(ext_is)
+
+    def intention(self, objects: list) -> list:
+        """Return maximal set of attributes which share ``objects``.
+
+        Parameters
+        ----------
+        objects : list
+            Names of objects (subset of ``self.G``)
+
+        Returns
+        -------
+        list
+            List of attributes (subset of ``self.M``)
+        """        
+        self._build_obj_indx()
+
+        int_is = set()
+        for obj in objects:
+            self._check_obj(obj)
+            int_i = set(self._deriv_operator(self.G2idx.get(obj), type='int'))
+            if len(int_i) == 0:
+                int_is.update(int_i)
+            else:
+                int_is &= int_i
+
+        return list(int_is)
