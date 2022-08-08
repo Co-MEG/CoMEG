@@ -1,5 +1,6 @@
 from re import sub
 from src.algorithms import AdamicAdar
+from src.context import FormalContext
 from src.graph import BipartiteGraph
 
 from sknetwork.utils import get_neighbors as gn
@@ -40,40 +41,18 @@ if __name__ == '__main__':
     print(f"Number of users: {len(g.V.get('left'))}")
     print(f"Number of books: {len(g.V.get('right'))}")
     print(f"Number of reviews: {len(g.E)}")
-
-    # Subgraph in vicinity of an edge
-    res = os.path.join(PATH_RES, 'adamic_adar.json')
-    results = json.load(open(res))
-
-    pred_scores, pred_edges = zip(*[(values[2], (values[0], values[1])) for _, values in results.items()])
-    max_score_edge = pred_edges[np.argmax(pred_scores)]
-    print(f'Predicted edge: {max_score_edge}')
-    subgraph = g.subgraph_vicinity(max_score_edge)
-    print(f"# nodes in subgraph: {len(subgraph.V['left'])}, {len(subgraph.V['right'])}")
-    print(f'# edges in subgraph: {len(subgraph.E)}')
-    print(f"# of edge attributes: {len(subgraph.edge_attr)}")
-    print(f"# of node attributes right: {len(subgraph.node_attr['right'])}")
-    raise Exception('end')
-
-    edge = g.E[3]
-    print(f'Edge: {edge}')
-    subgraph = g.subgraph_vicinity(edge)
-    print(f"# nodes in subgraph: {len(subgraph.V['left'])}, {len(subgraph.V['right'])}")
-    print(f'# edges in subgraph: {len(subgraph.E)}')
-    print(f"# of edge attributes: {len(subgraph.edge_attr)}")
-    print(f"# of node attributes right: {len(subgraph.node_attr['right'])}")
     
     
     # Link prediction
     # ----------------------
-    if TRAIN_TEST_SPLIT:
-        print('Splitting graph into train-test...')
-        train_g, test_g = g.train_test_split(test_size=TEST_SIZE)
-        print(f'Number of reviews in test: {len(test_g.E)}')
-        print(f'Number of left nodes used: {len(set([e[0] for e in test_g.E]))}')
-        print(f'Number of right nodes used: {len(set([e[1] for e in test_g.E]))}')
+    #if TRAIN_TEST_SPLIT:
+    #    print('Splitting graph into train-test...')
+    #    train_g, test_g = g.train_test_split(test_size=TEST_SIZE)
+    #    print(f'Number of reviews in test: {len(test_g.E)}')
+    #    print(f'Number of left nodes used: {len(set([e[0] for e in test_g.E]))}')
+    #    print(f'Number of right nodes used: {len(set([e[1] for e in test_g.E]))}')
 
-    # Adamic Adar
+    """# Adamic Adar
     print('Adamic Adar index...')
     aa = AdamicAdar()
 
@@ -83,7 +62,7 @@ if __name__ == '__main__':
     # Save results for AA index
     res = os.path.join(PATH_RES, 'adamic_adar_test_graph.json')
     with open(res, "w") as f:
-        json.dump(scores , f) 
+        json.dump(scores , f) """
 
     # predict nodes
     """
@@ -104,16 +83,49 @@ if __name__ == '__main__':
     # Evaluation
     # ----------
 
-    results = json.load(open(res))
+    #res = os.path.join(PATH_RES, 'adamic_adar.json')
+    #results = json.load(open(res))
 
     # ground truth label
-    y_pred, y_true = zip(*[(values[2], g.has_edge(values[0], values[1])) for _, values in results.items()])
-    print(f'Number of predicted edges: {len(y_pred)}')
+    #y_pred, y_true = zip(*[(values[2], g.has_edge(values[0], values[1])) for _, values in results.items()])
+    #print(f'Number of predicted edges: {len(y_pred)}')
 
     # Plot results
-    fig, ax = plt.subplots(1, 1, figsize=(12, 7))
-    plot_roc_auc(y_true, y_pred, ax)
-    plt.show()
+    #fig, ax = plt.subplots(1, 1, figsize=(12, 7))
+    #plot_roc_auc(y_true, y_pred, ax)
+    #plt.show()
+
+    # Formal Concept Analysis
+    # -----------------------
+
+    # Subgraph in the vicinity of an edge
+    res = os.path.join(PATH_RES, 'adamic_adar.json')
+    results = json.load(open(res))
+
+    pred_scores, pred_edges = zip(*[(values[2], (values[0], values[1])) for _, values in results.items()])
+    max_score_edge = pred_edges[np.argmax(pred_scores)]
+    print(f'Predicted edge: {max_score_edge}')
+    
+    subgraph = g.subgraph_vicinity(max_score_edge)
+    print(f"# nodes in subgraph: {len(subgraph.V['left'])}, {len(subgraph.V['right'])}")
+    print(f'# edges in subgraph: {len(subgraph.E)}')
+    print(f"# of edge attributes: {len(subgraph.edge_attr)}")
+    print(f"# of node attributes right: {len(subgraph.node_attr['right'])}")
+    print(f'Edge exists in graph: {g.has_edge(u=max_score_edge[0], v=max_score_edge[1])}')
+
+    #print(subgraph.node_attr['right'].get(max_score_edge[1]))
+    
+    fc = FormalContext(subgraph)
+    print(f'Formal context dimensions: {fc.I.shape}')
+
+    # Derivation operators: intention, extention
+    a = fc.M[0:2]
+    b = fc.G[0:2]
+    print('b: ', b)
+    #print(f'Extension of attribute {a}: {fc.extension(a)}')
+    print(f'Intention of objects {b}: {fc.intention(a)}')
+
+
 
     
     #idx = np.where(train_g.names_row == first_node)[0][0]
