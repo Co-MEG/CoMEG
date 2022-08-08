@@ -2,6 +2,9 @@ import numpy as np
 import random
 from tqdm import tqdm
 import time
+import os
+#from multiprocessing import Pool
+from alive_progress import alive_bar
 
 from src.graph import BipartiteGraph
 
@@ -9,6 +12,19 @@ from src.graph import BipartiteGraph
 class AdamicAdar:
     def __init__(self):
         self.scores = {}
+
+    def _log_inv_deg(self, g: BipartiteGraph, node: str) -> float:
+        weight = 0
+        if node in g.degrees:
+            degree = g.degrees.get(node)
+        else:
+            degree = len(g.get_neighbors(node))
+        if degree > 1:
+            weight += 1 / (np.log(degree))
+        else:
+            weight += 0
+
+        return weight
 
     def _compute_index(self, g: BipartiteGraph, nodes_u: list, nodes_v: list):
         """Compute Adamic Adar index between two nodes.
@@ -23,6 +39,8 @@ class AdamicAdar:
             List of target nodes
         """        
         commons = set(nodes_u).intersection(set(nodes_v))
+
+        # Sequential
         weight = 0
 
         for c in commons:
@@ -35,6 +53,12 @@ class AdamicAdar:
                 weight += 1 / (np.log(degree))
             else:
                 weight += 0
+
+        # MultiProcessing
+        #start = time.time()
+        #with Pool(4) as p:
+        #    res = p.starmap(self._log_inv_deg, zip([g] * len(commons), commons))
+        #print(f'End multiprocessing: {time.time() - start}')
         
         return weight
 
@@ -56,16 +80,17 @@ class AdamicAdar:
             Scores for predicted edges. Each entry is a list [u, v, s], with (u, v) the edge and s the predicted score.
         """        
         cpt = 0
-        for e in tqdm(edges):
-            u, v = e[0], e[1]
-            
-            n_2hops = g.get_neighbors_2hops(u, transpose=transpose)
-            n_opp = g.get_neighbors(v, transpose=~transpose)
-            
-            score = self._compute_index(g, n_2hops, n_opp)
-            self.scores.update({cpt: (u, v, score)})
-            
-            cpt += 1
+        with alive_bar(len(edges)) as bar:
+            for e in edges:
+                u, v = e[0], e[1]
+                
+                n_2hops = g.get_neighbors_2hops(u, transpose=transpose)
+                n_opp = g.get_neighbors(v, transpose=~transpose)
+                
+                score = self._compute_index(g, n_2hops, n_opp)
+                self.scores.update({cpt: (u, v, score)})
+                cpt += 1
+                bar()
 
         return self.scores
     
