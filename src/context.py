@@ -44,10 +44,14 @@ class FormalContext:
         return bunch
 
     def _build_attr_indx(self):
+        """Build attribute to index mapping.
+        """        
         if len(self.M2idx) == 0:
             self.M2idx = {attr: idx for idx, attr in enumerate(self.M)}
 
     def _build_obj_indx(self):
+        """Build object to index mapping.
+        """        
         if len(self.G2idx) == 0:
             self.G2idx = {obj: idx for idx, obj in enumerate(self.G)}
 
@@ -77,14 +81,6 @@ class FormalContext:
         res = list(names[matrix.indices[matrix.indptr[idx]:matrix.indptr[idx + 1]]])
         
         return res
-
-    def _check_attr(self, attr: str):
-        if not attr in self.M2idx:
-            raise TypeError(f'Attribute {attr} is not known.')
-    
-    def _check_obj(self, obj: str) -> bool:
-        if not obj in self.G2idx:
-            raise TypeError(f'Object {obj} is not known.')
 
     def extension(self, attributes: list) -> list:
         """Return maximal set of objects which share ``attributes``.
@@ -137,3 +133,11 @@ class FormalContext:
                 int_is &= int_i
 
         return list(int_is)
+
+    def _check_attr(self, attr: str):
+        if not attr in self.M2idx:
+            raise TypeError(f'Attribute {attr} is not known.')
+    
+    def _check_obj(self, obj: str) -> bool:
+        if not obj in self.G2idx:
+            raise TypeError(f'Object {obj} is not known.')
