@@ -127,7 +127,7 @@ class FormalContext:
         for obj in objects:
             self._check_obj(obj)
             int_i = set(self._deriv_operator(self.G2idx.get(obj), type='int'))
-            if len(int_i) == 0:
+            if len(int_is) == 0:
                 int_is.update(int_i)
             else:
                 int_is &= int_i
