@@ -58,7 +58,7 @@ class FormalContext:
         if len(self.G2idx) == 0:
             self.G2idx = {obj: idx for idx, obj in enumerate(self.G)}
 
-    def _deriv_operator(self, idx: int, type: str = 'ext') -> list:
+    def _deriv_operator(self, idx: int, type: str = 'ext', return_names: bool = True) -> list:
         """Return derivative operator, i.e. extension or intention, given the index of an attribute, resp. object.
 
         Parameters
@@ -69,6 +69,8 @@ class FormalContext:
             Type of derivative operator, by default 'ext'. Can be either:
                 * `ext`: extention
                 * `int`: intention
+        return_names: bool
+            If ``True`` return names of objects/attributes. Else return indexes, ``True`` by default.
 
         Returns
         -------
@@ -81,11 +83,14 @@ class FormalContext:
         elif type == 'int':
             matrix = self.I
             names = self.M
-        res = list(names[matrix.indices[matrix.indptr[idx]:matrix.indptr[idx + 1]]])
+
+        res = [matrix.indices[matrix.indptr[idx]:matrix.indptr[idx + 1]]]
+        if return_names:
+            res = list(names[res])
         
         return res
 
-    def extension(self, attributes: Optional[list] = None) -> list:
+    def extension(self, attributes: Optional[list] = None, return_names: bool = True) -> list:
         """Return maximal set of objects which share ``attributes``. Without parameter, return the whole set 
         of objects.
 
@@ -93,6 +98,8 @@ class FormalContext:
         ----------
         attributes : list
             Names of attributes (subset of ``self.M``)
+        return_names: bool
+            If ``True`` return names of objects/attributes. Else return indexes, ``True`` by default.
 
         Returns
         -------
@@ -107,7 +114,7 @@ class FormalContext:
         else:
             for attr in attributes:
                 self._check_attr(attr)
-                ext_i = set(self._deriv_operator(self.M2idx.get(attr), type='ext'))
+                ext_i = set(self._deriv_operator(self.M2idx.get(attr), type='ext', return_names=return_names))
                 if len(ext_is) == 0:
                     ext_is.update(ext_i)
                 else:
@@ -115,7 +122,7 @@ class FormalContext:
             
         return list(ext_is)
 
-    def intention(self, objects: Optional[list] = None) -> list:
+    def intention(self, objects: Optional[list] = None, return_names: bool = True) -> list:
         """Return maximal set of attributes which share ``objects``. Without parameter, return the whole set
         of attributes.
 
@@ -123,7 +130,9 @@ class FormalContext:
         ----------
         objects : list
             Names of objects (subset of ``self.G``)
-
+        return_names: bool
+            If ``True`` return names of objects/attributes. Else return indexes, ``True`` by default.
+            
         Returns
         -------
         list
@@ -137,7 +146,7 @@ class FormalContext:
         else:
             for obj in objects:
                 self._check_obj(obj)
-                int_i = set(self._deriv_operator(self.G2idx.get(obj), type='int'))
+                int_i = set(self._deriv_operator(self.G2idx.get(obj), type='int', return_names=return_names))
                 if len(int_is) == 0:
                     int_is.update(int_i)
                 else:
