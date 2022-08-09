@@ -1,3 +1,6 @@
+from typing import Optional, Union
+from numpy import isin
+
 from scipy import sparse
 from src.graph import BipartiteGraph
 
@@ -82,8 +85,9 @@ class FormalContext:
         
         return res
 
-    def extension(self, attributes: list) -> list:
-        """Return maximal set of objects which share ``attributes``.
+    def extension(self, attributes: Optional[list] = None) -> list:
+        """Return maximal set of objects which share ``attributes``. Without parameter, return the whole set 
+        of objects.
 
         Parameters
         ----------
@@ -98,18 +102,22 @@ class FormalContext:
         self._build_attr_indx()
         
         ext_is = set()
-        for attr in attributes:
-            self._check_attr(attr)
-            ext_i = set(self._deriv_operator(self.M2idx.get(attr), type='ext'))
-            if len(ext_is) == 0:
-                ext_is.update(ext_i)
-            else:
-                ext_is &= ext_i
-        
+        if (isinstance(attributes, list) and len(attributes) == 0) or attributes is None:
+            ext_is = self.G
+        else:
+            for attr in attributes:
+                self._check_attr(attr)
+                ext_i = set(self._deriv_operator(self.M2idx.get(attr), type='ext'))
+                if len(ext_is) == 0:
+                    ext_is.update(ext_i)
+                else:
+                    ext_is &= ext_i
+            
         return list(ext_is)
 
-    def intention(self, objects: list) -> list:
-        """Return maximal set of attributes which share ``objects``.
+    def intention(self, objects: Optional[list] = None) -> list:
+        """Return maximal set of attributes which share ``objects``. Without parameter, return the whole set
+        of attributes.
 
         Parameters
         ----------
@@ -124,13 +132,16 @@ class FormalContext:
         self._build_obj_indx()
 
         int_is = set()
-        for obj in objects:
-            self._check_obj(obj)
-            int_i = set(self._deriv_operator(self.G2idx.get(obj), type='int'))
-            if len(int_is) == 0:
-                int_is.update(int_i)
-            else:
-                int_is &= int_i
+        if (isinstance(objects, list) and len(objects) == 0) or objects is None:
+            int_is = self.M
+        else:
+            for obj in objects:
+                self._check_obj(obj)
+                int_i = set(self._deriv_operator(self.G2idx.get(obj), type='int'))
+                if len(int_is) == 0:
+                    int_is.update(int_i)
+                else:
+                    int_is &= int_i
 
         return list(int_is)
 
