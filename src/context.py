@@ -84,7 +84,7 @@ class FormalContext:
             matrix = self.I
             names = self.M
 
-        res = [matrix.indices[matrix.indptr[idx]:matrix.indptr[idx + 1]]]
+        res = matrix.indices[matrix.indptr[idx]:matrix.indptr[idx + 1]]
         if return_names:
             res = list(names[res])
         
@@ -132,7 +132,7 @@ class FormalContext:
             Names of objects (subset of ``self.G``)
         return_names: bool
             If ``True`` return names of objects/attributes. Else return indexes, ``True`` by default.
-            
+
         Returns
         -------
         list
