@@ -1,5 +1,6 @@
-from re import sub
+from matplotlib.style import context
 from src.algorithms import AdamicAdar
+from src.concept_lattice import ConceptLattice
 from src.context import FormalContext
 from src.graph import BipartiteGraph
 
@@ -29,8 +30,20 @@ def plot_roc_auc(y_true, y_pred, ax):
     ax.set_title(f'ROC AUC Curve - AUC = {auc:.4f}', weight='bold')
     ax.legend()
 
-if __name__ == '__main__':
-    
+def run_toy():
+    # Toy context
+    context_toy = FormalContext.from_csv(os.path.join(os.getcwd(), 'data/toy/digits.csv'))
+    print(context_toy.I.todense().shape)
+    print(context_toy.G)
+    print(context_toy.M)
+    print()
+
+    print(context_toy.intention(['01', '03', '09']))
+    # Concept Lattice
+    L = ConceptLattice.from_context(context_toy)
+
+
+def run():
     # Build graph
     g = BipartiteGraph()
     g.load_data(IN_PATH, use_cache=USE_CACHE)
@@ -115,19 +128,33 @@ if __name__ == '__main__':
 
     #print(subgraph.node_attr['right'].get(max_score_edge[1]))
     
+    # Formal Context
+    # --------------
     fc = FormalContext(subgraph)
     print(f'Formal context dimensions: {fc.I.shape}')
 
     # Derivation operators: intention, extention
-    a = fc.M[0:2]
-    b = fc.G[0:2]
-    print('b: ', b)
-    #print(f'Extension of attribute {a}: {fc.extension(a)}')
-    print(f'Intention of objects {b}: {fc.intention(a)}')
-
-
+    a = fc.G[0:2]
+    b = fc.M[0:2]
+    print(f'Intention of objects {a}: {fc.intention(a)}')
+    print(f'Extension of attributes {b}: {fc.extension(b)}')
+    print(f'Extention(intention({a})): {fc.extension(fc.intention(a))}')
 
     
+    # Concept Lattice
+    # ---------------
+    
+    # A formal concept is a pair `(A, B)` of objects `A` and attributes `B`. Ojbects `A` are all the objects 
+    # sharing attributes `B`. Attributes `B` are all the attributes describing objects `A`. In other words:
+    #   * `A = extension(B)`
+    #   * `B = intention(A)`
+
+    # TODO: implement ConcepLattice class
+    print()
+    L = ConceptLattice.from_context(fc)
+
+
+
     #idx = np.where(train_g.names_row == first_node)[0][0]
     #scores = aa.predict(idx)
     #scores = aa.predict(np.arange(0, 377799))
@@ -147,4 +174,16 @@ if __name__ == '__main__':
         print(nn) # OK
         total += nn
     print(total)"""
+    
+
+
+if __name__ == '__main__':
+    
+    # Run on GoodReads poetry data
+    # ----------------------------
+    # run()
+
+    # Run on toy data
+    # ---------------
+    run_toy()
     
