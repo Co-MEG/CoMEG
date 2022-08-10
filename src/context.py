@@ -5,11 +5,16 @@ from scipy import sparse
 from src.graph import BipartiteGraph
 
 from sknetwork.data.parse import from_edge_list
+from sknetwork.data import from_csv
 
 
 class FormalContext:
-    def __init__(self, graph: BipartiteGraph):
-        bunch = self._get_ohe_attributes(graph.node_attr['right'])
+    def __init__(self, graph: Union[BipartiteGraph, dict]):
+        if isinstance(graph, BipartiteGraph):
+            bunch = self._get_ohe_attributes(graph.node_attr['right'])
+        elif isinstance(graph, dict):
+            # for "from_csv" usage
+            bunch = graph
         self.G = bunch.names_row
         self.M = bunch.names_col
         self.I = bunch.biadjacency
@@ -161,3 +166,22 @@ class FormalContext:
     def _check_obj(self, obj: str) -> bool:
         if not obj in self.G2idx:
             raise TypeError(f'Object {obj} is not known.')
+
+    @staticmethod
+    def from_csv(path) -> 'FormalContext':
+        """Build ``FormalContext`` from csv file.
+
+        Parameters
+        ----------
+        path : _type_
+            Path to `.csv` file
+
+        Returns
+        -------
+        FormalContext
+            Formal context
+        """        
+        bunch = from_csv(path, bipartite=True, weighted=False)
+        context = FormalContext(bunch)
+        
+        return context
