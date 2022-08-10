@@ -71,9 +71,15 @@ def process(A, attrs, L, context):
     
     # If a concept has already been elaborated, the extent C contains at least one object lexicographically smaller 
     # than the current object -> we verify that C < A_i is False
-    print(f'  Test if {context.G[C]} is lex less than {context.G[A_i]} : {minus_lex(set(C), set(A_i))}')
+    #print(f'  Test if {context.G[C]} is lex less than {context.G[A_i]} : {minus_lex(set(C), set(A_i))}')
+    print(f'  Test if {C} is lex less than {context.extension(attrs, return_names=False)}')
     
-    if not minus_lex(set(C), set(A_i)):
+    # new
+    diff = set(A_i).difference(set(C))
+    is_lex_smaller = any([h < np.max(context.extension(attrs, return_names=False)) for h in diff])
+    if not is_lex_smaller:
+    
+    #if not minus_lex(set(C), set(A_i)):
         print(f'  New extent: {context.G[C]}')
 
         L.append((list(context.G[C]), D))
@@ -81,7 +87,13 @@ def process(A, attrs, L, context):
 
         # Complementary objects of current object, which are lexicographically above the current object
         comp_g = set(np.arange(0, len(context.G))).difference(set(A_i))
-        candidates = [h for h in comp_g if minus_lex(set(A_i), set([h]))]
+        #candidates = [h for h in comp_g if minus_lex(set(A_i), set([h]))]
+        
+        # new
+        #candidates = [h for h in comp_g if h > np.max(context.extension(attrs, return_names=False))]
+        candidates = [h for h in comp_g ]
+        print(f'Candidates: {candidates}')
+
         print(f'  Try to add some more candidates in the extent...')
         for f in candidates:
             print(f'    Candidate: {context.G[f]}')
