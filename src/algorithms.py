@@ -3,6 +3,7 @@ import random
 from tqdm import tqdm
 import time
 import os
+import json
 #from multiprocessing import Pool
 from alive_progress import alive_bar
 
@@ -79,18 +80,24 @@ class AdamicAdar:
         dict
             Scores for predicted edges. Each entry is a list [u, v, s], with (u, v) the edge and s the predicted score.
         """        
+        PATH_RES = os.path.join(os.getcwd(), 'data', 'goodreads_poetry', 'result')
+        res = os.path.join(PATH_RES, 'adamic_adar_test_graph2.json')
         cpt = 0
-        with alive_bar(len(edges)) as bar:
-            for e in edges:
-                u, v = e[0], e[1]
-                
-                n_2hops = g.get_neighbors_2hops(u, transpose=transpose)
-                n_opp = g.get_neighbors(v, transpose=~transpose)
-                
-                score = self._compute_index(g, n_2hops, n_opp)
-                self.scores.update({cpt: (u, v, score)})
-                cpt += 1
-                bar()
+        with open(res, "a") as f:
+        
+            with alive_bar(len(edges)) as bar:
+                for e in edges:
+                    u, v = e[0], e[1]
+                    
+                    n_2hops = g.get_neighbors_2hops(u, transpose=transpose)
+                    n_opp = g.get_neighbors(v, transpose=~transpose)
+                    
+                    score = self._compute_index(g, n_2hops, n_opp)
+                    self.scores.update({cpt: (u, v, score)})
+                    cpt += 1
+                    bar()
+                    json.dump({cpt: (u, v, score)} , f)
+                    f.write(os.linesep)
 
         return self.scores
     
