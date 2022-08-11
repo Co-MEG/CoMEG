@@ -55,10 +55,10 @@ def close_by_one(context: FormalContext) -> List[FormalConcept]:
     # Find all concepts using Close by One (CbO) algorithm
     L = []
     for i, g in enumerate(context.G):
-        process([g], context.intention([g]), L, context)
+        process([g], context.intention([g]), L, context, g)
     return L
 
-def process(A, attrs, L, context):
+def process(A, attrs, L, context, g):
     print(f"**Process({A}, {attrs})")
 
     #D = attrs
@@ -72,13 +72,18 @@ def process(A, attrs, L, context):
     # If a concept has already been elaborated, the extent C contains at least one object lexicographically smaller 
     # than the current object -> we verify that C < A_i is False
     #print(f'  Test if {context.G[C]} is lex less than {context.G[A_i]} : {minus_lex(set(C), set(A_i))}')
-    print(f'  Test if {C} is lex less than {context.extension(attrs, return_names=False)}')
+    #print(f'  Test if {set} is lex less than {context.extension(attrs, return_names=False)}')
     
     # new
-    diff = set(A_i).difference(set(C))
-    is_lex_smaller = any([h < np.max(context.extension(attrs, return_names=False)) for h in diff])
+    #diff = set(A_i).difference(set(C))
+    #is_lex_smaller = any([h < np.max(context.extension(attrs, return_names=False)) for h in diff])
+    #if not is_lex_smaller:
+
+    # newnew
+    diff = set(C).difference(set(A_i))
+    is_lex_smaller = any([h < np.max(context.G2idx.get(g)) for h in diff])
+    print(f'  Test if {diff} (i.e {C}-{A_i}) is lex less than {np.max(context.G2idx.get(g))}')
     if not is_lex_smaller:
-    
     #if not minus_lex(set(C), set(A_i)):
         print(f'  New extent: {context.G[C]}')
 
@@ -92,8 +97,6 @@ def process(A, attrs, L, context):
         # new
         #candidates = [h for h in comp_g if h > np.max(context.extension(attrs, return_names=False))]
         candidates = [h for h in comp_g ]
-        print(f'Candidates: {candidates}')
-
         print(f'  Try to add some more candidates in the extent...')
         for f in candidates:
             print(f'    Candidate: {context.G[f]}')
@@ -106,7 +109,7 @@ def process(A, attrs, L, context):
             if len(Y) != 0:
                 X = context.extension(Y)
                 print(f'    X: {X}')
-                process(Z_labels, f_intention, L, context)
+                process(Z_labels, f_intention, L, context, g)
 
     #print(f'  L : {(L)}')
     print()
