@@ -58,14 +58,14 @@ def run():
     
     # Link prediction
     # ----------------------
-    #if TRAIN_TEST_SPLIT:
-    #    print('Splitting graph into train-test...')
-    #    train_g, test_g = g.train_test_split(test_size=TEST_SIZE)
-    #    print(f'Number of reviews in test: {len(test_g.E)}')
-    #    print(f'Number of left nodes used: {len(set([e[0] for e in test_g.E]))}')
-    #    print(f'Number of right nodes used: {len(set([e[1] for e in test_g.E]))}')
+    if TRAIN_TEST_SPLIT:
+        print('Splitting graph into train-test...')
+        train_g, test_g = g.train_test_split(test_size=TEST_SIZE)
+        print(f'Number of reviews in test: {len(test_g.E)}')
+        print(f'Number of left nodes used: {len(set([e[0] for e in test_g.E]))}')
+        print(f'Number of right nodes used: {len(set([e[1] for e in test_g.E]))}')
 
-    """# Adamic Adar
+    # Adamic Adar
     print('Adamic Adar index...')
     aa = AdamicAdar()
 
@@ -73,9 +73,9 @@ def run():
     scores = aa.predict_edges(train_g, test_g.E, transpose=False)
     print(f'Number of predictions: {len(scores)}')
     # Save results for AA index
-    res = os.path.join(PATH_RES, 'adamic_adar_test_graph.json')
-    with open(res, "w") as f:
-        json.dump(scores , f) """
+    #res = os.path.join(PATH_RES, 'adamic_adar_test_graph.json')
+    #with open(res, "w") as f:
+    #    json.dump(scores , f) 
 
     # predict nodes
     """
@@ -112,7 +112,7 @@ def run():
     # -----------------------
 
     # Subgraph in the vicinity of an edge
-    res = os.path.join(PATH_RES, 'adamic_adar.json')
+    """res = os.path.join(PATH_RES, 'adamic_adar.json')
     results = json.load(open(res))
 
     pred_scores, pred_edges = zip(*[(values[2], (values[0], values[1])) for _, values in results.items()])
@@ -151,7 +151,7 @@ def run():
 
     # TODO: implement ConcepLattice class
     print()
-    L = ConceptLattice.from_context(fc)
+    L = ConceptLattice.from_context(fc)"""
 
 
 
@@ -181,7 +181,7 @@ if __name__ == '__main__':
     
     # Run on GoodReads poetry data
     # ----------------------------
-    # run()
+    #run()
 
     # Run on toy data
     # ---------------
