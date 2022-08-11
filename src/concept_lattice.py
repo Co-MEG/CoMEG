@@ -30,22 +30,28 @@ class ConceptLattice:
 
         # Build concepts
         concepts = algo_func(context)
-        tot = []
         for c in concepts:
-            if c not in tot:
-                tot.append(c)
-        for c in tot:
             print(c)
-        print(f"# of concepts: {len(tot)}")
+        print(f"# of concepts: {len(concepts)}")
 
         # Build ConceptLattice
-        cl = ConceptLattice(concepts=tot)
+        cl = ConceptLattice(concepts=concepts)
 
         return cl
 
 
 def close_by_one(context: FormalContext) -> List[FormalConcept]:
     """
+    Parameters
+    ----------
+    context : FormalContext
+        Formal context used to find concepts
+
+    Returns
+    -------
+    List
+        List of formal concepts
+
     References
     ----------
     O. Kuznetsov (1999). 
@@ -54,9 +60,15 @@ def close_by_one(context: FormalContext) -> List[FormalConcept]:
     """
     # Find all concepts using Close by One (CbO) algorithm
     L = []
+    
     for g in context.G:
         process([g], context.intention([g]), L, context, g)
-    return L
+    
+    L_dedup = []
+    for c in L:
+        if c not in L_dedup:
+            L_dedup.append(c)
+    return L_dedup
 
 def process(A: list, attrs: list, L: list, context: FormalContext, current_obj: int):
     """Process Close by One algorithm.
