@@ -32,13 +32,14 @@ def plot_roc_auc(y_true, y_pred, ax):
 
 def run_toy():
     # Toy context
-    context_toy = FormalContext.from_csv(os.path.join(os.getcwd(), 'data/toy/digits.csv'))
+    #context_toy = FormalContext.from_csv(os.path.join(os.getcwd(), 'data/toy/digits.csv'))
+    context_toy = FormalContext.from_csv(os.path.join(os.getcwd(), 'data/toy/animal_movement.csv'))
     print(context_toy.I.todense().shape)
     print(context_toy.G)
     print(context_toy.M)
     print()
 
-    print(context_toy.intention(['01', '03', '09']))
+    #print(context_toy.intention(['01', '03', '09']))
     # Concept Lattice
     L = ConceptLattice.from_context(context_toy)
 
