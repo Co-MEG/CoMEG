@@ -1,8 +1,8 @@
-from typing import Optional, Union
-from numpy import isin
-
 from scipy import sparse
+from typing import Optional, Union, TYPE_CHECKING
+
 from src.graph import BipartiteGraph
+from src.concept_lattice import ConceptLattice
 
 from sknetwork.data.parse import from_edge_list
 from sknetwork.data import from_csv
@@ -158,6 +158,21 @@ class FormalContext:
                     int_is &= int_i
 
         return list(int_is)
+
+    def lattice(self, algo: str = 'CbO') -> ConceptLattice:
+        """Return Concept Lattice of the Formal Context.
+
+        Parameters
+        ----------
+        algo : str, optional
+            Algorithm name used for building Concept Lattice, by default 'CbO' (Close by One)
+
+        Returns
+        -------
+        ConceptLattice
+            ``ConceptLattice`` instance.
+        """        
+        return ConceptLattice.from_context(self, algo=algo)
 
     def _check_attr(self, attr: str):
         if not attr in self.M2idx:
