@@ -218,7 +218,11 @@ def run_concept_lattice():
     # sharing attributes `B`. Attributes `B` are all the attributes describing objects `A`. In other words:
     #   * `A = extension(B)`
     #   * `B = intention(A)`
-    L = ConceptLattice.from_context(fc)
+    lattice = fc.lattice()
+    for c in lattice.concepts:
+        print(c)
+    print(f'Number of concepts in lattice: {len(lattice)}')
+    #L = ConceptLattice.from_context(fc)
 
 
 if __name__ == '__main__':
