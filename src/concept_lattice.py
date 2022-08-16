@@ -1,8 +1,11 @@
-from src.context import FormalContext
-from src.concept import FormalConcept
+from __future__ import annotations
 
-from typing import List
+from typing import List, TYPE_CHECKING
 import numpy as np
+
+from src.concept import FormalConcept
+if TYPE_CHECKING:
+    from src.context import FormalContext
 
 
 class ConceptLattice:
@@ -10,8 +13,18 @@ class ConceptLattice:
         # Build a Concept Lattice given formal concepts
         self.concepts = concepts
 
+    def __len__(self) -> int:
+        """Return number of concepts in Lattice.
+
+        Returns
+        -------
+        int
+            Number of concepts
+        """        
+        return len(self.concepts)
+
     @classmethod
-    def from_context(cls, context: FormalContext, algo: str = 'CbO') -> 'ConceptLattice':
+    def from_context(cls, context: FormalContext, algo: str = 'CbO') -> ConceptLattice:
         """Return a ``ConceptLattice`` according to ``context``, created using algorithm ``algo``.
 
         Parameters
@@ -30,9 +43,6 @@ class ConceptLattice:
 
         # Build concepts
         concepts = algo_func(context)
-        for c in concepts:
-            print(c)
-        print(f"# of concepts: {len(concepts)}")
 
         # Build ConceptLattice
         cl = ConceptLattice(concepts=concepts)
@@ -59,6 +69,8 @@ def close_by_one(context: FormalContext) -> List[FormalConcept]:
     In J. M. \.Zytkow and J. Rauch, editors, Principles of Data Mining and Knowledge Discovery.
     """
     # Find all concepts using Close by One (CbO) algorithm
+
+    # TODO: add first and last concepts to lattice, i.e empty intent and empty extent concept
     L = []
     
     for g in context.G:
