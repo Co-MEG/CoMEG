@@ -9,10 +9,12 @@ from sknetwork.linkpred import JaccardIndex #, AdamicAdar
 import numpy as np
 import json
 import os
+import random
 
 from sklearn import metrics
 
 import matplotlib.pyplot as plt
+
 
 # Data path
 IN_PATH = 'goodreads_poetry'
@@ -30,7 +32,8 @@ def plot_roc_auc(y_true, y_pred, ax):
     ax.set_title(f'ROC AUC Curve - AUC = {auc:.4f}', weight='bold')
     ax.legend()
 
-def run_toy():
+
+def run_toy_concept_lattice():
     # Toy context
     #context_toy = FormalContext.from_csv(os.path.join(os.getcwd(), 'data/toy/digits.csv'))
     context_toy = FormalContext.from_csv(os.path.join(os.getcwd(), 'data/toy/animal_movement.csv'))
@@ -44,7 +47,7 @@ def run_toy():
     L = ConceptLattice.from_context(context_toy)
 
 
-def run():
+def run_prediction():
     # Build graph
     g = BipartiteGraph()
     g.load_data(IN_PATH, use_cache=USE_CACHE)
@@ -70,9 +73,16 @@ def run():
     print('Adamic Adar index...')
     aa = AdamicAdar()
 
+    # predit random edges
+    rand_n_left = random.choices(train_g.V.get('left'), k=len(test_g.E))
+    rand_n_rigth = random.choices(train_g.V.get('right'), k=len(test_g.E))
+    rand_edges = [(u, v) for u, v in zip(rand_n_left, rand_n_rigth)]
+    rand_scores =  aa.predict_edges(train_g, rand_edges, transpose=False)
+
     # predict edges
     scores = aa.predict_edges(train_g, test_g.E, transpose=False)
     print(f'Number of predictions: {len(scores)}')
+    
     # Save results for AA index
     #res = os.path.join(PATH_RES, 'adamic_adar_test_graph.json')
     #with open(res, "w") as f:
@@ -94,68 +104,6 @@ def run():
         json.dump(scores , f) 
     """
     
-    # Evaluation
-    # ----------
-
-    #res = os.path.join(PATH_RES, 'adamic_adar.json')
-    #results = json.load(open(res))
-
-    # ground truth label
-    #y_pred, y_true = zip(*[(values[2], g.has_edge(values[0], values[1])) for _, values in results.items()])
-    #print(f'Number of predicted edges: {len(y_pred)}')
-
-    # Plot results
-    #fig, ax = plt.subplots(1, 1, figsize=(12, 7))
-    #plot_roc_auc(y_true, y_pred, ax)
-    #plt.show()
-
-    # Formal Concept Analysis
-    # -----------------------
-
-    # Subgraph in the vicinity of an edge
-    """res = os.path.join(PATH_RES, 'adamic_adar.json')
-    results = json.load(open(res))
-
-    pred_scores, pred_edges = zip(*[(values[2], (values[0], values[1])) for _, values in results.items()])
-    max_score_edge = pred_edges[np.argmax(pred_scores)]
-    print(f'Predicted edge: {max_score_edge}')
-    
-    subgraph = g.subgraph_vicinity(max_score_edge)
-    print(f"# nodes in subgraph: {len(subgraph.V['left'])}, {len(subgraph.V['right'])}")
-    print(f'# edges in subgraph: {len(subgraph.E)}')
-    print(f"# of edge attributes: {len(subgraph.edge_attr)}")
-    print(f"# of node attributes right: {len(subgraph.node_attr['right'])}")
-    print(f'Edge exists in graph: {g.has_edge(u=max_score_edge[0], v=max_score_edge[1])}')
-
-    #print(subgraph.node_attr['right'].get(max_score_edge[1]))
-    
-    # Formal Context
-    # --------------
-    fc = FormalContext(subgraph)
-    print(f'Formal context dimensions: {fc.I.shape}')
-
-    # Derivation operators: intention, extention
-    a = fc.G[0:2]
-    b = fc.M[0:2]
-    print(f'Intention of objects {a}: {fc.intention(a)}')
-    print(f'Extension of attributes {b}: {fc.extension(b)}')
-    print(f'Extention(intention({a})): {fc.extension(fc.intention(a))}')
-
-    
-    # Concept Lattice
-    # ---------------
-    
-    # A formal concept is a pair `(A, B)` of objects `A` and attributes `B`. Ojbects `A` are all the objects 
-    # sharing attributes `B`. Attributes `B` are all the attributes describing objects `A`. In other words:
-    #   * `A = extension(B)`
-    #   * `B = intention(A)`
-
-    # TODO: implement ConcepLattice class
-    print()
-    L = ConceptLattice.from_context(fc)"""
-
-
-
     #idx = np.where(train_g.names_row == first_node)[0][0]
     #scores = aa.predict(idx)
     #scores = aa.predict(np.arange(0, 377799))
@@ -177,14 +125,120 @@ def run():
     print(total)"""
     
 
+def load_predictions(path):
+    # Load predictions
+    D = {}
+    # Convert list of dicts into one big dictionary of values
+    print(f'Load result values...')
+    with open(path) as f:
+        lines = f.read().splitlines()
+        for l in lines:            
+            pair = l.strip('{}').split(': ')
+            k = pair[0]
+            v = pair[1]
+            vals = []
+            for idx, i in enumerate(v.strip('[]').split(', ')):
+                if idx <= 1:
+                    vals.append(i.strip('""'))
+                else:
+                    vals.append(float(i))
+            D.update({k: vals})
+
+    return D
+
+
+def run_auc_test_graph():
+
+    # Build graph
+    g = BipartiteGraph()
+    g.load_data(IN_PATH, use_cache=USE_CACHE)
+
+    # Load predictions
+    path = os.path.join(PATH_RES, 'adamic_adar_test_graph.json')
+    preds = load_predictions(path)
+
+    # ground truth label
+    y_pred, y_true = zip(*[(values[2], g.has_edge(values[0], values[1])) for _, values in preds.items()])
+    #y_pred, y_true = zip(*[(values[2], g_test.has_edge(values[0], values[1])) for _, values in D.items()])
+    print(f'Number of predicted edges: {len(y_pred)}')
+    
+    # Plot results
+    fig, ax = plt.subplots(1, 1, figsize=(12, 7))
+    plot_roc_auc(y_true, y_pred, ax)
+    plt.show()
+
+
+def run_concept_lattice():
+    # Build graph
+    g = BipartiteGraph()
+    g.load_data(IN_PATH, use_cache=USE_CACHE)
+
+    # Load predictions
+    path = os.path.join(PATH_RES, 'adamic_adar_test_graph.json')
+    preds = load_predictions(path)
+
+    # Formal Concept Analysis
+    # -----------------------
+    # Subgraph in the vicinity of an edge
+    pred_scores, pred_edges = zip(*[(values[2], (values[0], values[1])) for _, values in preds.items()])
+    
+    # Max score edge is for edge ('fd379cf294fc1937e41f3f7df3c9eabe', '1381'):
+    #   book '1381' is "The Odyssey (Homere)"
+    #score_edge = pred_edges[np.argmax(pred_scores)]
+    #print(f'Predicted edge: {score_edge}')
+
+    # Random score edge
+    i = np.random.randint(len(pred_scores))
+    score_edge = pred_edges[i]
+    print(f'Predicted edge: {score_edge}')
+    
+    subgraph = g.subgraph_vicinity(score_edge)
+    print(f"# nodes in subgraph: {len(subgraph.V['left'])}, {len(subgraph.V['right'])}")
+    print(f'# edges in subgraph: {len(subgraph.E)}')
+    print(f"# of edge attributes: {len(subgraph.edge_attr)}")
+    print(f"# of node attributes right: {len(subgraph.node_attr['right'])}")
+    print(f'Edge exists in graph: {g.has_edge(u=score_edge[0], v=score_edge[1])}')
+    
+    # Formal Context
+    # --------------
+    fc = FormalContext(subgraph)
+    print(f'Formal context dimensions: {fc.I.shape}')
+
+    # Derivation operators: intention, extention
+    a = fc.G[0:2]
+    b = fc.M[0:2]
+    print(f'Intention of objects {a}: {fc.intention(a)}')
+    print(f'Extension of attributes {b}: {fc.extension(b)}')
+    print(f'Extention(intention({a})): {fc.extension(fc.intention(a))}')
+
+    # Concept Lattice
+    # ---------------
+    
+    # A formal concept is a pair `(A, B)` of objects `A` and attributes `B`. Ojbects `A` are all the objects 
+    # sharing attributes `B`. Attributes `B` are all the attributes describing objects `A`. In other words:
+    #   * `A = extension(B)`
+    #   * `B = intention(A)`
+    L = ConceptLattice.from_context(fc)
+
 
 if __name__ == '__main__':
     
     # Run on GoodReads poetry data
     # ----------------------------
-    #run()
+    #run_prediction()
 
-    # Run on toy data
+    # Evaluation (AUC) on test graph
+    # ------------------------------
+    #run_auc_test_graph()
+
+    # Concept lattice
     # ---------------
-    run_toy()
+    
+    # Toy data
+    #run_toy_concept_lattice()
+    
+    # Full data
+    run_concept_lattice()
+
+    
     
