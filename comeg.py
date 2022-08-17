@@ -148,7 +148,6 @@ def load_predictions(path):
 
     return D
 
-
 def run_auc_test_graph():
 
     # Build graph
@@ -157,17 +156,23 @@ def run_auc_test_graph():
 
     # Load predictions
     path = os.path.join(PATH_RES, 'adamic_adar_test_graph.json')
-    preds = load_predictions(path)
+    preds_test = load_predictions(path)
+    path_rand = os.path.join(PATH_RES, 'adamic_adar_test_graph_rand.json')
+    preds_rand = load_predictions(path_rand)
 
     # ground truth label
-    y_pred, y_true = zip(*[(values[2], g.has_edge(values[0], values[1])) for _, values in preds.items()])
-    #y_pred, y_true = zip(*[(values[2], g_test.has_edge(values[0], values[1])) for _, values in D.items()])
+    y_pred_test, y_true_test = zip(*[(values[2], g.has_edge(values[0], values[1])) for _, values in preds_test.items()])
+    y_pred_rand, y_true_rand = zip(*[(values[2], g.has_edge(values[0], values[1])) for _, values in preds_rand.items()])
+    
+    y_pred = y_pred_test + y_pred_rand
+    y_true = y_true_test + y_true_rand
     print(f'Number of predicted edges: {len(y_pred)}')
     
     # Plot results
     fig, ax = plt.subplots(1, 1, figsize=(12, 7))
     plot_roc_auc(y_true, y_pred, ax)
-    plt.show()
+    #plt.show()
+    plt.savefig(os.path.join(PATH_RES, 'img', 'adamic_adar_test_graph.eps'))
 
 
 def run_concept_lattice():
@@ -210,7 +215,7 @@ def run_concept_lattice():
     print(f'Formal context dimensions: {fc.I.shape}')
 
     fc_path = os.path.join(PATH_RES, 'context', f'context_{score_edge[0]}_{score_edge[1]}.csv')
-    fc.to_csv(fc_path, sep='|')
+    fc.to_csv(fc_path, sep=',')
 
     # Verify list of concepts with Concepts library
 
@@ -255,16 +260,15 @@ if __name__ == '__main__':
 
     # Evaluation (AUC) on test graph
     # ------------------------------
-    #run_auc_test_graph()
+    run_auc_test_graph()
 
     # Concept lattice
     # ---------------
-    
     # Toy data
     #run_toy_concept_lattice()
     
     # Full data
-    run_concept_lattice()
+    #run_concept_lattice()
 
     
     
