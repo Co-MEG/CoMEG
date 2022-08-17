@@ -75,11 +75,14 @@ def close_by_one(context: FormalContext) -> List[FormalConcept]:
     
     for g in context.G:
         process([g], context.intention([g]), L, context, g)
-    
+    hashes = []
     L_dedup = []
     for c in L:
-        if c not in L_dedup:
+        h = set(c[0]).union(set(c[1]))
+        if h not in hashes:
+            hashes.append(h)
             L_dedup.append(c)
+    
     return L_dedup
 
 def process(A: list, attrs: list, L: list, context: FormalContext, current_obj: int):
