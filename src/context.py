@@ -1,8 +1,12 @@
 from scipy import sparse
+import numpy as np
+import pandas as pd
+import os
 from typing import Optional, Union, TYPE_CHECKING
 
 from src.graph import BipartiteGraph
 from src.concept_lattice import ConceptLattice
+from src.utils import get_oserror_dir
 
 from sknetwork.data.parse import from_edge_list
 from sknetwork.data import from_csv
@@ -200,3 +204,22 @@ class FormalContext:
         context = FormalContext(bunch)
         
         return context
+
+    def to_csv(self, path):
+        """Save formal context interactions to `.csv` file.
+
+        Parameters
+        ----------
+        path : _type_
+            Path to `csv.file`
+        """        
+        mat = np.hstack((self.G.reshape(-1, 1), self.I.todense()))
+        cols = np.concatenate([np.array(['row_names']), self.M])
+        df = pd.DataFrame(mat, columns=cols)
+        
+        try:
+            df.to_csv(path, index=False, sep=',')
+        except OSError as e:
+            os.mkdir(get_oserror_dir(e))
+            df.to_csv(path, index=False, sep=',')
+        print(f'Saved!')
