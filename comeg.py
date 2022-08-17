@@ -1,3 +1,4 @@
+from re import L
 from matplotlib.style import context
 from src.algorithms import AdamicAdar
 from src.concept_lattice import ConceptLattice
@@ -15,6 +16,7 @@ from sklearn import metrics
 
 import matplotlib.pyplot as plt
 
+from concepts import Context
 
 # Data path
 IN_PATH = 'goodreads_poetry'
@@ -192,6 +194,9 @@ def run_concept_lattice():
     score_edge = pred_edges[i]
     print(f'Predicted edge: {score_edge}')
     
+    # Specific edge
+    score_edge = ('bc1d727746e210f315138932e0aacb11', '13637887')
+
     subgraph = g.subgraph_vicinity(score_edge)
     print(f"# nodes in subgraph: {len(subgraph.V['left'])}, {len(subgraph.V['right'])}")
     print(f'# edges in subgraph: {len(subgraph.E)}')
@@ -203,6 +208,12 @@ def run_concept_lattice():
     # --------------
     fc = FormalContext(subgraph)
     print(f'Formal context dimensions: {fc.I.shape}')
+
+    fc_path = os.path.join(PATH_RES, 'context', f'context_{score_edge[0]}_{score_edge[1]}.csv')
+    fc.to_csv(fc_path, sep='|')
+
+    # Verify list of concepts with Concepts library
+
 
     # Derivation operators: intention, extention
     a = fc.G[0:2]
@@ -220,10 +231,21 @@ def run_concept_lattice():
     #   * `B = intention(A)`
     lattice = fc.lattice()
     for c in lattice.concepts:
-        print(c)
+        print('**  ', c)
+        print()
     print(f'Number of concepts in lattice: {len(lattice)}')
     #L = ConceptLattice.from_context(fc)
 
+    c = Context.fromfile('context_bc1d727746e210f315138932e0aacb11_13637887.csv', frmat='csv')
+    l = c.lattice
+    l_hashes = [] # list of sets
+    for extent, intent in l:
+        l_hashes.append(set(extent).union(set(intent)))
+    for c in lattice.concepts:
+        if set(c[0]).union(set(c[1])) in l_hashes:
+            print(f'- Concept exists in other result {c[0]} ')
+        else:
+            print(f'* Concept DOES NOT exists in other result {c[0]} ')
 
 if __name__ == '__main__':
     
