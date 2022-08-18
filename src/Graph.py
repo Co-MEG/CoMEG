@@ -68,8 +68,9 @@ class BipartiteGraph:
                         print(f'   Loading book information...')
                         books = {}
                         excluded_attributes = ['popular_shelves', 'description', 'link', 'url', 'image_url', \
-                                                'book_id', 'isbn13', 'work_id', 'text_reviews_count', 'asin', \
-                                                'kindle_asin']
+                                                'book_id', 'isbn13', 'isbn', 'work_id', 'text_reviews_count', 'asin', \
+                                                'kindle_asin', 'average_rating', 'ratings_count', 'num_pages', \
+                                                'publication_day']
 
                         for book in file:
                             data = json.loads(book)
