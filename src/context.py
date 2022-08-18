@@ -187,7 +187,7 @@ class FormalContext:
             raise TypeError(f'Object {obj} is not known.')
 
     @staticmethod
-    def from_csv(path) -> 'FormalContext':
+    def from_csv(path: str) -> 'FormalContext':
         """Build ``FormalContext`` from csv file.
 
         Parameters
@@ -205,21 +205,56 @@ class FormalContext:
         
         return context
 
-    def to_csv(self, path):
+    def to_csv(self, path: str, sep: str = ','):
         """Save formal context interactions to `.csv` file.
 
         Parameters
         ----------
-        path : _type_
+        path : str
             Path to `csv.file`
+        sep : str
+            Separator
         """        
         mat = np.hstack((self.G.reshape(-1, 1), self.I.todense()))
-        cols = np.concatenate([np.array(['row_names']), self.M])
+        cols = np.concatenate([np.array(['names']), self.M])
         df = pd.DataFrame(mat, columns=cols)
         
         try:
-            df.to_csv(path, index=False, sep=',')
+            df.to_csv(path, index=False, sep=sep)
         except OSError as e:
             os.mkdir(get_oserror_dir(e))
-            df.to_csv(path, index=False, sep=',')
+            df.to_csv(path, index=False, sep=sep)
+        print(f'Saved!')
+
+    def to_concept_csv(self, path: str):
+        """Save formal context interactions to `concepts` library `.csv` format. 
+
+        Parameters
+        ----------
+        path : str
+            Path to `csv.file`
+        """        
+        # Convert FormalContext format
+        I_str = self.I.todense().astype(str)
+        I_str[I_str == '1'] = 'X'
+        I_str[I_str == '0'] = ''
+
+        # Build row and column names
+        row_names = self.G.reshape(-1, 1)
+        col_names = np.concatenate([np.array(['names']), self.M])
+
+        # Concatenate and save
+        mat = np.hstack((row_names, I_str))
+        df = pd.DataFrame(mat, columns=col_names)
+        
+        try:
+            df.to_csv(path, index=False)
+        except OSError as e:
+            os.mkdir(get_oserror_dir(e))
+            df.to_csv(path, index=False)
+        
+        # Add necessary line at end of file
+        separators = ',' * (len(col_names) - 1)
+        with open(path, 'a') as f:
+            f.write("R = X = {}" + separators)
         print(f'Saved!')
