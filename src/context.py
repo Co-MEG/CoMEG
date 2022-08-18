@@ -176,6 +176,8 @@ class FormalContext:
         ConceptLattice
             ``ConceptLattice`` instance.
         """        
+        self._build_attr_indx()
+        self._build_obj_indx()
         return ConceptLattice.from_context(self, algo=algo)
 
     def _check_attr(self, attr: str):
