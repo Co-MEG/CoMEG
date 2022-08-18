@@ -81,7 +81,7 @@ class AdamicAdar:
             Scores for predicted edges. Each entry is a list [u, v, s], with (u, v) the edge and s the predicted score.
         """        
         PATH_RES = os.path.join(os.getcwd(), 'data', 'goodreads_poetry', 'result')
-        res = os.path.join(PATH_RES, 'adamic_adar_test_graph2.json')
+        res = os.path.join(PATH_RES, 'adamic_adar_test_graph.json')
         cpt = 0
         with open(res, "a") as f:
         
