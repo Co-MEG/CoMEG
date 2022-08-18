@@ -54,6 +54,7 @@ class BipartiteGraph:
         out_path = os.path.join(in_path_preproc, dirname)
         
         if not use_cache:
+            print('Loading data...')
             os.makedirs(in_path_preproc, exist_ok=True)
             files = os.listdir(in_path_raw)
 
@@ -64,8 +65,11 @@ class BipartiteGraph:
                     
                     # Book attributes
                     if 'books' in f:
+                        print(f'   Loading book information...')
                         books = {}
-                        excluded_attributes = ['popular_shelves', 'description', 'link', 'url', 'image_url']
+                        excluded_attributes = ['popular_shelves', 'description', 'link', 'url', 'image_url', \
+                                                'book_id', 'isbn13', 'work_id', 'text_reviews_count', 'asin', \
+                                                'kindle_asin']
 
                         for book in file:
                             data = json.loads(book)
@@ -74,6 +78,7 @@ class BipartiteGraph:
                     
                     # Interaction information
                     elif 'interactions' in f:
+                        print(f'   Loading interactions information...')
                         links = []
                         edge_attrs = []
                         user_ids = set()
