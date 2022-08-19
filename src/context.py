@@ -163,13 +163,15 @@ class FormalContext:
 
         return list(int_is)
 
-    def lattice(self, algo: str = 'CbO') -> ConceptLattice:
+    def lattice(self, algo: str = 'in-close') -> ConceptLattice:
         """Return Concept Lattice of the Formal Context.
 
         Parameters
         ----------
         algo : str, optional
-            Algorithm name used for building Concept Lattice, by default 'CbO' (Close by One)
+            Algorithm name, by default 'in-close' (in-close). Can be either:
+                * 'in-close': In Close 
+                * 'CbO': Close by One
 
         Returns
         -------
