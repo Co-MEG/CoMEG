@@ -37,16 +37,16 @@ def plot_roc_auc(y_true, y_pred, ax):
 
 def run_toy_concept_lattice():
     # Toy context
-    #context_toy = FormalContext.from_csv(os.path.join(os.getcwd(), 'data/toy/digits.csv'))
-    context_toy = FormalContext.from_csv(os.path.join(os.getcwd(), 'data/toy/animal_movement.csv'))
+    context_toy = FormalContext.from_csv(os.path.join(os.getcwd(), 'data/toy/digits.csv'))
+    #context_toy = FormalContext.from_csv(os.path.join(os.getcwd(), 'data/toy/animal_movement.csv'))
     print(context_toy.I.todense().shape)
     print(context_toy.G)
     print(context_toy.M)
     print()
 
-    #print(context_toy.intention(['01', '03', '09']))
     # Concept Lattice
-    L = ConceptLattice.from_context(context_toy)
+    #L = ConceptLattice.from_context(context_toy, algo='in-close')
+    context_toy.lattice(algo='in-close')
 
 
 def run_prediction():
@@ -200,7 +200,7 @@ def run_concept_lattice():
     print(f'Predicted edge: {score_edge}')
     
     # Specific edge
-    score_edge = ('bc1d727746e210f315138932e0aacb11', '13637887')
+    #score_edge = ('bc1d727746e210f315138932e0aacb11', '13637887')
 
     subgraph = g.subgraph_vicinity(score_edge)
     print(f"# nodes in subgraph: {len(subgraph.V['left'])}, {len(subgraph.V['right'])}")
@@ -215,10 +215,8 @@ def run_concept_lattice():
     print(f'Formal context dimensions: {fc.I.shape}')
 
     fc_path = os.path.join(PATH_RES, 'context', f'context_{score_edge[0]}_{score_edge[1]}.csv')
-    fc.to_csv(fc_path, sep=',')
-
-    # Verify list of concepts with Concepts library
-
+    #fc.to_csv(fc_path, sep=',')
+    fc.to_concept_csv(fc_path)
 
     # Derivation operators: intention, extention
     a = fc.G[0:2]
@@ -241,14 +239,16 @@ def run_concept_lattice():
     print(f'Number of concepts in lattice: {len(lattice)}')
     #L = ConceptLattice.from_context(fc)
 
-    c = Context.fromfile('context_bc1d727746e210f315138932e0aacb11_13637887.csv', frmat='csv')
+    # Verify list of concepts with Concepts library
+    c = Context.fromfile(fc_path, frmat='csv')
     l = c.lattice
+    print(f'Number of concepts in concepts lattice: {len(l)}\n')
     l_hashes = [] # list of sets
     for extent, intent in l:
         l_hashes.append(set(extent).union(set(intent)))
     for c in lattice.concepts:
         if set(c[0]).union(set(c[1])) in l_hashes:
-            print(f'- Concept exists in other result {c[0]} ')
+            print(f'- Concept exists in other result {c[0]}')
         else:
             print(f'* Concept DOES NOT exists in other result {c[0]} ')
 
@@ -260,15 +260,12 @@ if __name__ == '__main__':
 
     # Evaluation (AUC) on test graph
     # ------------------------------
-    run_auc_test_graph()
+    #run_auc_test_graph()
 
     # Concept lattice
     # ---------------
     # Toy data
-    #run_toy_concept_lattice()
+    run_toy_concept_lattice()
     
     # Full data
     #run_concept_lattice()
-
-    
-    
