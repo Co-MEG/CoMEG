@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import List, TYPE_CHECKING
 import numpy as np
+from sklearn.metrics import multilabel_confusion_matrix
 
 from src.concept import FormalConcept
 if TYPE_CHECKING:
@@ -24,7 +25,7 @@ class ConceptLattice:
         return len(self.concepts)
 
     @classmethod
-    def from_context(cls, context: FormalContext, algo: str = 'CbO') -> ConceptLattice:
+    def from_context(cls, context: FormalContext, algo: str = 'in-close') -> ConceptLattice:
         """Return a ``ConceptLattice`` according to ``context``, created using algorithm ``algo``.
 
         Parameters
@@ -32,7 +33,9 @@ class ConceptLattice:
         context : FormalContext
             Formal context on which concept lattice is created.
         algo : str, optional
-            Algorithm name, by default 'CbO' (Close by One)
+            Algorithm name, by default 'in-close' (in-close). Can be either:
+                * 'in-close': In Close 
+                * 'CbO': Close by One
 
         Returns
         -------
@@ -42,8 +45,15 @@ class ConceptLattice:
         algo_func = get_algo(algo)
 
         # Build concepts
-        concepts = algo_func(context)
-
+        if algo == 'in-close':
+            
+            global r_new
+            r_new = 0
+            extents, intents = init_in_close(context)
+            concepts = algo_func(context, extents, intents, r=0, y=0)
+        else:
+            concepts = algo_func(context)
+        
         # Build ConceptLattice
         cl = ConceptLattice(concepts=concepts)
 
@@ -131,12 +141,109 @@ def process(A: list, attrs: list, L: list, context: FormalContext, current_obj: 
                 X = context.extension(Y)
                 process(Z_labels, f_intention, L, context, current_obj)
 
-def minus_lex(A: set, B: set) -> bool:
-    diff = sorted(A.difference(B))
-    return any([x < sorted(B)[-1] for x in diff])
-    #diff = sorted(B.difference(A))
-    #return len(diff) > 0 and \
-    #    any([A.intersection(set(np.arange(1, i))) == B.intersection(set(np.arange(1, i))) for i in diff])
+
+def in_close(context: FormalContext, extents: list, intents: list, r: int = 0, y: int = 0, minimum_support: int = 0) \
+    -> list:
+    """In Close algorithm. 
+
+    Parameters
+    ----------
+    context : FormalContext
+        Formal Context from which concepts are retrieved.
+    extents : list
+        List of extents filled during the process, i.e objects of concepts.
+    intents : list
+        List of intents filled during the process, i.e attributes of concepts.
+    r : int, optional
+        Index of concept being closed, by default 0
+    y : int, optional
+        Starting attribute index, by default 0
+    minimum_support : int, optional
+        If over 0, `minimum support` defines the minimum size of interest of extents, by default 0
+
+    Returns
+    -------
+    List
+        List of formal concepts
+
+    References
+    ----------
+    S. Andrews (2009). 
+    In-Close, a fast algorithm for computing formal concepts. 
+    In International Conference on Conceptual Structures (ICCS), Moscow.
+    """        
+    global r_new
+
+    r_new = r_new + 1
+    for j in context.M[y:]:
+        try:
+            extents[r_new] = []
+        except IndexError:
+            extents.append([])
+
+        # Form a new extent by adding extension of attribute j to current concept extent
+        extents[r_new] = list(sorted(set(extents[r]).intersection(set(context.extension(j)))))
+        
+        # If the extent is empty, skip recursion and move to next attribute. 
+        # If the extent is unchanged, add attribute j to current concept intent, skip recursion and move to next attribute.
+        # Otherwise, extent must be a smaller (lexicographically) intersection. If the extent already exists, skip recursion and move on to next attribute.
+        if len(extents[r_new]) > minimum_support:
+            
+            if len(extents[r_new]) == len(extents[r]):
+                intents[r] = list(sorted(set(intents[r]).union(set(j))))
+            else:
+                if is_cannonical(context, extents, intents, r, context.M2idx.get(j) - 1):
+                    try:
+                        intents[r_new] = []
+                    except IndexError:
+                        intents.append([])
+                    intents[r_new] = list(sorted(set(intents[r]).union(set(j))))
+                    in_close(context, extents, intents, r=r_new, y=context.M2idx.get(j) + 1, minimum_support=minimum_support)
+
+    return [*zip(extents, intents)]
+
+
+def is_cannonical(context, extents, intents, r, y):
+    global r_new
+
+    for k in reversed(range(len(intents[r]))):
+        for j in intents[r][y:k:-1]:
+            for h in range(len(extents[r_new])):
+                if not context.I[context.G2idx.get(extents[r_new][h]),context.M2idx.get(j)]:
+                    break
+            if h == len(extents[r_new]) - 1:
+                return False
+        y = context.M2idx.get(intents[r][k]) - 1
+
+    for j in reversed(range(y, -1, -1)):
+        for h in range(len(extents[r_new])):
+            if not context.I[context.G2idx.get(extents[r_new][h]),j]:
+                break
+        if h == len(extents[r_new]) - 1:
+            return False
+    
+    return True
+    
+def init_in_close(context: FormalContext):
+    """In Close algorithm initilization of extent and intent lists.
+
+    Parameters
+    ----------
+    context : FormalContext
+        Formal Context used to retrieve concepts.
+
+    Returns
+    -------
+    Extent and Intent lists intialized.
+    """    
+    extents, intents = [], []
+    extents_init = list(dict(sorted(context.G2idx.items(), key=lambda x: x[1])).keys())
+    intents_init = []
+    extents.append(extents_init) # Initalize extents with all objects from context
+    intents.append(intents_init) # Initialize intents with empty set attributes
+    
+    return extents, intents
+
 
 def get_algo(algo: str) -> object:
     """Return algorithm function according to algorithm name.
@@ -158,5 +265,7 @@ def get_algo(algo: str) -> object:
     """    
     if algo == 'CbO':
         return close_by_one
+    elif algo == 'in-close':
+        return in_close
     else:
-        raise ValueError(f"Algorithm '{algo}' is not known. Possible values are: 'CbO' (Close by One).")
+        raise ValueError(f"Algorithm '{algo}' is not known. Possible values are: 'CbO' (Close by One) or 'in-close' (In-Close).")
