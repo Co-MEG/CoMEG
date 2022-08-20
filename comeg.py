@@ -1,5 +1,4 @@
-from re import L
-from matplotlib.style import context
+import time
 from src.algorithms import AdamicAdar
 from src.concept_lattice import ConceptLattice
 from src.context import FormalContext
@@ -37,16 +36,35 @@ def plot_roc_auc(y_true, y_pred, ax):
 
 def run_toy_concept_lattice():
     # Toy context
-    context_toy = FormalContext.from_csv(os.path.join(os.getcwd(), 'data/toy/digits.csv'))
-    #context_toy = FormalContext.from_csv(os.path.join(os.getcwd(), 'data/toy/animal_movement.csv'))
+    context_toy = FormalContext.from_csv(os.path.join(os.getcwd(), 'data/toy/context.csv'))
     print(context_toy.I.todense().shape)
     print(context_toy.G)
     print(context_toy.M)
     print()
 
-    # Concept Lattice
+    # Verif
+    p = os.path.join(os.getcwd(), 'data/toy/context_concepts_frmt.csv')
+    context_toy.to_concept_csv(p)
+    c = Context.fromfile(p, frmat='csv')
+    l = c.lattice
+    for e, i in l:
+        print(e, i)
+    print(len(l))
+    l_hashes = [] # list of sets
+    for extent, intent in l:
+        l_hashes.append(set(extent).union(set(intent)))
+
+     # Concept Lattice
     #L = ConceptLattice.from_context(context_toy, algo='in-close')
-    context_toy.lattice(algo='in-close')
+    lattice = context_toy.lattice(algo='in-close')
+    print()
+    for c in lattice.concepts:
+        if set(c[0]).union(set(c[1])) in l_hashes:
+            print('* ', c)
+        else:
+            print(f'X ', c)
+    print(f'Total number of concepts: {len(lattice)}')
+
 
 
 def run_prediction():
@@ -201,6 +219,8 @@ def run_concept_lattice():
     
     # Specific edge
     #score_edge = ('bc1d727746e210f315138932e0aacb11', '13637887')
+    #score_edge = ('18bf7556e8f06efd9269db97880dd9ef', '5289')
+    #score_edge = ('c36d77d30d627e8ad5eccbab8d92f54d', '22237148') # small context
 
     subgraph = g.subgraph_vicinity(score_edge)
     print(f"# nodes in subgraph: {len(subgraph.V['left'])}, {len(subgraph.V['right'])}")
@@ -219,11 +239,11 @@ def run_concept_lattice():
     fc.to_concept_csv(fc_path)
 
     # Derivation operators: intention, extention
-    a = fc.G[0:2]
-    b = fc.M[0:2]
-    print(f'Intention of objects {a}: {fc.intention(a)}')
-    print(f'Extension of attributes {b}: {fc.extension(b)}')
-    print(f'Extention(intention({a})): {fc.extension(fc.intention(a))}')
+    #a = fc.G[0:2]
+    #b = fc.M[0:2]
+    #print(f'Intention of objects {a}: {fc.intention(a)}')
+    #print(f'Extension of attributes {b}: {fc.extension(b)}')
+    #print(f'Extention(intention({a})): {fc.extension(fc.intention(a))}')
 
     # Concept Lattice
     # ---------------
@@ -232,25 +252,55 @@ def run_concept_lattice():
     # sharing attributes `B`. Attributes `B` are all the attributes describing objects `A`. In other words:
     #   * `A = extension(B)`
     #   * `B = intention(A)`
-    lattice = fc.lattice()
-    for c in lattice.concepts:
-        print('**  ', c)
-        print()
+    algo = 'in-close'
+    start = time.time()
+    lattice = fc.lattice(algo=algo)
+    print(f'Elapsed time using {algo}: {time.time()-start}')
+    #for c in lattice.concepts:
+    #    print('**  ', c)
+    #    print()
     print(f'Number of concepts in lattice: {len(lattice)}')
     #L = ConceptLattice.from_context(fc)
+
+    algo = 'CbO'
+    start = time.time()
+    lattice_cbo = fc.lattice(algo=algo)
+    print(f'Elapsed time using {algo}: {time.time()-start}')
+    #for c in lattice.concepts:
+    #    print('**  ', c)
+    #    print()
+    print(f'Number of concepts in lattice: {len(lattice_cbo)}')
 
     # Verify list of concepts with Concepts library
     c = Context.fromfile(fc_path, frmat='csv')
     l = c.lattice
     print(f'Number of concepts in concepts lattice: {len(l)}\n')
-    l_hashes = [] # list of sets
+    """l_hashes = [] # list of sets
     for extent, intent in l:
         l_hashes.append(set(extent).union(set(intent)))
-    for c in lattice.concepts:
+    for c in lattice_cbo.concepts:
         if set(c[0]).union(set(c[1])) in l_hashes:
             print(f'- Concept exists in other result {c[0]}')
         else:
-            print(f'* Concept DOES NOT exists in other result {c[0]} ')
+            print(f'* Concept DOES NOT exists in other result {c[0]} ')"""
+
+    
+    print(f'\nLattice CbO')
+    print(f'-------------------------------')
+    for c in lattice_cbo.concepts:
+        print(c)
+
+    print(f'\nLattice Concepts')
+    print(f'-------------------------------')
+    for e, i in l:
+        print(e, i)
+
+    print(f'\nLattice inclose')
+    print(f'-------------------------------')
+    for c in lattice.concepts:
+        print(c)
+
+    
 
 if __name__ == '__main__':
     
