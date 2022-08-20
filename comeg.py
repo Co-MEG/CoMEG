@@ -218,9 +218,11 @@ def run_concept_lattice():
     print(f'Predicted edge: {score_edge}')
     
     # Specific edge
-    #score_edge = ('bc1d727746e210f315138932e0aacb11', '13637887')
-    #score_edge = ('18bf7556e8f06efd9269db97880dd9ef', '5289')
-    #score_edge = ('c36d77d30d627e8ad5eccbab8d92f54d', '22237148') # small context
+    #score_edge = ('fd379cf294fc1937e41f3f7df3c9eabe', '1381') # max score edge
+    #score_edge = ('bc1d727746e210f315138932e0aacb11', '13637887') # small context
+    #score_edge = ('c36d77d30d627e8ad5eccbab8d92f54d', '22237148') # medium context
+    #score_edge = ('18bf7556e8f06efd9269db97880dd9ef', '5289') # Medium-Large context
+    #score_edge = ('9ec2bf0c6452ee5be914cb3330e233e6', '25052044') # Large context (225, 718) - InClose -> 40s
 
     subgraph = g.subgraph_vicinity(score_edge)
     print(f"# nodes in subgraph: {len(subgraph.V['left'])}, {len(subgraph.V['right'])}")
@@ -256,36 +258,39 @@ def run_concept_lattice():
     start = time.time()
     lattice = fc.lattice(algo=algo)
     print(f'Elapsed time using {algo}: {time.time()-start}')
-    #for c in lattice.concepts:
-    #    print('**  ', c)
-    #    print()
     print(f'Number of concepts in lattice: {len(lattice)}')
-    #L = ConceptLattice.from_context(fc)
 
-    algo = 'CbO'
+    """algo = 'CbO'
     start = time.time()
     lattice_cbo = fc.lattice(algo=algo)
     print(f'Elapsed time using {algo}: {time.time()-start}')
-    #for c in lattice.concepts:
-    #    print('**  ', c)
-    #    print()
-    print(f'Number of concepts in lattice: {len(lattice_cbo)}')
+    print(f'Number of concepts in lattice: {len(lattice_cbo)}')"""
 
     # Verify list of concepts with Concepts library
     c = Context.fromfile(fc_path, frmat='csv')
     l = c.lattice
     print(f'Number of concepts in concepts lattice: {len(l)}\n')
-    """l_hashes = [] # list of sets
+    l_hashes = [] # list of sets
     for extent, intent in l:
         l_hashes.append(set(extent).union(set(intent)))
+    """print(f'Verify CbO algorithm')
+    print(f'===========================================================')
     for c in lattice_cbo.concepts:
         if set(c[0]).union(set(c[1])) in l_hashes:
-            print(f'- Concept exists in other result {c[0]}')
+            print(f'* Concept exists in other result {c[0]}')
         else:
-            print(f'* Concept DOES NOT exists in other result {c[0]} ')"""
+            print(f'X Concept DOES NOT exists in other result {c[0]} ')"""
+    print(f'Verify InClose algorithm')
+    print(f'===========================================================')
+    for c in lattice.concepts:
+        if set(c[0]).union(set(c[1])) in l_hashes:
+            print(f'* Concept exists in other result {c[0]}')
+        else:
+            print(f'X Concept DOES NOT exists in other result {c[0]} ')
 
-    
-    print(f'\nLattice CbO')
+    # Print all concepts in lattices
+    # ======================================
+    """print(f'\nLattice CbO')
     print(f'-------------------------------')
     for c in lattice_cbo.concepts:
         print(c)
@@ -298,7 +303,7 @@ def run_concept_lattice():
     print(f'\nLattice inclose')
     print(f'-------------------------------')
     for c in lattice.concepts:
-        print(c)
+        print(c)"""
 
     
 
@@ -315,7 +320,7 @@ if __name__ == '__main__':
     # Concept lattice
     # ---------------
     # Toy data
-    run_toy_concept_lattice()
+    #run_toy_concept_lattice()
     
     # Full data
-    #run_concept_lattice()
+    run_concept_lattice()

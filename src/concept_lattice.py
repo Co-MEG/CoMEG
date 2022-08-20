@@ -174,88 +174,58 @@ def in_close(context: FormalContext, extents: list, intents: list, r: int = 0, y
     """        
     global r_new
     r_new = r_new + 1
-    print(f'**Idx of current concept: {r} {extents[r], intents[r]} - inclose(r={r},y={y})**')
-    print('---------------------------------')
-    print(f'  idx candidate new concept r_new: {r_new} - columns to try: {context.M[y:]}')
+
     for j in context.M[y:]:
-        print(f'     Attribute {j} (idx={context.M2idx.get(j)}) - Current concept: {r} ')
         try:
             extents[r_new] = []
         except IndexError:
             extents.append([])
 
         # Form a new extent by adding extension of attribute j to current concept extent
-        print(f'        Extent r new: {set(extents[r_new])} - extents r: {extents[r]}')
         extents[r_new] = list(sorted(set(extents[r]).intersection(set(context.extension([j])))))
-        print(f'        Extent r new after : {sorted(set(extents[r_new]))}')
 
         # If the extent is empty, skip recursion and move to next attribute. 
         # If the extent is unchanged, add attribute j to current concept intent, skip recursion and move to next attribute.
         # Otherwise, extent must be a smaller (lexicographically) intersection. If the extent already exists, skip recursion and move on to next attribute.
         if len(extents[r_new]) > minimum_support:
-            
             if len(extents[r_new]) == len(extents[r]):
-                print(f'        Extent is unchanged -> modify only intent of concept r')
                 intents[r] = list(sorted(set(intents[r]).union(set([j]))))
-                print(f'        Intent[{r}] after : {intents[r]}')
             else:
-                print(f'        RECURSION -> is_canno({r},{context.M2idx.get(j) - 1})?')
                 # Test if extent has already be generated using is_cannonical()
                 if is_cannonical(context, extents, intents, r, context.M2idx.get(j) - 1):
-                    print(f'        ==>Is cannonical')
                     try:
                         intents[r_new] = []
                     except IndexError:
                         intents.append([])
-                    
+
                     # Extent is cannonical, i.e new concept 
                     # -> Initialize intent and recursive call to begin closure
                     intents[r_new] = list(sorted(set(intents[r]).union(set([j]))))
-                    print(f'        New intents[{r_new}]: {intents[r_new]} - CALL INCLOSE')
                     in_close(context, extents, intents, r=r_new, y=context.M2idx.get(j) + 1, 
                             minimum_support=minimum_support)
-    print(f'ENDFOR -> return to previous call of in-close')
+
     return [*zip(extents, intents)]
 
 
 def is_cannonical(context, extents, intents, r, y):
     global r_new
 
-    #for k in reversed(range(len(intents[r]))):
-    print(f'        |B[r={r}]-1|={len(intents[r])-1}')
-    
-    # \o/ !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     for k in range(len(intents[r])-1, -1, -1):
-        
-        print(f'        k: {k} |B[r]|={len(intents[r])}')
-        #for j in intents[r][y:k+1:-1]:
-        for j in range(y, context.M2idx.get(intents[r][k]), -1):
-            print(f'          j:{j} -> downto B[r={r}][k={k}]={intents[r][k]}, idx={context.M2idx.get(intents[r][k])}')
-            
+        for j in range(y, context.M2idx.get(intents[r][k]), -1):            
             for h in range(len(extents[r_new])):
-                print(f'            h={h} - context.I[A[r_new={r_new}][h={h}], j={j}] = I[{extents[r_new][h]}][{context.M[j]}] = {context.I[context.G2idx.get(extents[r_new][h]), j]}')
-                #if not context.I[context.G2idx.get(extents[r_new][h]), context.M2idx.get(j)]:
                 if context.I[context.G2idx.get(extents[r_new][h]), j] == 0:
                     h -= 1 # Necessary for next test in case last interaction of h for-loop returns False
                     break
-            #if h == len(extents[r_new]) - 1:
             if h == len(extents[r_new]) - 1:
-                print(f'        Not canonical! -> stop recursion')
                 return False
         y = context.M2idx.get(intents[r][k]) - 1
 
     for j in reversed(range(y, -1, -1)):
-        print(f'        j: {j} - |extents[r_new={r_new}]|={len(extents[r_new])}')
         for h in range(len(extents[r_new])):
-            print(f'          h={h} - context.I[A[r_new={r_new}][h={h}], j={j}] = I[{extents[r_new][h]}][{context.M[j]}] = {context.I[context.G2idx.get(extents[r_new][h]), j]}')
-            #if not context.I[context.G2idx.get(extents[r_new][h]), j]:
             if context.I[context.G2idx.get(extents[r_new][h]), j] == 0:
                 h -= 1 # Necessary for next test in case last interaction of h for-loop returns False
                 break
-        #if h == len(extents[r_new]) - 1:
-        print(f'        h={h} = |A[r_new]|-1={len(extents[r_new])-1}? {h == len(extents[r_new])-1}')
         if h == len(extents[r_new]) - 1:
-            print(f'        Not canonical bis! -> stop recursion')
             return False
     
     return True
