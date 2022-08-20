@@ -239,7 +239,7 @@ class FormalContext:
             Path to `csv.file`
         """        
         # Convert FormalContext format
-        I_str = self.I.todense().astype(str)
+        I_str = self.I.todense().astype(int).astype(str)
         I_str[I_str == '1'] = 'X'
         I_str[I_str == '0'] = ''
 
