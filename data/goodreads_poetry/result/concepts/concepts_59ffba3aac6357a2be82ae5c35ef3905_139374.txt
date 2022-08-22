@@ -1,0 +1,598 @@
+Loaded data from '/Users/simondelarue/Documents/PhD/Research/Co-Meg/CoMEG/data/goodreads_poetry/preproc/goodreads_poetry'.
+Load result values...
+Predicted edge: ('59ffba3aac6357a2be82ae5c35ef3905', '139374')
+# nodes in subgraph: 203, 92
+# edges in subgraph: 294
+# of edge attributes: 0
+# of node attributes right: 92
+Edge exists in graph: True
+Formal context dimensions: (92, 295)
+Saved!
+Elapsed time using in-close: 6.068956136703491
+Number of concepts in lattice: 291
+Number of concepts in concepts lattice: 293
+
+Verify InClose algorithm
+===========================================================
+* Concept exists in other result ['1015201', '106251', '10898243', '11425131', '1151331', '11853480', '1201579', '1201580', '12030685', '12173471', '127684', '12914', '13124956', '13237099', '1373', '1383945', '139374', '1420', '1450284', '146429', '146462', '147924', '150253', '154387', '16241149', '16241810', '171547', '17465598', '175626', '17675075', '17910294', '179631', '1800460', '18528223', '203310', '20613761', '20702490', '20786859', '20949640', '211515', '22543936', '23129930', '23568532', '239236', '2459339', '24611522', '248193', '25004284', '25330115', '25334576', '25362908', '2547', '2549', '25572095', '25937948', '27209355', '27409510', '27494', '27822', '27837534', '279769', '28818688', '28818718', '29358559', '29363291', '304485', '313972', '333706', '3612415', '364141', '40795', '440025', '45974', '508149', '539477', '5932', '606104', '63114', '6585085', '6612726', '6798263', '70189', '7090309', '7427866', '766882', '8122927', '853153', '85745', '93405', '9583799', '97553', '978914']
+* Concept exists in other result ['1015201', '106251', '10898243', '11425131', '1151331', '11853480', '1201579', '1201580', '12030685', '12173471', '127684', '12914', '13124956', '13237099', '1373', '1383945', '139374', '1420', '1450284', '146429', '146462', '147924', '150253', '154387', '16241149', '16241810', '171547', '17465598', '175626', '17675075', '17910294', '179631', '1800460', '18528223', '20613761', '20702490', '20786859', '20949640', '211515', '22543936', '23129930', '23568532', '239236', '2459339', '24611522', '248193', '25004284', '25330115', '25334576', '25362908', '2547', '2549', '25572095', '25937948', '27209355', '27409510', '27494', '27837534', '279769', '28818688', '28818718', '29358559', '29363291', '304485', '313972', '3612415', '364141', '40795', '440025', '45974', '508149', '539477', '5932', '606104', '63114', '6585085', '6612726', '6798263', '70189', '7090309', '766882', '8122927', '853153', '85745', '93405', '9583799', '978914']
+* Concept exists in other result ['1015201', '154387', '22543936', '29358559', '313972', '8122927']
+* Concept exists in other result ['1015201', '154387', '22543936', '29358559', '8122927']
+* Concept exists in other result ['8122927']
+* Concept exists in other result ['1015201']
+* Concept exists in other result ['154387']
+* Concept exists in other result ['22543936']
+* Concept exists in other result ['29358559']
+* Concept exists in other result ['313972']
+* Concept exists in other result ['12030685', '1383945', '16241149', '17465598', '17675075', '239236', '24611522', '25334576', '25362908', '2549', '25937948', '28818688', '29363291', '70189', '7090309']
+* Concept exists in other result ['12030685', '1383945', '16241149', '17465598', '17675075', '25362908', '2549', '25937948', '29363291', '70189', '7090309']
+* Concept exists in other result ['1383945']
+* Concept exists in other result ['7090309']
+* Concept exists in other result ['17465598', '25937948', '29363291']
+* Concept exists in other result ['17465598']
+* Concept exists in other result ['25937948', '29363291']
+* Concept exists in other result ['25937948']
+* Concept exists in other result ['29363291']
+* Concept exists in other result ['17465598', '29363291']
+* Concept exists in other result ['25362908']
+* Concept exists in other result ['17675075']
+* Concept exists in other result ['2549', '70189']
+* Concept exists in other result ['2549']
+* Concept exists in other result ['70189']
+* Concept exists in other result ['12030685', '16241149']
+* Concept exists in other result ['12030685']
+* Concept exists in other result ['16241149']
+* Concept exists in other result ['16241149', '17465598']
+* Concept exists in other result ['25937948', '7090309']
+* Concept exists in other result ['16241149', '70189']
+* Concept exists in other result ['24611522']
+* Concept exists in other result ['239236', '25334576', '28818688']
+* Concept exists in other result ['28818688']
+* Concept exists in other result ['239236']
+* Concept exists in other result ['25334576']
+* Concept exists in other result ['1383945', '28818688']
+* Concept exists in other result ['17465598', '24611522', '25937948', '29363291']
+* Concept exists in other result ['24611522', '25334576', '25362908']
+* Concept exists in other result ['25937948', '28818688', '29363291']
+* Concept exists in other result ['106251', '11425131', '1151331', '11853480', '1201579', '1201580', '12173471', '127684', '12914', '13124956', '13237099', '1373', '139374', '1420', '1450284', '146429', '146462', '147924', '150253', '16241810', '171547', '175626', '179631', '1800460', '18528223', '20613761', '20702490', '20786859', '20949640', '211515', '23129930', '2459339', '248193', '25004284', '25330115', '2547', '25572095', '27209355', '27409510', '27494', '27837534', '279769', '28818718', '304485', '3612415', '364141', '40795', '440025', '45974', '508149', '539477', '5932', '606104', '63114', '6585085', '6612726', '6798263', '766882', '853153', '85745', '93405', '9583799', '978914']
+* Concept exists in other result ['106251', '11425131', '1151331', '11853480', '1201579', '1201580', '12173471', '1450284', '146462', '16241810', '1800460', '18528223', '20702490', '20786859', '20949640', '23129930', '2459339', '25330115', '27209355', '27409510', '27837534', '279769', '28818718', '440025', '508149', '606104', '63114', '6585085', '6612726', '853153', '93405', '978914']
+* Concept exists in other result ['146462', '25330115', '63114']
+* Concept exists in other result ['146462']
+* Concept exists in other result ['63114']
+* Concept exists in other result ['25330115']
+* Concept exists in other result ['20949640', '279769']
+* Concept exists in other result ['279769']
+* Concept exists in other result ['20949640']
+* Concept exists in other result ['11425131']
+* Concept exists in other result ['1151331', '12173471']
+* Concept exists in other result ['1151331']
+* Concept exists in other result ['12173471']
+* Concept exists in other result ['606104']
+* Concept exists in other result ['1450284', '20786859']
+* Concept exists in other result ['1450284']
+* Concept exists in other result ['20786859']
+* Concept exists in other result ['106251', '23129930', '27409510', '27837534', '6612726', '93405']
+* Concept exists in other result ['93405']
+* Concept exists in other result ['106251']
+* Concept exists in other result ['6612726']
+* Concept exists in other result ['23129930']
+* Concept exists in other result ['27409510', '27837534']
+* Concept exists in other result ['27409510']
+* Concept exists in other result ['27837534']
+* Concept exists in other result ['106251', '93405']
+* Concept exists in other result ['11853480', '1800460', '508149', '978914']
+* Concept exists in other result ['978914']
+* Concept exists in other result ['508149']
+* Concept exists in other result ['1800460']
+* Concept exists in other result ['11853480']
+* Concept exists in other result ['1201580', '2459339', '27209355', '6585085']
+* Concept exists in other result ['1201580']
+* Concept exists in other result ['2459339']
+* Concept exists in other result ['6585085']
+* Concept exists in other result ['27209355']
+* Concept exists in other result ['1201580', '6585085']
+* Concept exists in other result ['16241810', '18528223']
+* Concept exists in other result ['16241810']
+* Concept exists in other result ['18528223']
+* Concept exists in other result ['440025']
+* Concept exists in other result ['1201579', '20702490', '28818718', '853153']
+* Concept exists in other result ['853153']
+* Concept exists in other result ['1201579']
+* Concept exists in other result ['20702490']
+* Concept exists in other result ['28818718']
+* Concept exists in other result ['20702490', '28818718']
+* Concept exists in other result ['440025', '978914']
+* Concept exists in other result ['1201580', '279769', '63114']
+* Concept exists in other result ['1151331', '1450284']
+* Concept exists in other result ['106251', '606104']
+* Concept exists in other result ['1800460', '2459339']
+* Concept exists in other result ['11425131', '11853480', '12173471']
+* Concept exists in other result ['18528223', '20702490', '20786859', '20949640']
+* Concept exists in other result ['25330115', '27209355', '27409510', '27837534', '28818718']
+* Concept exists in other result ['12173471', '23129930', '63114']
+* Concept exists in other result ['1201579', '1201580', '18528223', '25330115', '6585085', '978914']
+* Concept exists in other result ['440025', '6612726']
+* Concept exists in other result ['1450284', '27209355']
+* Concept exists in other result ['106251', '146462', '93405']
+* Concept exists in other result ['20702490', '2459339', '28818718', '508149']
+* Concept exists in other result ['147924', '9583799']
+* Concept exists in other result ['9583799']
+* Concept exists in other result ['147924']
+* Concept exists in other result ['127684', '1373', '171547', '179631', '211515', '539477']
+* Concept exists in other result ['171547']
+* Concept exists in other result ['211515', '539477']
+* Concept exists in other result ['539477']
+* Concept exists in other result ['211515']
+* Concept exists in other result ['127684', '179631']
+* Concept exists in other result ['179631']
+* Concept exists in other result ['127684']
+* Concept exists in other result ['1373']
+* Concept exists in other result ['12914', '13124956', '13237099', '139374', '1420', '146429', '150253', '175626', '20613761', '248193', '25004284', '2547', '25572095', '27494', '304485', '3612415', '364141', '40795', '45974', '5932', '6798263', '766882', '85745']
+* Concept exists in other result ['150253', '175626']
+* Concept exists in other result ['175626']
+* Concept exists in other result ['150253']
+* Concept exists in other result ['146429', '2547', '3612415', '40795']
+* Concept exists in other result ['40795']
+* Concept exists in other result ['146429']
+* Concept exists in other result ['3612415']
+* Concept exists in other result ['2547']
+* Concept exists in other result ['20613761', '6798263']
+* Concept exists in other result ['6798263']
+* Concept exists in other result ['20613761']
+* Concept exists in other result ['85745']
+* Concept exists in other result ['45974', '5932']
+* Concept exists in other result ['45974']
+* Concept exists in other result ['5932']
+* Concept exists in other result ['139374']
+* Concept exists in other result ['304485', '364141']
+* Concept exists in other result ['364141']
+* Concept exists in other result ['304485']
+* Concept exists in other result ['13124956', '248193', '766882']
+* Concept exists in other result ['248193', '766882']
+* Concept exists in other result ['248193']
+* Concept exists in other result ['766882']
+* Concept exists in other result ['13124956']
+* Concept exists in other result ['12914', '25572095']
+* Concept exists in other result ['12914']
+* Concept exists in other result ['25572095']
+* Concept exists in other result ['13237099', '1420', '25004284', '27494']
+* Concept exists in other result ['1420']
+* Concept exists in other result ['27494']
+* Concept exists in other result ['13237099']
+* Concept exists in other result ['25004284']
+* Concept exists in other result ['139374', '1420']
+* Concept exists in other result ['27494', '5932', '85745']
+* Concept exists in other result ['3612415', '6798263']
+* Concept exists in other result ['13124956', '13237099']
+* Concept exists in other result ['25004284', '25572095']
+* Concept exists in other result ['3612415', '85745']
+* Concept exists in other result ['175626', '45974', '5932']
+* Concept exists in other result ['13237099', '6798263']
+* Concept exists in other result ['146429', '146462', '171547', '25330115', '2547', '3612415', '40795', '63114']
+* Concept exists in other result ['3612415', '63114']
+* Concept exists in other result ['20613761', '20949640', '211515', '279769', '539477', '6798263']
+* Concept exists in other result ['20613761', '20949640']
+* Concept exists in other result ['11425131', '127684', '179631', '85745', '9583799']
+* Concept exists in other result ['1151331', '12173471', '45974', '5932']
+* Concept exists in other result ['1151331', '45974']
+* Concept exists in other result ['1373', '139374', '1450284', '20786859']
+* Concept exists in other result ['106251', '23129930', '27409510', '27837534', '304485', '364141', '6612726', '93405']
+* Concept exists in other result ['106251', '304485', '364141', '93405']
+* Concept exists in other result ['11853480', '13124956', '147924', '1800460', '248193', '508149', '766882', '978914']
+* Concept exists in other result ['248193', '766882', '978914']
+* Concept exists in other result ['13124956', '978914']
+* Concept exists in other result ['1201580', '12914', '2459339', '25572095', '27209355', '6585085']
+* Concept exists in other result ['13237099', '1420', '25004284', '27494', '440025']
+* Concept exists in other result ['1373', '146462']
+* Concept exists in other result ['248193', '440025', '766882', '978914']
+* Concept exists in other result ['1201580', '127684', '147924', '279769', '63114']
+* Concept exists in other result ['1151331', '1450284', '211515', '45974']
+* Concept exists in other result ['150253', '853153']
+* Concept exists in other result ['1201579', '139374', '1420', '171547']
+* Concept exists in other result ['27494', '508149', '5932', '85745']
+* Concept exists in other result ['3612415', '6585085', '6798263']
+* Concept exists in other result ['2547', '6612726', '9583799']
+* Concept exists in other result ['18528223', '20613761', '20702490', '20786859', '20949640']
+* Concept exists in other result ['23129930', '25004284', '25572095']
+* Concept exists in other result ['12173471', '23129930', '3612415', '63114', '85745']
+* Concept exists in other result ['1201579', '1201580', '13124956', '18528223', '25330115', '6585085', '978914']
+* Concept exists in other result ['139374', '279769']
+* Concept exists in other result ['147924', '16241810', '40795']
+* Concept exists in other result ['175626', '179631', '45974', '5932']
+* Concept exists in other result ['12914', '539477']
+* Concept exists in other result ['106251', '146462', '304485', '364141', '93405']
+* Concept exists in other result ['13237099', '20702490', '2459339', '28818718', '508149', '6798263']
+* Concept exists in other result ['10898243', '17910294', '23568532']
+* Concept exists in other result ['10898243', '23568532']
+* Concept exists in other result ['23568532']
+* Concept exists in other result ['10898243']
+* Concept exists in other result ['17910294']
+* Concept exists in other result ['17910294', '23568532']
+* Concept exists in other result ['1015201', '106251', '11425131', '1151331', '11853480', '1201579', '1201580', '12030685', '12173471', '127684', '12914', '13124956', '13237099', '1373', '1383945', '139374', '1420', '1450284', '146429', '146462', '147924', '150253', '154387', '16241149', '16241810', '171547', '17465598', '175626', '17675075', '179631', '1800460', '18528223', '20613761', '20702490', '20786859', '20949640', '211515', '22543936', '23129930', '239236', '2459339', '24611522', '248193', '25004284', '25330115', '25334576', '25362908', '2547', '2549', '25572095', '25937948', '27209355', '27409510', '27494', '27837534', '279769', '28818688', '28818718', '29358559', '29363291', '304485', '313972', '3612415', '364141', '40795', '440025', '45974', '508149', '539477', '5932', '606104', '63114', '6585085', '6612726', '6798263', '70189', '7090309', '766882', '8122927', '853153', '85745', '93405', '9583799', '978914']
+* Concept exists in other result ['1015201', '106251', '11425131', '1151331', '11853480', '1201579', '1201580', '12030685', '12173471', '1383945', '1450284', '146462', '154387', '16241149', '16241810', '17465598', '17675075', '1800460', '18528223', '20702490', '20786859', '20949640', '22543936', '23129930', '2459339', '25330115', '25362908', '2549', '25937948', '27209355', '27409510', '27837534', '279769', '28818718', '29358559', '29363291', '440025', '508149', '606104', '63114', '6585085', '6612726', '70189', '7090309', '8122927', '853153', '93405', '978914']
+* Concept exists in other result ['1015201', '1383945', '154387', '22543936', '29358559', '8122927']
+* Concept exists in other result ['146462', '25330115', '63114', '7090309']
+* Concept exists in other result ['17465598', '20949640', '25937948', '279769', '29363291']
+* Concept exists in other result ['1151331', '12173471', '25362908']
+* Concept exists in other result ['106251', '17675075', '23129930', '27409510', '27837534', '6612726', '93405']
+* Concept exists in other result ['1201580', '2459339', '2549', '27209355', '6585085', '70189']
+* Concept exists in other result ['12030685', '16241149', '440025']
+* Concept exists in other result ['508149', '70189']
+* Concept exists in other result ['6612726', '7090309']
+* Concept exists in other result ['16241149', '16241810', '17465598']
+* Concept exists in other result ['17675075', '18528223', '20702490', '20786859', '20949640']
+* Concept exists in other result ['23129930', '25362908']
+* Concept exists in other result ['25330115', '25937948', '27209355', '27409510', '27837534', '28818718', '29363291']
+* Concept exists in other result ['28818718', '29363291']
+* Concept exists in other result ['106251', '146462', '16241149', '70189', '93405']
+* Concept exists in other result ['17465598', '20702490', '2459339', '28818718', '29363291', '508149']
+* Concept exists in other result ['147924', '24611522', '9583799']
+* Concept exists in other result ['12914', '13124956', '13237099', '139374', '1420', '146429', '150253', '175626', '20613761', '239236', '248193', '25004284', '25334576', '2547', '25572095', '27494', '28818688', '304485', '313972', '3612415', '364141', '40795', '45974', '5932', '6798263', '766882', '85745']
+* Concept exists in other result ['150253', '175626', '28818688', '313972']
+* Concept exists in other result ['150253', '239236']
+* Concept exists in other result ['25004284', '25334576', '25572095']
+* Concept exists in other result ['13124956', '239236']
+* Concept exists in other result ['1015201', '1383945', '150253', '154387', '175626', '22543936', '28818688', '29358559', '313972', '8122927']
+* Concept exists in other result ['146429', '146462', '171547', '25330115', '2547', '3612415', '40795', '63114', '7090309']
+* Concept exists in other result ['2547', '7090309']
+* Concept exists in other result ['17465598', '20613761', '20949640', '211515', '24611522', '25937948', '279769', '29363291', '539477', '6798263']
+* Concept exists in other result ['17465598', '29363291', '6798263']
+* Concept exists in other result ['1151331', '12173471', '25362908', '45974', '5932']
+* Concept exists in other result ['106251', '17675075', '23129930', '27409510', '27837534', '304485', '364141', '6612726', '93405']
+* Concept exists in other result ['1201580', '12914', '2459339', '2549', '25572095', '27209355', '6585085', '70189']
+* Concept exists in other result ['16241810', '18528223', '239236']
+* Concept exists in other result ['18528223', '239236']
+* Concept exists in other result ['12030685', '13237099', '1420', '16241149', '25004284', '27494', '440025']
+* Concept exists in other result ['12030685', '13237099']
+* Concept exists in other result ['1201579', '20702490', '25334576', '28818718', '853153']
+* Concept exists in other result ['150253', '239236', '853153']
+* Concept exists in other result ['27494', '508149', '5932', '70189', '85745']
+* Concept exists in other result ['2547', '6612726', '7090309', '9583799']
+* Concept exists in other result ['12030685', '13124956', '13237099']
+* Concept exists in other result ['17675075', '18528223', '20613761', '20702490', '20786859', '20949640']
+* Concept exists in other result ['23129930', '24611522', '25004284', '25334576', '25362908', '25572095']
+* Concept exists in other result ['25330115', '25937948', '27209355', '27409510', '27837534', '28818688', '28818718', '29363291']
+* Concept exists in other result ['1201579', '1201580', '13124956', '18528223', '239236', '25330115', '6585085', '978914']
+* Concept exists in other result ['106251', '146462', '16241149', '304485', '364141', '70189', '93405']
+* Concept exists in other result ['13237099', '17465598', '20702490', '2459339', '28818718', '29363291', '508149', '6798263']
+* Concept exists in other result ['1015201', '106251', '10898243', '11425131', '1151331', '11853480', '1201579', '1201580', '12030685', '12173471', '1383945', '1450284', '146462', '154387', '16241149', '16241810', '17465598', '17675075', '1800460', '18528223', '20702490', '20786859', '20949640', '22543936', '23129930', '23568532', '2459339', '25330115', '25362908', '2549', '25937948', '27209355', '27409510', '27837534', '279769', '28818718', '29358559', '29363291', '440025', '508149', '606104', '63114', '6585085', '6612726', '70189', '7090309', '8122927', '853153', '93405', '978914']
+* Concept exists in other result ['1151331', '12173471', '23568532', '25362908']
+* Concept exists in other result ['10898243', '16241810', '18528223']
+* Concept exists in other result ['10898243', '11425131', '11853480', '12173471']
+* Concept exists in other result ['17675075', '18528223', '20702490', '20786859', '20949640', '23568532']
+* Concept exists in other result ['12914', '13124956', '13237099', '139374', '1420', '146429', '150253', '175626', '17910294', '20613761', '239236', '248193', '25004284', '25334576', '2547', '25572095', '27494', '28818688', '304485', '313972', '3612415', '364141', '40795', '45974', '5932', '6798263', '766882', '85745']
+* Concept exists in other result ['17910294', '20613761', '6798263']
+* Concept exists in other result ['17465598', '17910294', '20613761', '20949640', '211515', '24611522', '25937948', '279769', '29363291', '539477', '6798263']
+* Concept exists in other result ['17465598', '17910294']
+* Concept exists in other result ['1151331', '12173471', '23568532', '25362908', '45974', '5932']
+* Concept exists in other result ['10898243', '16241810', '18528223', '239236']
+* Concept exists in other result ['16241149', '16241810', '17465598', '17910294']
+* Concept exists in other result ['17675075', '18528223', '20613761', '20702490', '20786859', '20949640', '23568532']
+* Concept exists in other result ['7427866']
+* Concept exists in other result ['97553']
+* Concept exists in other result ['203310']
+* Concept exists in other result ['27822']
+* Concept exists in other result ['333706']
+* Concept exists in other result ['1015201', '154387', '22543936', '29358559', '313972', '333706', '8122927']
+* Concept exists in other result ['12030685', '1383945', '16241149', '17465598', '17675075', '239236', '24611522', '25334576', '25362908', '2549', '25937948', '28818688', '29363291', '70189', '7090309', '97553']
+* Concept exists in other result ['239236', '25334576', '28818688', '97553']
+* Concept exists in other result ['106251', '11425131', '1151331', '11853480', '1201579', '1201580', '12173471', '127684', '12914', '13124956', '13237099', '1373', '139374', '1420', '1450284', '146429', '146462', '147924', '150253', '16241810', '171547', '175626', '179631', '1800460', '18528223', '203310', '20613761', '20702490', '20786859', '20949640', '211515', '23129930', '2459339', '248193', '25004284', '25330115', '2547', '25572095', '27209355', '27409510', '27494', '27822', '27837534', '279769', '28818718', '304485', '3612415', '364141', '40795', '440025', '45974', '508149', '539477', '5932', '606104', '63114', '6585085', '6612726', '6798263', '7427866', '766882', '853153', '85745', '93405', '9583799', '978914']
+* Concept exists in other result ['12914', '13124956', '13237099', '139374', '1420', '146429', '150253', '175626', '203310', '20613761', '248193', '25004284', '2547', '25572095', '27494', '27822', '304485', '3612415', '364141', '40795', '45974', '5932', '6798263', '766882', '85745']
+* Concept exists in other result ['20613761', '27822', '6798263']
+* Concept exists in other result ['203310', '45974', '5932']
+* Concept exists in other result ['248193', '27822', '766882']
+* Concept exists in other result ['27822', '766882']
+* Concept exists in other result ['20613761', '20949640', '211515', '27822', '279769', '539477', '6798263', '7427866']
+* Concept exists in other result ['1151331', '12173471', '203310', '45974', '5932']
+* Concept exists in other result ['248193', '27822', '440025', '766882', '978914']
+* Concept exists in other result ['16241810', '203310']
+* Concept exists in other result ['1015201', '106251', '11425131', '1151331', '11853480', '1201579', '1201580', '12030685', '12173471', '127684', '12914', '13124956', '13237099', '1373', '1383945', '139374', '1420', '1450284', '146429', '146462', '147924', '150253', '154387', '16241149', '16241810', '171547', '17465598', '175626', '17675075', '179631', '1800460', '18528223', '203310', '20613761', '20702490', '20786859', '20949640', '211515', '22543936', '23129930', '239236', '2459339', '24611522', '248193', '25004284', '25330115', '25334576', '25362908', '2547', '2549', '25572095', '25937948', '27209355', '27409510', '27494', '27822', '27837534', '279769', '28818688', '28818718', '29358559', '29363291', '304485', '313972', '333706', '3612415', '364141', '40795', '440025', '45974', '508149', '539477', '5932', '606104', '63114', '6585085', '6612726', '6798263', '70189', '7090309', '7427866', '766882', '8122927', '853153', '85745', '93405', '9583799', '97553', '978914']
+* Concept exists in other result ['127684', '1373', '171547', '179631', '211515', '333706', '539477']
+* Concept exists in other result ['127684', '179631', '333706']
+* Concept exists in other result ['179631', '333706']
+* Concept exists in other result ['1373', '333706']
+* Concept exists in other result ['12914', '13124956', '13237099', '139374', '1420', '146429', '150253', '175626', '203310', '20613761', '239236', '248193', '25004284', '25334576', '2547', '25572095', '27494', '27822', '28818688', '304485', '313972', '3612415', '364141', '40795', '45974', '5932', '6798263', '766882', '85745', '97553']
+* Concept exists in other result ['17465598', '20613761', '20949640', '211515', '24611522', '25937948', '27822', '279769', '29363291', '539477', '6798263', '7427866']
+* Concept exists in other result ['11425131', '127684', '179631', '333706', '85745', '9583799']
+* Concept exists in other result ['1151331', '12173471', '203310', '25362908', '45974', '5932']
+* Concept exists in other result ['606104', '97553']
+* Concept exists in other result ['1373', '146462', '333706']
+* Concept exists in other result ['16241149', '16241810', '17465598', '203310']
+* Concept exists in other result ['175626', '179631', '333706', '45974', '5932']
+* Concept exists in other result ['12914', '13124956', '13237099', '139374', '1420', '146429', '150253', '175626', '17910294', '203310', '20613761', '239236', '248193', '25004284', '25334576', '2547', '25572095', '27494', '27822', '28818688', '304485', '313972', '3612415', '364141', '40795', '45974', '5932', '6798263', '766882', '85745', '97553']
+* Concept exists in other result ['17910294', '20613761', '27822', '6798263']
+* Concept exists in other result ['17910294', '203310']
+* Concept exists in other result ['17465598', '17910294', '20613761', '20949640', '211515', '24611522', '25937948', '27822', '279769', '29363291', '539477', '6798263', '7427866']
+* Concept exists in other result ['1151331', '12173471', '203310', '23568532', '25362908', '45974', '5932']
+* Concept exists in other result ['16241149', '16241810', '17465598', '17910294', '203310']
+* (['1015201', '106251', '10898243', '11425131', '1151331', '11853480', '1201579', '1201580', '12030685', '12173471', '127684', '12914', '13124956', '13237099', '1373', '1383945', '139374', '1420', '1450284', '146429', '146462', '147924', '150253', '154387', '16241149', '16241810', '171547', '17465598', '175626', '17675075', '17910294', '179631', '1800460', '18528223', '203310', '20613761', '20702490', '20786859', '20949640', '211515', '22543936', '23129930', '23568532', '239236', '2459339', '24611522', '248193', '25004284', '25330115', '25334576', '25362908', '2547', '2549', '25572095', '25937948', '27209355', '27409510', '27494', '27822', '27837534', '279769', '28818688', '28818718', '29358559', '29363291', '304485', '313972', '333706', '3612415', '364141', '40795', '440025', '45974', '508149', '539477', '5932', '606104', '63114', '6585085', '6612726', '6798263', '70189', '7090309', '7427866', '766882', '8122927', '853153', '85745', '93405', '9583799', '97553', '978914'], ['country_code_US'])
+* (['1015201', '106251', '10898243', '11425131', '1151331', '11853480', '1201579', '1201580', '12030685', '12173471', '127684', '12914', '13124956', '13237099', '1373', '1383945', '139374', '1420', '1450284', '146429', '146462', '147924', '150253', '154387', '16241149', '16241810', '171547', '17465598', '175626', '17675075', '17910294', '179631', '1800460', '18528223', '20613761', '20702490', '20786859', '20949640', '211515', '22543936', '23129930', '23568532', '239236', '2459339', '24611522', '248193', '25004284', '25330115', '25334576', '25362908', '2547', '2549', '25572095', '25937948', '27209355', '27409510', '27494', '27837534', '279769', '28818688', '28818718', '29358559', '29363291', '304485', '313972', '3612415', '364141', '40795', '440025', '45974', '508149', '539477', '5932', '606104', '63114', '6585085', '6612726', '6798263', '70189', '7090309', '766882', '8122927', '853153', '85745', '93405', '9583799', '978914'], ['country_code_US', 'edition_information_'])
+* (['1015201', '154387', '22543936', '29358559', '313972', '8122927'], ['country_code_US', 'edition_information_', 'format_', 'is_ebook_false', 'publication_month_', 'publication_year_', 'publisher_'])
+* (['1015201', '154387', '22543936', '29358559', '8122927'], ['country_code_US', 'edition_information_', 'format_', 'is_ebook_false', 'language_code_', 'publication_month_', 'publication_year_', 'publisher_'])
+* (['8122927'], ['country_code_US', 'edition_information_', 'format_', 'is_ebook_false', 'language_code_', 'publication_month_', 'publication_year_', 'publisher_', 'title_Hard Times Require Furious Dancing: New Poems', 'title_without_series_Hard Times Require Furious Dancing: New Poems'])
+* (['1015201'], ['country_code_US', 'edition_information_', 'format_', 'is_ebook_false', 'language_code_', 'publication_month_', 'publication_year_', 'publisher_', "title_Someone else's life", "title_without_series_Someone else's life"])
+* (['154387'], ['country_code_US', 'edition_information_', 'format_', 'is_ebook_false', 'language_code_', 'publication_month_', 'publication_year_', 'publisher_', 'title_Sonnets from the Portuguese', 'title_without_series_Sonnets from the Portuguese'])
+* (['22543936'], ['country_code_US', 'edition_information_', 'format_', 'is_ebook_false', 'language_code_', 'publication_month_', 'publication_year_', 'publisher_', 'title_Ten Windows: How Great Poems Transform the World', 'title_without_series_Ten Windows: How Great Poems Transform the World'])
+* (['29358559'], ['country_code_US', 'edition_information_', 'format_', 'is_ebook_false', 'language_code_', 'publication_month_', 'publication_year_', 'publisher_', 'title_Upstream: Selected Essays', 'title_without_series_Upstream: Selected Essays'])
+* (['313972'], ['country_code_US', 'edition_information_', 'format_', 'is_ebook_false', 'language_code_eng', 'publication_month_', 'publication_year_', 'publisher_', 'title_The Way of Chuang Tzu', 'title_without_series_The Way of Chuang Tzu'])
+* (['12030685', '1383945', '16241149', '17465598', '17675075', '239236', '24611522', '25334576', '25362908', '2549', '25937948', '28818688', '29363291', '70189', '7090309'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false'])
+* (['12030685', '1383945', '16241149', '17465598', '17675075', '25362908', '2549', '25937948', '29363291', '70189', '7090309'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_'])
+* (['1383945'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_', 'publication_month_', 'publication_year_1923', 'publisher_Maurice Darantiere', 'title_Spring and All', 'title_without_series_Spring and All'])
+* (['7090309'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_', 'publication_month_1', 'publication_year_2010', 'publisher_Knopf', 'title_If There is Something to Desire: One Hundred Poems', 'title_without_series_If There is Something to Desire: One Hundred Poems'])
+* (['17465598', '25937948', '29363291'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_', 'publication_month_10'])
+* (['17465598'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_', 'publication_month_10', 'publication_year_2013', 'publisher_Wave Books', 'title_Trances of the Blast', 'title_without_series_Trances of the Blast'])
+* (['25937948', '29363291'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_', 'publication_month_10', 'publication_year_2016'])
+* (['25937948'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_', 'publication_month_10', 'publication_year_2016', 'publisher_Knopf', 'title_Float', 'title_without_series_Float'])
+* (['29363291'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_', 'publication_month_10', 'publication_year_2016', 'publisher_Wave Books', 'title_My Private Property', 'title_without_series_My Private Property'])
+* (['17465598', '29363291'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_', 'publication_month_10', 'publisher_Wave Books'])
+* (['25362908'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_', 'publication_month_12', 'publication_year_2015', 'publisher_PM Press', 'title_Late in the Day: Poems 2010–2014', 'title_without_series_Late in the Day: Poems 2010–2014'])
+* (['17675075'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_', 'publication_month_4', 'publication_year_2014', 'publisher_Bellevue Literary Press', 'title_The Poetic Species: A Conversation with Edward O. Wilson and Robert Hass', 'title_without_series_The Poetic Species: A Conversation with Edward O. Wilson and Robert Hass'])
+* (['2549', '70189'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_', 'publication_month_6'])
+* (['2549'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_', 'publication_month_6', 'publication_year_1950', 'publisher_Alfred A.Knopf', 'title_A Tear and a Smile', 'title_without_series_A Tear and a Smile'])
+* (['70189'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_', 'publication_month_6', 'publication_year_2006', 'publisher_W. W. Norton  Company', 'title_Rainer Maria Rilke and Lou Andreas-Salomé: The Correspondence', 'title_without_series_Rainer Maria Rilke and Lou Andreas-Salomé: The Correspondence'])
+* (['12030685', '16241149'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_', 'publication_month_8'])
+* (['12030685'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_', 'publication_month_8', 'publication_year_2012', 'publisher_Ecco', 'title_What Light Can Do: Essays on Art, Imagination, and the Natural World', 'title_without_series_What Light Can Do: Essays on Art, Imagination, and the Natural World'])
+* (['16241149'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_', 'publication_month_8', 'publication_year_2013', 'publisher_W. W. Norton  Company', 'title_Haiku in English: The First Hundred Years', 'title_without_series_Haiku in English: The First Hundred Years'])
+* (['16241149', '17465598'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_', 'publication_year_2013'])
+* (['25937948', '7090309'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_', 'publisher_Knopf'])
+* (['16241149', '70189'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_', 'publisher_W. W. Norton  Company'])
+* (['24611522'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_en-GB', 'publication_month_10', 'publication_year_2015', 'publisher_Penguin Press', 'title_Felicity', 'title_without_series_Felicity'])
+* (['239236', '25334576', '28818688'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_eng'])
+* (['28818688'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_eng', 'publication_month_', 'publication_year_2016', 'publisher_Copper Canyon', 'title_Garden Time', 'title_without_series_Garden Time'])
+* (['239236'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_eng', 'publication_month_7', 'publication_year_2003', 'publisher_Copper Canyon Press', 'title_Braided Creek', 'title_without_series_Braided Creek'])
+* (['25334576'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'language_code_eng', 'publication_month_9', 'publication_year_2015', 'publisher_Faber & Faber', 'title_Grief is the Thing with Feathers', 'title_without_series_Grief is the Thing with Feathers'])
+* (['1383945', '28818688'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'publication_month_'])
+* (['17465598', '24611522', '25937948', '29363291'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'publication_month_10'])
+* (['24611522', '25334576', '25362908'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'publication_year_2015'])
+* (['25937948', '28818688', '29363291'], ['country_code_US', 'edition_information_', 'format_Hardcover', 'is_ebook_false', 'publication_year_2016'])
+* (['106251', '11425131', '1151331', '11853480', '1201579', '1201580', '12173471', '127684', '12914', '13124956', '13237099', '1373', '139374', '1420', '1450284', '146429', '146462', '147924', '150253', '16241810', '171547', '175626', '179631', '1800460', '18528223', '20613761', '20702490', '20786859', '20949640', '211515', '23129930', '2459339', '248193', '25004284', '25330115', '2547', '25572095', '27209355', '27409510', '27494', '27837534', '279769', '28818718', '304485', '3612415', '364141', '40795', '440025', '45974', '508149', '539477', '5932', '606104', '63114', '6585085', '6612726', '6798263', '766882', '853153', '85745', '93405', '9583799', '978914'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false'])
+* (['106251', '11425131', '1151331', '11853480', '1201579', '1201580', '12173471', '1450284', '146462', '16241810', '1800460', '18528223', '20702490', '20786859', '20949640', '23129930', '2459339', '25330115', '27209355', '27409510', '27837534', '279769', '28818718', '440025', '508149', '606104', '63114', '6585085', '6612726', '853153', '93405', '978914'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_'])
+* (['146462', '25330115', '63114'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_1'])
+* (['146462'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_1', 'publication_year_1997', 'publisher_W. W. Norton  Company', 'title_Walking Words', 'title_without_series_Walking Words'])
+* (['63114'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_1', 'publication_year_2001', 'publisher_City Lights Publishers', 'title_Poems of Fernando Pessoa', 'title_without_series_Poems of Fernando Pessoa'])
+* (['25330115'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_1', 'publication_year_2016', 'publisher_Copper Canyon Press', 'title_The Poet, The Lion, Talking Pictures, El Farolito, A Wedding in St. Roch, The Big Box Store, The Warp in the Mirror, Spring, Midnights, Fire & All', 'title_without_series_The Poet, The Lion, Talking Pictures, El Farolito, A Wedding in St. Roch, The Big Box Store, The Warp in the Mirror, Spring, Midnights, Fire & All'])
+* (['20949640', '279769'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_10'])
+* (['279769'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_10', 'publication_year_2001', 'publisher_Da Capo Press', 'title_The Leaf And The Cloud: A Poem', 'title_without_series_The Leaf And The Cloud: A Poem'])
+* (['20949640'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_10', 'publication_year_2014', 'publisher_Stone Bridge Press', 'title_I Wait for the Moon: 100 Haiku of Momoko Kuroda', 'title_without_series_I Wait for the Moon: 100 Haiku of Momoko Kuroda'])
+* (['11425131'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_11', 'publication_year_2011', 'publisher_TarcherPerigee', 'title_In the Company of Rilke: Why a 20th-Century Visionary Poet Speaks So Eloquently to 21st-Century Readers', 'title_without_series_In the Company of Rilke: Why a 20th-Century Visionary Poet Speaks So Eloquently to 21st-Century Readers'])
+* (['1151331', '12173471'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_12'])
+* (['1151331'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_12', 'publication_year_2002', 'publisher_Pocket', 'title_Fables', 'title_without_series_Fables'])
+* (['12173471'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_12', 'publication_year_2011', 'publisher_City Lights Publishers', 'title_Citizen', 'title_without_series_Citizen'])
+* (['606104'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_2', 'publication_year_2007', 'publisher_Carnegie-Mellon University Press', 'title_Indeed I Was Pleased with the World', 'title_without_series_Indeed I Was Pleased with the World'])
+* (['1450284', '20786859'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_3'])
+* (['1450284'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_3', 'publication_year_2002', 'publisher_Penguin Books', 'title_Borrowed Love Poems', 'title_without_series_Borrowed Love Poems'])
+* (['20786859'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_3', 'publication_year_2014', 'publisher_Action Books', 'title_Sorrowtoothpaste Mirrorcream', 'title_without_series_Sorrowtoothpaste Mirrorcream'])
+* (['106251', '23129930', '27409510', '27837534', '6612726', '93405'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_4'])
+* (['93405'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_4', 'publication_year_1992', 'publisher_W. W. Norton  Company', 'title_The Notebooks of Malte Laurids Brigge', 'title_without_series_The Notebooks of Malte Laurids Brigge'])
+* (['106251'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_4', 'publication_year_2007', 'publisher_W. W. Norton  Company', 'title_Poetry and Commitment', 'title_without_series_Poetry and Commitment'])
+* (['6612726'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_4', 'publication_year_2010', 'publisher_Harper Perennial', 'title_Newspaper Blackout', 'title_without_series_Newspaper Blackout'])
+* (['23129930'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_4', 'publication_year_2015', 'publisher_City Lights Publishers', 'title_On Time: Poems 2005-2014', 'title_without_series_On Time: Poems 2005-2014'])
+* (['27409510', '27837534'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_4', 'publication_year_2016', 'publisher_Red Hen Press'])
+* (['27409510'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_4', 'publication_year_2016', 'publisher_Red Hen Press', 'title_Power Made Us Swoon', 'title_without_series_Power Made Us Swoon'])
+* (['27837534'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_4', 'publication_year_2016', 'publisher_Red Hen Press', 'title_Work and Days', 'title_without_series_Work and Days'])
+* (['106251', '93405'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_4', 'publisher_W. W. Norton  Company'])
+* (['11853480', '1800460', '508149', '978914'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_5'])
+* (['978914'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_5', 'publication_year_1998', 'publisher_Copper Canyon Press', 'title_The Redshifting Web: New & Selected Poems', 'title_without_series_The Redshifting Web: New & Selected Poems'])
+* (['508149'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_5', 'publication_year_2006', 'publisher_Wave Books', 'title_A Little White Shadow', 'title_without_series_A Little White Shadow'])
+* (['1800460'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_5', 'publication_year_2008', 'publisher_BiblioLife', "title_Milton's Comus", "title_without_series_Milton's Comus"])
+* (['11853480'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_5', 'publication_year_2011', 'publisher_Book Thug', 'title_Killdeer: Essay-Poems', 'title_without_series_Killdeer: Essay-Poems'])
+* (['1201580', '2459339', '27209355', '6585085'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_6'])
+* (['1201580'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_6', 'publication_year_2001', 'publisher_Copper Canyon Press', 'title_Silk Dragon: Translations from the Chinese', 'title_without_series_Silk Dragon: Translations from the Chinese'])
+* (['2459339'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_6', 'publication_year_2008', 'publisher_Wave Books', 'title_The Most of It', 'title_without_series_The Most of It'])
+* (['6585085'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_6', 'publication_year_2009', 'publisher_Copper Canyon Press', 'title_The Ginkgo Light', 'title_without_series_The Ginkgo Light'])
+* (['27209355'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_6', 'publication_year_2016', 'publisher_Penguin Books', 'title_Plenty', 'title_without_series_Plenty'])
+* (['1201580', '6585085'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_6', 'publisher_Copper Canyon Press'])
+* (['16241810', '18528223'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_7'])
+* (['16241810'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_7', 'publication_year_2013', 'publisher_New Directions', 'title_A Musical Hell', 'title_without_series_A Musical Hell'])
+* (['18528223'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_7', 'publication_year_2014', 'publisher_Copper Canyon Press', 'title_Compass Rose', 'title_without_series_Compass Rose'])
+* (['440025'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_8', 'publication_year_1998', 'publisher_Harper Perennial', 'title_Nine Gates: Entering the Mind of Poetry', 'title_without_series_Nine Gates: Entering the Mind of Poetry'])
+* (['1201579', '20702490', '28818718', '853153'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_9'])
+* (['853153'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_9', 'publication_year_2003', 'publisher_City Lights Books', 'title_Where River Meets Ocean (Poet Laureate Series (City Lights Foundation), No. 3.)', 'title_without_series_Where River Meets Ocean (Poet Laureate Series (City Lights Foundation), No. 3.)'])
+* (['1201579'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_9', 'publication_year_2005', 'publisher_Copper Canyon Press', 'title_Quipu', 'title_without_series_Quipu'])
+* (['20702490'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_9', 'publication_year_2014', 'publisher_Wave Books', 'title_ECODEVIANCE: (Soma)tics for the Future Wilderness', 'title_without_series_ECODEVIANCE: (Soma)tics for the Future Wilderness'])
+* (['28818718'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_9', 'publication_year_2016', 'publisher_Wave Books', 'title_Calamities', 'title_without_series_Calamities'])
+* (['20702490', '28818718'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_month_9', 'publisher_Wave Books'])
+* (['440025', '978914'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_year_1998'])
+* (['1201580', '279769', '63114'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_year_2001'])
+* (['1151331', '1450284'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_year_2002'])
+* (['106251', '606104'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_year_2007'])
+* (['1800460', '2459339'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_year_2008'])
+* (['11425131', '11853480', '12173471'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_year_2011'])
+* (['18528223', '20702490', '20786859', '20949640'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_year_2014'])
+* (['25330115', '27209355', '27409510', '27837534', '28818718'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publication_year_2016'])
+* (['12173471', '23129930', '63114'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publisher_City Lights Publishers'])
+* (['1201579', '1201580', '18528223', '25330115', '6585085', '978914'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publisher_Copper Canyon Press'])
+* (['440025', '6612726'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publisher_Harper Perennial'])
+* (['1450284', '27209355'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publisher_Penguin Books'])
+* (['106251', '146462', '93405'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publisher_W. W. Norton  Company'])
+* (['20702490', '2459339', '28818718', '508149'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_', 'publisher_Wave Books'])
+* (['147924', '9583799'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_en-GB'])
+* (['9583799'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_en-GB', 'publication_month_11', 'publication_year_2010', 'publisher_Visual Editions', 'title_Tree of Codes', 'title_without_series_Tree of Codes'])
+* (['147924'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_en-GB', 'publication_month_5', 'publication_year_2001', 'publisher_New Directions', 'title_Alphabet', 'title_without_series_Alphabet'])
+* (['127684', '1373', '171547', '179631', '211515', '539477'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_en-US'])
+* (['171547'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_en-US', 'publication_month_1', 'publication_year_2005', 'publisher_Digireads.com', 'title_Songs of Innocence and of Experience', 'title_without_series_Songs of Innocence and of Experience'])
+* (['211515', '539477'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_en-US', 'publication_month_10'])
+* (['539477'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_en-US', 'publication_month_10', 'publication_year_1984', 'publisher_Vintage', 'title_Letters to a Young Poet', 'title_without_series_Letters to a Young Poet'])
+* (['211515'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_en-US', 'publication_month_10', 'publication_year_2002', 'publisher_Kodansha International Ltd.', 'title_Writing and Enjoying Haiku: A Hands-On Guide', 'title_without_series_Writing and Enjoying Haiku: A Hands-On Guide'])
+* (['127684', '179631'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_en-US', 'publication_month_11'])
+* (['179631'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_en-US', 'publication_month_11', 'publication_year_1994', 'publisher_Penguin Classics', 'title_Complete Poems', 'title_without_series_Complete Poems'])
+* (['127684'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_en-US', 'publication_month_11', 'publication_year_2001', 'publisher_Mariner Books', 'title_The Discovery of Poetry: A Field Guide to Reading and Writing Poems', 'title_without_series_The Discovery of Poetry: A Field Guide to Reading and Writing Poems'])
+* (['1373'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_en-US', 'publication_month_3', 'publication_year_1997', 'publisher_Hackett Publishing Company, Inc.', 'title_Iliad', 'title_without_series_Iliad'])
+* (['12914', '13124956', '13237099', '139374', '1420', '146429', '150253', '175626', '20613761', '248193', '25004284', '2547', '25572095', '27494', '304485', '3612415', '364141', '40795', '45974', '5932', '6798263', '766882', '85745'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng'])
+* (['150253', '175626'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_'])
+* (['175626'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_', 'publication_year_1966', 'publisher_Penguin Classics', 'title_The Narrow Road to the Deep North and Other Travel Sketches', 'title_without_series_The Narrow Road to the Deep North and Other Travel Sketches'])
+* (['150253'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_', 'publication_year_2003', 'publisher_Virago', 'title_If Not, Winter: Fragments of Sappho', 'title_without_series_If Not, Winter: Fragments of Sappho'])
+* (['146429', '2547', '3612415', '40795'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_1'])
+* (['40795'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_1', 'publication_year_1974', 'publisher_New Directions', 'title_Turtle Island', 'title_without_series_Turtle Island'])
+* (['146429'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_1', 'publication_year_1985', 'publisher_University of Texas Press', 'title_Dreamtigers', 'title_without_series_Dreamtigers'])
+* (['3612415'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_1', 'publication_year_2009', 'publisher_City Lights Publishers', 'title_World Ball Notebook', 'title_without_series_World Ball Notebook'])
+* (['2547'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_1', 'publication_year_2010', 'publisher_Rupa & Co', 'title_The Prophet', 'title_without_series_The Prophet'])
+* (['20613761', '6798263'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_10'])
+* (['6798263'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_10', 'publication_year_2009', 'publisher_Wave Books', 'title_Bluets', 'title_without_series_Bluets'])
+* (['20613761'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_10', 'publication_year_2014', 'publisher_Graywolf Press', 'title_Citizen: An American Lyric', 'title_without_series_Citizen: An American Lyric'])
+* (['85745'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_11', 'publication_year_2006', 'publisher_City Lights Publishers', 'title_Howl on Trial: The Battle for Free Expression', 'title_without_series_Howl on Trial: The Battle for Free Expression'])
+* (['45974', '5932'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_12', 'publisher_Penguin Classics'])
+* (['45974'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_12', 'publication_year_2002', 'publisher_Penguin Classics', 'title_The Book of Disquiet', 'title_without_series_The Book of Disquiet'])
+* (['5932'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_12', 'publication_year_2006', 'publisher_Penguin Classics', 'title_Twenty Love Poems and a Song of Despair', 'title_without_series_Twenty Love Poems and a Song of Despair'])
+* (['139374'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_3', 'publication_year_2005', 'publisher_Da Capo Press', 'title_Long Life: Essays and Other Writings', 'title_without_series_Long Life: Essays and Other Writings'])
+* (['304485', '364141'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_4', 'publisher_W. W. Norton  Company'])
+* (['364141'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_4', 'publication_year_1993', 'publisher_W. W. Norton  Company', 'title_The Dream of a Common Language', 'title_without_series_The Dream of a Common Language'])
+* (['304485'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_4', 'publication_year_1995', 'publisher_W. W. Norton  Company', 'title_On Lies, Secrets, and Silence: Selected Prose, 1966-1978', 'title_without_series_On Lies, Secrets, and Silence: Selected Prose, 1966-1978'])
+* (['13124956', '248193', '766882'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_5'])
+* (['248193', '766882'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_5', 'publication_year_1998'])
+* (['248193'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_5', 'publication_year_1998', 'publisher_Basic Books', 'title_Le Ton beau de Marot: In Praise of the Music of Language', 'title_without_series_Le Ton beau de Marot: In Praise of the Music of Language'])
+* (['766882'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_5', 'publication_year_1998', 'publisher_Oxford University Press', 'title_Metamorphoses', 'title_without_series_Metamorphoses'])
+* (['13124956'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_5', 'publication_year_2012', 'publisher_Copper Canyon Press', 'title_When My Brother Was an Aztec', 'title_without_series_When My Brother Was an Aztec'])
+* (['12914', '25572095'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_6'])
+* (['12914'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_6', 'publication_year_1990', 'publisher_Vintage', 'title_The Aeneid', 'title_without_series_The Aeneid'])
+* (['25572095'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_6', 'publication_year_2015', 'publisher_Timeless, Infinite Light', 'title_Tender Points', 'title_without_series_Tender Points'])
+* (['13237099', '1420', '25004284', '27494'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_8'])
+* (['1420'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_8', 'publication_year_2005', 'publisher_Cambridge University Press', 'title_Hamlet', 'title_without_series_Hamlet'])
+* (['27494'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_8', 'publication_year_2006', 'publisher_Simon & Schuster', 'title_Leaves of Grass', 'title_without_series_Leaves of Grass'])
+* (['13237099'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_8', 'publication_year_2012', 'publisher_Wave Books', 'title_Madness, Rack, and Honey: Collected Lectures', 'title_without_series_Madness, Rack, and Honey: Collected Lectures'])
+* (['25004284'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_8', 'publication_year_2015', 'publisher_Anhinga Press', 'title_Shipbreaking', 'title_without_series_Shipbreaking'])
+* (['139374', '1420'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_year_2005'])
+* (['27494', '5932', '85745'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_year_2006'])
+* (['3612415', '6798263'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_year_2009'])
+* (['13124956', '13237099'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_year_2012'])
+* (['25004284', '25572095'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_year_2015'])
+* (['3612415', '85745'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publisher_City Lights Publishers'])
+* (['175626', '45974', '5932'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publisher_Penguin Classics'])
+* (['13237099', '6798263'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publisher_Wave Books'])
+* (['146429', '146462', '171547', '25330115', '2547', '3612415', '40795', '63114'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_month_1'])
+* (['3612415', '63114'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_month_1', 'publisher_City Lights Publishers'])
+* (['20613761', '20949640', '211515', '279769', '539477', '6798263'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_month_10'])
+* (['20613761', '20949640'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_month_10', 'publication_year_2014'])
+* (['11425131', '127684', '179631', '85745', '9583799'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_month_11'])
+* (['1151331', '12173471', '45974', '5932'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_month_12'])
+* (['1151331', '45974'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_month_12', 'publication_year_2002'])
+* (['1373', '139374', '1450284', '20786859'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_month_3'])
+* (['106251', '23129930', '27409510', '27837534', '304485', '364141', '6612726', '93405'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_month_4'])
+* (['106251', '304485', '364141', '93405'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_month_4', 'publisher_W. W. Norton  Company'])
+* (['11853480', '13124956', '147924', '1800460', '248193', '508149', '766882', '978914'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_month_5'])
+* (['248193', '766882', '978914'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_month_5', 'publication_year_1998'])
+* (['13124956', '978914'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_month_5', 'publisher_Copper Canyon Press'])
+* (['1201580', '12914', '2459339', '25572095', '27209355', '6585085'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_month_6'])
+* (['13237099', '1420', '25004284', '27494', '440025'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_month_8'])
+* (['1373', '146462'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_year_1997'])
+* (['248193', '440025', '766882', '978914'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_year_1998'])
+* (['1201580', '127684', '147924', '279769', '63114'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_year_2001'])
+* (['1151331', '1450284', '211515', '45974'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_year_2002'])
+* (['150253', '853153'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_year_2003'])
+* (['1201579', '139374', '1420', '171547'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_year_2005'])
+* (['27494', '508149', '5932', '85745'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_year_2006'])
+* (['3612415', '6585085', '6798263'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_year_2009'])
+* (['2547', '6612726', '9583799'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_year_2010'])
+* (['18528223', '20613761', '20702490', '20786859', '20949640'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_year_2014'])
+* (['23129930', '25004284', '25572095'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publication_year_2015'])
+* (['12173471', '23129930', '3612415', '63114', '85745'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publisher_City Lights Publishers'])
+* (['1201579', '1201580', '13124956', '18528223', '25330115', '6585085', '978914'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publisher_Copper Canyon Press'])
+* (['139374', '279769'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publisher_Da Capo Press'])
+* (['147924', '16241810', '40795'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publisher_New Directions'])
+* (['175626', '179631', '45974', '5932'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publisher_Penguin Classics'])
+* (['12914', '539477'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publisher_Vintage'])
+* (['106251', '146462', '304485', '364141', '93405'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publisher_W. W. Norton  Company'])
+* (['13237099', '20702490', '2459339', '28818718', '508149', '6798263'], ['country_code_US', 'edition_information_', 'format_Paperback', 'is_ebook_false', 'publisher_Wave Books'])
+* (['10898243', '17910294', '23568532'], ['country_code_US', 'edition_information_', 'format_ebook', 'is_ebook_true'])
+* (['10898243', '23568532'], ['country_code_US', 'edition_information_', 'format_ebook', 'is_ebook_true', 'language_code_'])
+* (['23568532'], ['country_code_US', 'edition_information_', 'format_ebook', 'is_ebook_true', 'language_code_', 'publication_month_12', 'publication_year_2014', 'publisher_Farrar, Straus and Giroux', 'title_Breathturn into Timestead: The Collected Later Poetry', 'title_without_series_Breathturn into Timestead: The Collected Later Poetry'])
+* (['10898243'], ['country_code_US', 'edition_information_', 'format_ebook', 'is_ebook_true', 'language_code_', 'publication_month_7', 'publication_year_2011', 'publisher_Smashwords Edition', 'title_Night of Pure Breathing', 'title_without_series_Night of Pure Breathing'])
+* (['17910294'], ['country_code_US', 'edition_information_', 'format_ebook', 'is_ebook_true', 'language_code_eng', 'publication_month_10', 'publication_year_2013', 'publisher_Farrar, Straus and Giroux', 'title_Holding On Upside Down: The Life and Work of Marianne Moore', 'title_without_series_Holding On Upside Down: The Life and Work of Marianne Moore'])
+* (['17910294', '23568532'], ['country_code_US', 'edition_information_', 'format_ebook', 'is_ebook_true', 'publisher_Farrar, Straus and Giroux'])
+* (['1015201', '106251', '11425131', '1151331', '11853480', '1201579', '1201580', '12030685', '12173471', '127684', '12914', '13124956', '13237099', '1373', '1383945', '139374', '1420', '1450284', '146429', '146462', '147924', '150253', '154387', '16241149', '16241810', '171547', '17465598', '175626', '17675075', '179631', '1800460', '18528223', '20613761', '20702490', '20786859', '20949640', '211515', '22543936', '23129930', '239236', '2459339', '24611522', '248193', '25004284', '25330115', '25334576', '25362908', '2547', '2549', '25572095', '25937948', '27209355', '27409510', '27494', '27837534', '279769', '28818688', '28818718', '29358559', '29363291', '304485', '313972', '3612415', '364141', '40795', '440025', '45974', '508149', '539477', '5932', '606104', '63114', '6585085', '6612726', '6798263', '70189', '7090309', '766882', '8122927', '853153', '85745', '93405', '9583799', '978914'], ['country_code_US', 'edition_information_', 'is_ebook_false'])
+* (['1015201', '106251', '11425131', '1151331', '11853480', '1201579', '1201580', '12030685', '12173471', '1383945', '1450284', '146462', '154387', '16241149', '16241810', '17465598', '17675075', '1800460', '18528223', '20702490', '20786859', '20949640', '22543936', '23129930', '2459339', '25330115', '25362908', '2549', '25937948', '27209355', '27409510', '27837534', '279769', '28818718', '29358559', '29363291', '440025', '508149', '606104', '63114', '6585085', '6612726', '70189', '7090309', '8122927', '853153', '93405', '978914'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'language_code_'])
+* (['1015201', '1383945', '154387', '22543936', '29358559', '8122927'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'language_code_', 'publication_month_'])
+* (['146462', '25330115', '63114', '7090309'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'language_code_', 'publication_month_1'])
+* (['17465598', '20949640', '25937948', '279769', '29363291'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'language_code_', 'publication_month_10'])
+* (['1151331', '12173471', '25362908'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'language_code_', 'publication_month_12'])
+* (['106251', '17675075', '23129930', '27409510', '27837534', '6612726', '93405'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'language_code_', 'publication_month_4'])
+* (['1201580', '2459339', '2549', '27209355', '6585085', '70189'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'language_code_', 'publication_month_6'])
+* (['12030685', '16241149', '440025'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'language_code_', 'publication_month_8'])
+* (['508149', '70189'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'language_code_', 'publication_year_2006'])
+* (['6612726', '7090309'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'language_code_', 'publication_year_2010'])
+* (['16241149', '16241810', '17465598'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'language_code_', 'publication_year_2013'])
+* (['17675075', '18528223', '20702490', '20786859', '20949640'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'language_code_', 'publication_year_2014'])
+* (['23129930', '25362908'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'language_code_', 'publication_year_2015'])
+* (['25330115', '25937948', '27209355', '27409510', '27837534', '28818718', '29363291'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'language_code_', 'publication_year_2016'])
+* (['28818718', '29363291'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'language_code_', 'publication_year_2016', 'publisher_Wave Books'])
+* (['106251', '146462', '16241149', '70189', '93405'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'language_code_', 'publisher_W. W. Norton  Company'])
+* (['17465598', '20702490', '2459339', '28818718', '29363291', '508149'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'language_code_', 'publisher_Wave Books'])
+* (['147924', '24611522', '9583799'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'language_code_en-GB'])
+* (['12914', '13124956', '13237099', '139374', '1420', '146429', '150253', '175626', '20613761', '239236', '248193', '25004284', '25334576', '2547', '25572095', '27494', '28818688', '304485', '313972', '3612415', '364141', '40795', '45974', '5932', '6798263', '766882', '85745'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'language_code_eng'])
+* (['150253', '175626', '28818688', '313972'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'language_code_eng', 'publication_month_'])
+* (['150253', '239236'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'language_code_eng', 'publication_year_2003'])
+* (['25004284', '25334576', '25572095'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'language_code_eng', 'publication_year_2015'])
+* (['13124956', '239236'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'language_code_eng', 'publisher_Copper Canyon Press'])
+* (['1015201', '1383945', '150253', '154387', '175626', '22543936', '28818688', '29358559', '313972', '8122927'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'publication_month_'])
+* (['146429', '146462', '171547', '25330115', '2547', '3612415', '40795', '63114', '7090309'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'publication_month_1'])
+* (['2547', '7090309'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'publication_month_1', 'publication_year_2010'])
+* (['17465598', '20613761', '20949640', '211515', '24611522', '25937948', '279769', '29363291', '539477', '6798263'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'publication_month_10'])
+* (['17465598', '29363291', '6798263'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'publication_month_10', 'publisher_Wave Books'])
+* (['1151331', '12173471', '25362908', '45974', '5932'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'publication_month_12'])
+* (['106251', '17675075', '23129930', '27409510', '27837534', '304485', '364141', '6612726', '93405'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'publication_month_4'])
+* (['1201580', '12914', '2459339', '2549', '25572095', '27209355', '6585085', '70189'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'publication_month_6'])
+* (['16241810', '18528223', '239236'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'publication_month_7'])
+* (['18528223', '239236'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'publication_month_7', 'publisher_Copper Canyon Press'])
+* (['12030685', '13237099', '1420', '16241149', '25004284', '27494', '440025'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'publication_month_8'])
+* (['12030685', '13237099'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'publication_month_8', 'publication_year_2012'])
+* (['1201579', '20702490', '25334576', '28818718', '853153'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'publication_month_9'])
+* (['150253', '239236', '853153'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'publication_year_2003'])
+* (['27494', '508149', '5932', '70189', '85745'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'publication_year_2006'])
+* (['2547', '6612726', '7090309', '9583799'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'publication_year_2010'])
+* (['12030685', '13124956', '13237099'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'publication_year_2012'])
+* (['17675075', '18528223', '20613761', '20702490', '20786859', '20949640'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'publication_year_2014'])
+* (['23129930', '24611522', '25004284', '25334576', '25362908', '25572095'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'publication_year_2015'])
+* (['25330115', '25937948', '27209355', '27409510', '27837534', '28818688', '28818718', '29363291'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'publication_year_2016'])
+* (['1201579', '1201580', '13124956', '18528223', '239236', '25330115', '6585085', '978914'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'publisher_Copper Canyon Press'])
+* (['106251', '146462', '16241149', '304485', '364141', '70189', '93405'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'publisher_W. W. Norton  Company'])
+* (['13237099', '17465598', '20702490', '2459339', '28818718', '29363291', '508149', '6798263'], ['country_code_US', 'edition_information_', 'is_ebook_false', 'publisher_Wave Books'])
+* (['1015201', '106251', '10898243', '11425131', '1151331', '11853480', '1201579', '1201580', '12030685', '12173471', '1383945', '1450284', '146462', '154387', '16241149', '16241810', '17465598', '17675075', '1800460', '18528223', '20702490', '20786859', '20949640', '22543936', '23129930', '23568532', '2459339', '25330115', '25362908', '2549', '25937948', '27209355', '27409510', '27837534', '279769', '28818718', '29358559', '29363291', '440025', '508149', '606104', '63114', '6585085', '6612726', '70189', '7090309', '8122927', '853153', '93405', '978914'], ['country_code_US', 'edition_information_', 'language_code_'])
+* (['1151331', '12173471', '23568532', '25362908'], ['country_code_US', 'edition_information_', 'language_code_', 'publication_month_12'])
+* (['10898243', '16241810', '18528223'], ['country_code_US', 'edition_information_', 'language_code_', 'publication_month_7'])
+* (['10898243', '11425131', '11853480', '12173471'], ['country_code_US', 'edition_information_', 'language_code_', 'publication_year_2011'])
+* (['17675075', '18528223', '20702490', '20786859', '20949640', '23568532'], ['country_code_US', 'edition_information_', 'language_code_', 'publication_year_2014'])
+* (['12914', '13124956', '13237099', '139374', '1420', '146429', '150253', '175626', '17910294', '20613761', '239236', '248193', '25004284', '25334576', '2547', '25572095', '27494', '28818688', '304485', '313972', '3612415', '364141', '40795', '45974', '5932', '6798263', '766882', '85745'], ['country_code_US', 'edition_information_', 'language_code_eng'])
+* (['17910294', '20613761', '6798263'], ['country_code_US', 'edition_information_', 'language_code_eng', 'publication_month_10'])
+* (['17465598', '17910294', '20613761', '20949640', '211515', '24611522', '25937948', '279769', '29363291', '539477', '6798263'], ['country_code_US', 'edition_information_', 'publication_month_10'])
+* (['17465598', '17910294'], ['country_code_US', 'edition_information_', 'publication_month_10', 'publication_year_2013'])
+* (['1151331', '12173471', '23568532', '25362908', '45974', '5932'], ['country_code_US', 'edition_information_', 'publication_month_12'])
+* (['10898243', '16241810', '18528223', '239236'], ['country_code_US', 'edition_information_', 'publication_month_7'])
+* (['16241149', '16241810', '17465598', '17910294'], ['country_code_US', 'edition_information_', 'publication_year_2013'])
+* (['17675075', '18528223', '20613761', '20702490', '20786859', '20949640', '23568532'], ['country_code_US', 'edition_information_', 'publication_year_2014'])
+* (['7427866'], ['country_code_US', 'edition_information_Clasicos Universales Planeta', 'format_Paperback', 'is_ebook_false', 'language_code_spa', 'publication_month_10', 'publication_year_1981', 'publisher_Editorial Planeta', 'title_La vida es sueño: drama y auto sacramental', 'title_without_series_La vida es sueño: drama y auto sacramental'])
+* (['97553'], ['country_code_US', 'edition_information_Faber Library Edition', 'format_Hardcover', 'is_ebook_false', 'language_code_eng', 'publication_month_2', 'publication_year_1996', 'publisher_Faber and Faber', 'title_Crow: From the Life and Songs of the Crow', 'title_without_series_Crow: From the Life and Songs of the Crow'])
+* (['203310'], ['country_code_US', 'edition_information_HarperPerennial Modern Classics', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_12', 'publication_year_2013', 'publisher_Harper Perennial Modern Classics', 'title_Poetry, Language, Thought', 'title_without_series_Poetry, Language, Thought'])
+* (['27822'], ['country_code_US', "edition_information_Oxford World's Classics", 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_10', 'publication_year_1998', 'publisher_Oxford University Press', 'title_Eugene Onegin', 'title_without_series_Eugene Onegin'])
+* (['333706'], ['country_code_US', 'edition_information_Penguin Classics Deluxe Edition', 'format_', 'is_ebook_false', 'language_code_en-US', 'publication_month_11', 'publication_year_1997', 'publisher_Penguin Classics', 'title_The Odyssey', 'title_without_series_The Odyssey'])
+* (['1015201', '154387', '22543936', '29358559', '313972', '333706', '8122927'], ['country_code_US', 'format_', 'is_ebook_false'])
+* (['12030685', '1383945', '16241149', '17465598', '17675075', '239236', '24611522', '25334576', '25362908', '2549', '25937948', '28818688', '29363291', '70189', '7090309', '97553'], ['country_code_US', 'format_Hardcover', 'is_ebook_false'])
+* (['239236', '25334576', '28818688', '97553'], ['country_code_US', 'format_Hardcover', 'is_ebook_false', 'language_code_eng'])
+* (['106251', '11425131', '1151331', '11853480', '1201579', '1201580', '12173471', '127684', '12914', '13124956', '13237099', '1373', '139374', '1420', '1450284', '146429', '146462', '147924', '150253', '16241810', '171547', '175626', '179631', '1800460', '18528223', '203310', '20613761', '20702490', '20786859', '20949640', '211515', '23129930', '2459339', '248193', '25004284', '25330115', '2547', '25572095', '27209355', '27409510', '27494', '27822', '27837534', '279769', '28818718', '304485', '3612415', '364141', '40795', '440025', '45974', '508149', '539477', '5932', '606104', '63114', '6585085', '6612726', '6798263', '7427866', '766882', '853153', '85745', '93405', '9583799', '978914'], ['country_code_US', 'format_Paperback', 'is_ebook_false'])
+* (['12914', '13124956', '13237099', '139374', '1420', '146429', '150253', '175626', '203310', '20613761', '248193', '25004284', '2547', '25572095', '27494', '27822', '304485', '3612415', '364141', '40795', '45974', '5932', '6798263', '766882', '85745'], ['country_code_US', 'format_Paperback', 'is_ebook_false', 'language_code_eng'])
+* (['20613761', '27822', '6798263'], ['country_code_US', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_10'])
+* (['203310', '45974', '5932'], ['country_code_US', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_month_12'])
+* (['248193', '27822', '766882'], ['country_code_US', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_year_1998'])
+* (['27822', '766882'], ['country_code_US', 'format_Paperback', 'is_ebook_false', 'language_code_eng', 'publication_year_1998', 'publisher_Oxford University Press'])
+* (['20613761', '20949640', '211515', '27822', '279769', '539477', '6798263', '7427866'], ['country_code_US', 'format_Paperback', 'is_ebook_false', 'publication_month_10'])
+* (['1151331', '12173471', '203310', '45974', '5932'], ['country_code_US', 'format_Paperback', 'is_ebook_false', 'publication_month_12'])
+* (['248193', '27822', '440025', '766882', '978914'], ['country_code_US', 'format_Paperback', 'is_ebook_false', 'publication_year_1998'])
+* (['16241810', '203310'], ['country_code_US', 'format_Paperback', 'is_ebook_false', 'publication_year_2013'])
+* (['1015201', '106251', '11425131', '1151331', '11853480', '1201579', '1201580', '12030685', '12173471', '127684', '12914', '13124956', '13237099', '1373', '1383945', '139374', '1420', '1450284', '146429', '146462', '147924', '150253', '154387', '16241149', '16241810', '171547', '17465598', '175626', '17675075', '179631', '1800460', '18528223', '203310', '20613761', '20702490', '20786859', '20949640', '211515', '22543936', '23129930', '239236', '2459339', '24611522', '248193', '25004284', '25330115', '25334576', '25362908', '2547', '2549', '25572095', '25937948', '27209355', '27409510', '27494', '27822', '27837534', '279769', '28818688', '28818718', '29358559', '29363291', '304485', '313972', '333706', '3612415', '364141', '40795', '440025', '45974', '508149', '539477', '5932', '606104', '63114', '6585085', '6612726', '6798263', '70189', '7090309', '7427866', '766882', '8122927', '853153', '85745', '93405', '9583799', '97553', '978914'], ['country_code_US', 'is_ebook_false'])
+* (['127684', '1373', '171547', '179631', '211515', '333706', '539477'], ['country_code_US', 'is_ebook_false', 'language_code_en-US'])
+* (['127684', '179631', '333706'], ['country_code_US', 'is_ebook_false', 'language_code_en-US', 'publication_month_11'])
+* (['179631', '333706'], ['country_code_US', 'is_ebook_false', 'language_code_en-US', 'publication_month_11', 'publisher_Penguin Classics'])
+* (['1373', '333706'], ['country_code_US', 'is_ebook_false', 'language_code_en-US', 'publication_year_1997'])
+* (['12914', '13124956', '13237099', '139374', '1420', '146429', '150253', '175626', '203310', '20613761', '239236', '248193', '25004284', '25334576', '2547', '25572095', '27494', '27822', '28818688', '304485', '313972', '3612415', '364141', '40795', '45974', '5932', '6798263', '766882', '85745', '97553'], ['country_code_US', 'is_ebook_false', 'language_code_eng'])
+* (['17465598', '20613761', '20949640', '211515', '24611522', '25937948', '27822', '279769', '29363291', '539477', '6798263', '7427866'], ['country_code_US', 'is_ebook_false', 'publication_month_10'])
+* (['11425131', '127684', '179631', '333706', '85745', '9583799'], ['country_code_US', 'is_ebook_false', 'publication_month_11'])
+* (['1151331', '12173471', '203310', '25362908', '45974', '5932'], ['country_code_US', 'is_ebook_false', 'publication_month_12'])
+* (['606104', '97553'], ['country_code_US', 'is_ebook_false', 'publication_month_2'])
+* (['1373', '146462', '333706'], ['country_code_US', 'is_ebook_false', 'publication_year_1997'])
+* (['16241149', '16241810', '17465598', '203310'], ['country_code_US', 'is_ebook_false', 'publication_year_2013'])
+* (['175626', '179631', '333706', '45974', '5932'], ['country_code_US', 'is_ebook_false', 'publisher_Penguin Classics'])
+* (['12914', '13124956', '13237099', '139374', '1420', '146429', '150253', '175626', '17910294', '203310', '20613761', '239236', '248193', '25004284', '25334576', '2547', '25572095', '27494', '27822', '28818688', '304485', '313972', '3612415', '364141', '40795', '45974', '5932', '6798263', '766882', '85745', '97553'], ['country_code_US', 'language_code_eng'])
+* (['17910294', '20613761', '27822', '6798263'], ['country_code_US', 'language_code_eng', 'publication_month_10'])
+* (['17910294', '203310'], ['country_code_US', 'language_code_eng', 'publication_year_2013'])
+* (['17465598', '17910294', '20613761', '20949640', '211515', '24611522', '25937948', '27822', '279769', '29363291', '539477', '6798263', '7427866'], ['country_code_US', 'publication_month_10'])
+* (['1151331', '12173471', '203310', '23568532', '25362908', '45974', '5932'], ['country_code_US', 'publication_month_12'])
+* (['16241149', '16241810', '17465598', '17910294', '203310'], ['country_code_US', 'publication_year_2013'])
