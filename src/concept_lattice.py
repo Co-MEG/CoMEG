@@ -2,11 +2,11 @@ from __future__ import annotations
 
 from typing import List, TYPE_CHECKING
 import numpy as np
-from sklearn.metrics import multilabel_confusion_matrix
 
 from src.concept import FormalConcept
 if TYPE_CHECKING:
     from src.context import FormalContext
+from src.metric import jaccard_score, get_metric
 
 
 class ConceptLattice:
@@ -59,6 +59,25 @@ class ConceptLattice:
 
         return cl
 
+    def pairwise_distance(self, metric: str = 'Jaccard') -> np.ndarray:
+        n = self.concepts.shape[0]
+        i, j = np.triu_indices(n, k=1)
+        x = self.concepts[i][:, 0]
+        y = self.concepts[j][:, 0]
+        
+        metric_func = get_metric(metric)
+        d = [1 - metric_func(x[k], y[k]) for k in range(len(x))]
+        
+        result = np.zeros((n, n))
+        result[i, j] = d
+        result = result + result.T
+        
+        return result
+
+    def top_k(self, k: int = 5) -> list:
+        distance_mat = self.pairwise_distance()
+        idxs = np.argsort(-distance_mat.dot(np.ones(len(self.concepts))))
+        return self.concepts[idxs]
 
 def close_by_one(context: FormalContext) -> List[FormalConcept]:
     """
