@@ -219,7 +219,7 @@ def run_concept_lattice():
     
     # Specific edge
     #score_edge = ('fd379cf294fc1937e41f3f7df3c9eabe', '1381') # max score edge
-    #score_edge = ('bc1d727746e210f315138932e0aacb11', '13637887') # small context
+    score_edge = ('bc1d727746e210f315138932e0aacb11', '13637887') # small context
     #score_edge = ('c36d77d30d627e8ad5eccbab8d92f54d', '22237148') # medium context
     #score_edge = ('18bf7556e8f06efd9269db97880dd9ef', '5289') # Medium-Large context
     #score_edge = ('9ec2bf0c6452ee5be914cb3330e233e6', '25052044') # Large context (225, 718) - InClose -> 40s
@@ -305,7 +305,25 @@ def run_concept_lattice():
     for c in lattice.concepts:
         print(c)"""
 
+    topk_concepts = lattice.top_k()
+    for c in topk_concepts:
+        print(c)
     
+    mat = lattice.pairwise_concept_distance()
+    fig, ax = plt.subplots()
+    ax.matshow(mat, cmap=plt.cm.Blues)
+    tick_marks = np.arange(len(lattice.concepts))
+    plt.xticks(tick_marks, range(len(lattice.concepts)))
+    plt.yticks(tick_marks, [x[0] for x in lattice.concepts])
+    for i in range(mat.shape[0]):
+        for j in range(mat.shape[1]):
+            c = round(mat[j, i], 2)
+            ax.text(i, j, str(c), va='center', ha='center')
+    plt.title(f'Pairwise concept distance (Jaccard) for {score_edge}', weight='bold')
+    
+    plt.show()
+    res = os.path.join(PATH_RES, 'img', f'top_5_concepts_{score_edge[0]}_{score_edge[1]}.eps')
+    plt.savefig(res)
 
 if __name__ == '__main__':
     
