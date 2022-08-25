@@ -59,25 +59,60 @@ class ConceptLattice:
 
         return cl
 
-    def pairwise_distance(self, metric: str = 'Jaccard') -> np.ndarray:
-        n = self.concepts.shape[0]
+    def pairwise_concept_distance(self, metric: str = 'Jaccard') -> np.ndarray:
+        """Return matrix of pairwise concept distances. The distance between two concepts :math:`X_1` and :math:`X_2` 
+        is computed using the mean of the `metric` function between respective extents and intents of the concepts, i.e. 
+        :math:`1 - 0.5 * \psi(A_1, A_2) + \psi(B_1, B_2)`, with :math:`\psi` the `metric` function, :math:`A_i` and 
+        :math:`B_i` the extent and intent of concept :math:`i`.
+
+        Parameters
+        ----------
+        metric : str, optional
+            Metric used to compute distances between concepts, by default 'Jaccard'
+
+        Returns
+        -------
+        np.ndarray
+            Square matrix of size :math:`n` with :math:`n` the number of concepts in the lattice.
+        """        
+        n = len(self.concepts)
         i, j = np.triu_indices(n, k=1)
-        x = self.concepts[i][:, 0]
-        y = self.concepts[j][:, 0]
+        concepts_arr = np.array(self.concepts, dtype='object')
         
         metric_func = get_metric(metric)
-        d = [1 - metric_func(x[k], y[k]) for k in range(len(x))]
+        distances = []
+        
+        for k in range(len(i)):
+            distances.append(1 - 0.5 * (
+                                metric_func(concepts_arr[i][:, 0][k], concepts_arr[j][:, 0][k]) + 
+                                metric_func(concepts_arr[i][:, 1][k], concepts_arr[j][:, 1][k])
+                                )
+                            )
         
         result = np.zeros((n, n))
-        result[i, j] = d
+        result[i, j] = distances
         result = result + result.T
         
         return result
 
     def top_k(self, k: int = 5) -> list:
-        distance_mat = self.pairwise_distance()
+        """Return k concepts with highest distance between them.
+
+        Parameters
+        ----------
+        k : int, optional
+            Number of concepts to return, by default 5
+
+        Returns
+        -------
+        list
+            List of concepts
+        """        
+        distance_mat = self.pairwise_concept_distance()
         idxs = np.argsort(-distance_mat.dot(np.ones(len(self.concepts))))
-        return self.concepts[idxs]
+        concepts_arr = np.array(self.concepts, dtype='object')
+        
+        return [(x[0], x[1]) for x in concepts_arr[idxs][:k]]
 
 def close_by_one(context: FormalContext) -> List[FormalConcept]:
     """
