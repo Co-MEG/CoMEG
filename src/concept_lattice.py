@@ -6,7 +6,8 @@ import numpy as np
 from src.concept import FormalConcept
 if TYPE_CHECKING:
     from src.context import FormalContext
-from src.metric import jaccard_score, get_metric
+from src.metric import get_metric
+from src.solver import Solver
 
 
 class ConceptLattice:
@@ -78,6 +79,7 @@ class ConceptLattice:
         n = len(self.concepts)
         i, j = np.triu_indices(n, k=1)
         concepts_arr = np.array(self.concepts, dtype='object')
+        print(f'Number of (unique) pairs: {len(i)*2}/2={len(i)}')
         
         metric_func = get_metric(metric)
         distances = []
@@ -95,24 +97,32 @@ class ConceptLattice:
         
         return result
 
-    def top_k(self, k: int = 5) -> list:
+    def top_k(self, k: int = 5, metric: str = 'Jaccard', msg: bool = False) -> list:
         """Return k concepts with highest distance between them.
 
         Parameters
         ----------
         k : int, optional
             Number of concepts to return, by default 5
+        msg : bool, optional
+            If `True` and `metric` is ``MILP``, print solver log in standard output, by default False
 
         Returns
         -------
         list
             List of concepts
         """        
-        distance_mat = self.pairwise_concept_distance()
-        idxs = np.argsort(-distance_mat.dot(np.ones(len(self.concepts))))
-        concepts_arr = np.array(self.concepts, dtype='object')
+        if metric == 'Jaccard':
+            distance_mat = self.pairwise_concept_distance()
+            idxs = np.argsort(-distance_mat.dot(np.ones(len(self.concepts))))
+            concepts_arr = np.array(self.concepts, dtype='object')
+            return [(x[0], x[1]) for x in concepts_arr[idxs][:k]]
         
-        return [(x[0], x[1]) for x in concepts_arr[idxs][:k]]
+        elif metric == 'MILP':
+            solver = Solver(self.concepts)
+            concepts = solver.solve(k=k, msg=msg)
+            return concepts
+            
 
 def close_by_one(context: FormalContext) -> List[FormalConcept]:
     """
