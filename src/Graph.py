@@ -230,6 +230,16 @@ class BipartiteGraph:
         """        
         return len(self.V.get('left')) + len(self.V.get('right'))
 
+    def size(self) -> int:
+        """ Return the size of the graph, i.e. |V| + |E|.
+        
+        Returns
+        -------
+        int
+            Size of the graph.
+        """
+        return self.number_of_edges() + self.number_of_nodes()
+        
     def get_neighbors(self, node: str, transpose: bool = False) -> list:
         """Get neighbors of a node.
 
