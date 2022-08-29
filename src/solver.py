@@ -1,6 +1,8 @@
+import matplotlib.pyplot as plt
 from typing import TYPE_CHECKING
 import numpy as np
 from pulp import *
+import pandas as pd
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from src.concept_lattice import ConceptLattice
@@ -21,7 +23,7 @@ class Solver():
         for c in self.concepts:
             
             # Size of intent
-            int_len.append(len(c[1]))
+            int_len.append(len(c[1]) / len(self.lattice.context.M))
 
             # Size of extent
             #ext_len.append(len(c[0]))
@@ -31,10 +33,53 @@ class Solver():
             g_concept = self.lattice.context.graph.adjacency_csr.T[attr_idxs]
             n_right, n_left = g_concept.shape
             m = g_concept.nnz
-            ext_len.append(n_right + n_left + m)
+            ext_len.append((n_right + n_left + m) / self.lattice.context.graph.size())
+
+            print(round((n_right + n_left + m) / self.lattice.context.graph.size(), 3),
+                round(len(c[1]) / len(self.lattice.context.M), 3),
+                c)
 
         return ext_len, int_len
     
+    def multi_obj_model(self, k: int = 5):
+        # Variables are lengths of extent and intent of concepts
+        ext_len, int_len = self.init_model_variables()
+        # Find subset of 5 concepts that maximize both lengths of extents and intents
+        
+        step_size = 0.1
+        solutionTable = pd.DataFrame(columns=["alpha", "obj_value"])
+        probs = []
+        objs = []
+        min_obj = np.inf
+        for alpha in np.arange(0, 1 + step_size, step_size):
+            prob = pulp.LpProblem("Best_concepts Multi objectives", LpMaximize)
+            #prob += pulp.lpSum([self.x[c] * (alpha * ext_len[c] + (1 - alpha) * int_len[c]) for c in self.concepts_idx])
+            prob += alpha * pulp.lpSum([self.x[c] * ext_len[c] for c in self.concepts_idx]) \
+                + (1 - alpha) * pulp.lpSum([self.x[c] * int_len[c] * 3 for c in self.concepts_idx])
+            prob += pulp.lpSum([self.x[c] for c in self.concepts_idx]) == k
+            
+            solution = prob.solve(PULP_CBC_CMD(msg=False))
+            solutionTable.loc[int(alpha*1/step_size)] = [alpha, pulp.value(prob.objective)]
+            if pulp.value(prob.objective) <= min_obj:
+                min_obj = pulp.value(prob.objective)
+                min_prob = prob
+                min_alpha = alpha
+        
+        fig, ax = plt.subplots(1, 1, figsize=(12, 7))
+        print(solutionTable)
+        plt.plot(solutionTable['alpha'], solutionTable['obj_value'], color='g')
+        plt.xlabel('alpha')
+        plt.ylabel('Objective value')
+        #plt.show()
+        PATH_RES = os.path.join(os.getcwd(), 'data', 'goodreads_poetry', 'result')
+        res = os.path.join(PATH_RES, 'img', f'LO_pareto_bc1d727746e210f315138932e0aacb11_13637887.eps')
+        plt.tight_layout()
+        plt.savefig(res)
+
+        print(f'Alpha selected: {min_alpha}')
+
+        return min_prob
+
     def model(self, k: int = 5):
         """Build optmization model with objective and constraints.
 
@@ -72,9 +117,15 @@ class Solver():
         list
             List of concepts maximizing optimization problem.
         """        
-        prob = self.model(k=k)
-        prob.solve(solver(msg=msg))
-
-        concept_idxs = np.array([int(v.name.split('_')[1]) for v in prob.variables() if v.varValue == 1])
         
-        return list(self.concepts[concept_idxs])
+        # Multiple objective optimization
+        prob = self.multi_obj_model(k=k)
+
+        # Simple objective optimization
+        """prob = self.model(k=k)
+        prob.solve(solver(msg=msg))"""
+        
+        concept_idxs = np.array([int(v.name.split('_')[1]) for v in prob.variables() if v.varValue == 1])
+        scores = np.array([v.dj for v in prob.variables()])
+
+        return list(self.concepts[concept_idxs]), scores

@@ -219,9 +219,10 @@ def run_concept_lattice():
     
     # Specific edge
     #score_edge = ('fd379cf294fc1937e41f3f7df3c9eabe', '1381') # max score edge
-    #score_edge = ('bc1d727746e210f315138932e0aacb11', '13637887') # small context
-    score_edge = ('c36d77d30d627e8ad5eccbab8d92f54d', '22237148') # medium context
+    score_edge = ('bc1d727746e210f315138932e0aacb11', '13637887') # small context
+    #score_edge = ('c36d77d30d627e8ad5eccbab8d92f54d', '22237148') # medium context
     #score_edge = ('18bf7556e8f06efd9269db97880dd9ef', '5289') # Medium-Large context
+    #score_edge = ('0f9695b816f80ed7dd2768beaab2fabc', '8744427') # Medium-Large context (173, 491)
     #score_edge = ('9ec2bf0c6452ee5be914cb3330e233e6', '25052044') # Large context (225, 718) - InClose -> 40s
 
     subgraph = g.subgraph_vicinity(score_edge)
@@ -280,13 +281,13 @@ def run_concept_lattice():
             print(f'* Concept exists in other result {c[0]}')
         else:
             print(f'X Concept DOES NOT exists in other result {c[0]} ')"""
-    print(f'Verify InClose algorithm')
+    """print(f'Verify InClose algorithm')
     print(f'===========================================================')
     for c in lattice.concepts:
         if set(c[0]).union(set(c[1])) in l_hashes:
             print(f'* Concept exists in other result {c[0]}')
         else:
-            print(f'X Concept DOES NOT exists in other result {c[0]} ')
+            print(f'X Concept DOES NOT exists in other result {c[0]} ')"""
 
     # Print all concepts in lattices
     # ======================================
