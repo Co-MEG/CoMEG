@@ -19,6 +19,7 @@ class FormalContext:
         elif isinstance(graph, dict):
             # for "from_csv" usage
             bunch = graph
+        self.graph = graph
         self.G = bunch.names_row
         self.M = bunch.names_col
         self.I = bunch.biadjacency
