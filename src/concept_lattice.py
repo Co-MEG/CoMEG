@@ -14,6 +14,7 @@ class ConceptLattice:
     def __init__(self, concepts: List[FormalConcept]):
         # Build a Concept Lattice given formal concepts
         self.concepts = concepts
+        self.context = None
 
     def __len__(self) -> int:
         """Return number of concepts in Lattice.
@@ -57,6 +58,7 @@ class ConceptLattice:
         
         # Build ConceptLattice
         cl = ConceptLattice(concepts=concepts)
+        cl.context = context
 
         return cl
 
@@ -98,12 +100,17 @@ class ConceptLattice:
         return result
 
     def top_k(self, k: int = 5, metric: str = 'Jaccard', msg: bool = False) -> list:
-        """Return k concepts with highest distance between them.
+        """Return k concepts maximizing `metric`.with highest distance between them.
 
         Parameters
         ----------
         k : int, optional
             Number of concepts to return, by default 5
+        metric : str
+            Metric to maximize. Either
+                * ``Jaccard``: the Jaccard concept distance is maximized
+                * ``MILP``: Multi objective Linear Optimization is performed to find subset of concepts maximizing both
+                    the size of their extent and intent.
         msg : bool, optional
             If `True` and `metric` is ``MILP``, print solver log in standard output, by default False
 
@@ -119,9 +126,9 @@ class ConceptLattice:
             return [(x[0], x[1]) for x in concepts_arr[idxs][:k]]
         
         elif metric == 'MILP':
-            solver = Solver(self.concepts)
-            concepts = solver.solve(k=k, msg=msg)
-            return concepts
+            solver = Solver(self)
+            concepts, _ = solver.solve(k=k, msg=msg)
+            return [(x[0], x[1]) for x in concepts]
             
 
 def close_by_one(context: FormalContext) -> List[FormalConcept]:
