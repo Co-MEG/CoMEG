@@ -9,6 +9,8 @@ if TYPE_CHECKING:
 from src.metric import get_metric
 from src.solver import Solver
 
+from sknetwork.utils import get_degrees
+
 
 class ConceptLattice:
     def __init__(self, concepts: List[FormalConcept]):
@@ -130,6 +132,20 @@ class ConceptLattice:
             concepts, _ = solver.solve(k=k, msg=msg)
             return [(x[0], x[1]) for x in concepts]
             
+    def filter(self, ext_query, int_query) -> list:
+        
+        concepts = []
+        
+        for c in self.concepts:
+            g_concept = self.context.graph.adjacency_csr.T[[self.context.G2idx.get(i) for i in c[0]]].T
+            idx = np.flatnonzero(get_degrees(g_concept))
+            g_concept = g_concept[idx, :]
+            if np.all(get_degrees(g_concept) >= ext_query.get('degree_left')) \
+                and np.all(get_degrees(g_concept, transpose=True) >= ext_query.get('degree_right')) \
+                and len(set(int_query).intersection(set(c[1]))) > 0:
+                concepts.append((c[0], c[1]))
+
+        return concepts
 
 def close_by_one(context: FormalContext) -> List[FormalConcept]:
     """
