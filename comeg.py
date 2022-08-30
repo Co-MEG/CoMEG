@@ -17,6 +17,12 @@ import matplotlib.pyplot as plt
 
 from concepts import Context
 
+from IPython.display import SVG
+from sknetwork.visualization import svg_graph, svg_bigraph
+from sknetwork.utils import get_degrees
+
+import networkx as nx
+
 # Data path
 IN_PATH = 'goodreads_poetry'
 USE_CACHE = True
@@ -215,15 +221,16 @@ def run_concept_lattice():
     # Random score edge
     i = np.random.randint(len(pred_scores))
     score_edge = pred_edges[i]
-    print(f'Predicted edge: {score_edge}')
     
     # Specific edge
     #score_edge = ('fd379cf294fc1937e41f3f7df3c9eabe', '1381') # max score edge
-    score_edge = ('bc1d727746e210f315138932e0aacb11', '13637887') # small context
-    #score_edge = ('c36d77d30d627e8ad5eccbab8d92f54d', '22237148') # medium context
-    #score_edge = ('18bf7556e8f06efd9269db97880dd9ef', '5289') # Medium-Large context
-    #score_edge = ('0f9695b816f80ed7dd2768beaab2fabc', '8744427') # Medium-Large context (173, 491)
+    #score_edge = ('bc1d727746e210f315138932e0aacb11', '13637887') # small context
+    score_edge = ('c36d77d30d627e8ad5eccbab8d92f54d', '22237148') # medium context
+    #score_edge = ('18bf7556e8f06efd9269db97880dd9ef', '5289') # Medium context (20, 92)
+    #score_edge = ('0f9695b816f80ed7dd2768beaab2fabc', '8744427') # Large context (173, 491)
     #score_edge = ('9ec2bf0c6452ee5be914cb3330e233e6', '25052044') # Large context (225, 718) - InClose -> 40s
+
+    print(f'Predicted edge: {score_edge}')
 
     subgraph = g.subgraph_vicinity(score_edge)
     print(f"# nodes in subgraph: {len(subgraph.V['left'])}, {len(subgraph.V['right'])}")
@@ -305,11 +312,80 @@ def run_concept_lattice():
     print(f'-------------------------------')
     for c in lattice.concepts:
         print(c)"""
-
+    
     topk_concepts = lattice.top_k(metric='MILP')
+    print(f'\n ****** Selected concepts: ')
     for c in topk_concepts:
         print(c)
     
+    query_ext = {'degree_left': 2, 'degree_right': 1}
+    query_int = ['country_code_US', 'language_code_eng']
+    filtered_concepts = lattice.filter(query_ext, query_int)
+    print(f'\n ****** Filtered concepts: ')
+    for c in filtered_concepts:
+        print(c)
+
+
+    G = nx.Graph()
+    G.add_nodes_from(subgraph.V['left'], bipartite=0)
+    G.add_nodes_from(subgraph.V['right'], bipartite=1)
+    for e in subgraph.E:
+        if e == score_edge:
+            G.add_edge(e[0], e[1], color='r', weight=2)
+        else:
+            G.add_edge(e[0], e[1], color='black', weight=1)
+
+    fig, axs = plt.subplots(3, 3, figsize=(30, 15))
+    nx.draw_networkx(
+                G,
+                pos = nx.drawing.layout.bipartite_layout(G, nx.bipartite.sets(G)[0]),
+                edge_color = [G[u][v]['color'] for u, v in G.edges()],
+                width = [G[u][v]['weight'] for u, v in G.edges()],
+                ax = axs.ravel()[0]
+        )
+
+    def render_title(title):
+        res = ''
+        i = 0
+        for elem in title:
+            if i >= 2:
+                res += elem + ', '
+            else:
+                res += elem + ', \n'
+            i += 1
+        return res
+        
+    for c, ax in zip(filtered_concepts, axs.ravel()[1:]):
+        # Build graph induced by concept        
+        G_sub = G.copy()
+        r_nodes_to_remove = list(set(subgraph.V['right']).difference(set(c[0])))
+        G_sub.remove_nodes_from(r_nodes_to_remove)
+        l_nodes_to_remove = list(set(subgraph.V['left']).difference(set([e[0] for e in G_sub.edges()])))
+        G_sub.remove_nodes_from(l_nodes_to_remove)
+        # Draw graph
+        nx.draw_networkx(
+                G_sub,
+                pos = nx.drawing.layout.bipartite_layout(G_sub, nx.bipartite.sets(G_sub)[0]),
+                edge_color = [G[u][v]['color'] for u, v in G.edges()],
+                width = [G[u][v]['weight'] for u, v in G.edges()],
+                ax = ax
+        )
+        ax.set_title(f'{render_title(c[1])}', fontsize=6)
+    plt.show()
+
+    """for c in filtered_concepts:
+        col_idxs = [lattice.context.G2idx.get(i) for i in c[0]]
+        g_concept = lattice.context.graph.adjacency_csr.T[col_idxs].T
+        row_idxs = np.flatnonzero(get_degrees(g_concept))
+        g_concept = g_concept[row_idxs, :]
+        g_coo = g_concept.to_coo()
+
+        G = nx.graph()
+        G.add_nodes_from(lattice.context.G[row_idxs], bipartite=0)
+        G.add_nodes_from(lattice.context.M[col_idxs], bipartite=1)
+        G.add_edges_from()"""
+
+
     """mat = lattice.pairwise_concept_distance()
     fig, ax = plt.subplots()
     ax.matshow(mat, cmap=plt.cm.Blues)
