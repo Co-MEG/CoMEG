@@ -132,17 +132,35 @@ class ConceptLattice:
             concepts, _ = solver.solve(k=k, msg=msg)
             return [(x[0], x[1]) for x in concepts]
             
-    def filter(self, ext_query, int_query) -> list:
-        
+    def filter(self, ext_query: dict, int_query: list) -> list:
+        """Filter concepts w.r.t user queries.
+
+        Parameters
+        ----------
+        ext_query : dict
+            Dictionary containing filters on extent in keys: 
+                * ``degree_left``: filter concepts containing left nodes in extent with degree greater or equal than ``degree_left``
+                * ``degree_right``: filter concepts containing right nodes in extent with degree greater or equal than ``degree_right``
+                * ``nodes_right``: filter concepts with extent containing set of nodes in ``nodes_right``.
+        int_query : list
+            List of attributes must contained by filtered concepts.
+
+        Returns
+        -------
+        list
+            List of filtered concepts.
+        """        
         concepts = []
-        
+
         for c in self.concepts:
             g_concept = self.context.graph.adjacency_csr.T[[self.context.G2idx.get(i) for i in c[0]]].T
             idx = np.flatnonzero(get_degrees(g_concept))
             g_concept = g_concept[idx, :]
+            
             if np.all(get_degrees(g_concept) >= ext_query.get('degree_left')) \
                 and np.all(get_degrees(g_concept, transpose=True) >= ext_query.get('degree_right')) \
-                and len(set(int_query).intersection(set(c[1]))) > 0:
+                and len(set(ext_query.get('node_right')).intersection(set(c[0]))) >= len(ext_query.get('node_right')) \
+                and len(set(int_query).intersection(set(c[1]))) >= len(int_query):
                 concepts.append((c[0], c[1]))
 
         return concepts
