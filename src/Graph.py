@@ -208,6 +208,7 @@ class BipartiteGraph:
         # Filter edges and corresponding attributes
         self.E = list(np.array(self.E)[~mask])
         self.adjacency_csr.data[mask] = 0
+        self.adjacency_csr.eliminate_zeros()
         self.edge_attr = list(np.array(self.edge_attr)[~mask])
 
     def number_of_edges(self) -> int:
