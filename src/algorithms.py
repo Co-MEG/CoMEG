@@ -1,13 +1,109 @@
+from alive_progress import alive_bar
+import json
 import numpy as np
+import os
 import random
 from tqdm import tqdm
-import time
-import os
-import json
-#from multiprocessing import Pool
-from alive_progress import alive_bar
+from typing import Tuple
+
+from sknetwork.embedding import Spectral
 
 from src.graph import BipartiteGraph
+
+
+class SpectralEmb:
+    def __init__(self, k: int = 40, normalized: bool = True):
+        """Spectral embedding of graphs.
+
+        Parameters
+        ----------
+        k : int, optional
+            Embedding dimension, by default 40
+        normalized : bool, optional
+            If `True`, normalize embeddings so that each vector has norm 1 in embedding space, by default True
+        """    
+        self.k = k    
+        self.normalized = normalized
+        self.train_g = None
+        self.test_g = None
+        self.embedding_row = None
+        self.embedding_col = None
+
+    def fit_transform(self, train_g: BipartiteGraph) -> np.ndarray:
+        """Fit algorithm to data an return embeddings and return row embeddings.
+
+        Parameters
+        ----------
+        train_g : BipartiteGraph
+            Bipartite graph
+
+        Returns
+        -------
+        Array of row embeddings
+        """        
+        self.train_g = train_g
+        
+        spectral = Spectral(self.k, normalized=self.normalized)
+        self.embedding_row = spectral.fit_transform(train_g.adjacency_csr)
+        self.embedding_col = spectral.embedding_col_
+
+        return self.embedding_row
+
+    def predict_edges(self, test_g: BipartiteGraph, save_result: bool = True, path: str = None) -> Tuple:
+        """Predict existence of an edge between two nodes by computing the cosine similarity between their representation
+        in the embedding space.
+
+        Parameters
+        ----------
+        test_g : BipartiteGraph
+            Bipartite graph (usually test graph)
+        save_result : bool, optional
+            If `True`, save result to ``path``, by default True
+        path : str, optional
+            Path used to save result, by default None
+
+        Returns
+        -------
+        Tuple
+            Tuple of arrays containing ground truth values and predicted values for each edge in `test_g`
+        """                            
+        self.test_g = test_g
+
+        # Cosine similarity between node representation (need normalized=True in fit_transform, otherwise dot-product)
+        g_coo = self.test_g.adjacency_csr.tocoo()
+        
+        # Positive graph
+        scores_pos = (self.embedding_row[g_coo.row] * self.embedding_col[g_coo.col]).sum(axis=1)
+
+        # Negative graph -> sampling random edges
+        rand_n_right = np.random.randint(self.embedding_col.shape[0], size=len(scores_pos))
+        scores_neg = (self.embedding_row[g_coo.row] * self.embedding_col[rand_n_right]).sum(axis=1)
+        y_true_neg = []
+        # Verify if edge exists in original graph (i.e. train+test)
+        for src, dst in zip(g_coo.row, rand_n_right):
+            edge_exist = max(self.train_g.adjacency_csr[src, dst], self.test_g.adjacency_csr[src, dst])
+            y_true_neg.append(edge_exist)
+
+        y_pred = np.hstack((scores_pos, scores_neg))
+        y_true = np.hstack((np.ones(len(scores_pos)), y_true_neg))
+
+        if save_result:
+            with open(os.path.join(path, 'spectral_emb_test_graph.json'), 'w') as f:
+                i = 0
+                for idx, (u, v, s) in enumerate(zip(np.array(self.train_g.V['left'])[g_coo.row], 
+                                                    np.array(self.train_g.V['right'])[g_coo.col], 
+                                                    scores_pos)):
+                    json.dump({idx: (u, v, s)}, f)
+                    f.write(os.linesep)
+                    i = idx
+                for u, v, s in zip(np.array(self.train_g.V['left'])[g_coo.row], 
+                                   np.array(self.train_g.V['right'])[rand_n_right], 
+                                   scores_neg):
+                    i += 1
+                    json.dump({i: (u, v, s)}, f)
+                    f.write(os.linesep)
+        
+        return y_true, y_pred
 
 
 class AdamicAdar:
