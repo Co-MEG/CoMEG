@@ -15,7 +15,7 @@ def get_oserror_dir(e: OSError) -> str:
     return str(e).split(': ')[1].strip("''")
 
 
-def plot_roc_auc(y_true: Union(np.ndarray, list), y_pred: Union(np.ndarray, list), ax, label: str = 'Adamic-Adar'):
+def plot_roc_auc(y_true: Union[np.ndarray, list], y_pred: Union[np.ndarray, list], ax, label: str = 'Adamic-Adar'):
     """Plot ROC-AUC curve.
 
     Parameters
