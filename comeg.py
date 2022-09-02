@@ -1,43 +1,27 @@
 import time
-from src.algorithms import AdamicAdar
-from src.concept_lattice import ConceptLattice
-from src.context import FormalContext
-from src.graph import BipartiteGraph
-
-from sknetwork.utils import get_neighbors as gn
-from sknetwork.linkpred import JaccardIndex #, AdamicAdar
 import numpy as np
 import json
 import os
 import random
-
-from sklearn import metrics
-
 import matplotlib.pyplot as plt
-
-from concepts import Context
-
 from IPython.display import SVG
+
+from src.algorithms import AdamicAdar
+from src.concept_lattice import ConceptLattice
+from src.context import FormalContext
+from src.graph import BipartiteGraph
+from src.utils import *
+
+from sknetwork.utils import get_neighbors as gn
+from sknetwork.linkpred import JaccardIndex #, AdamicAdar
 from sknetwork.visualization import svg_graph, svg_bigraph
 from sknetwork.utils import get_degrees
 
 import networkx as nx
 
-# Data path
-IN_PATH = 'goodreads_poetry'
-USE_CACHE = True
-TEST_SIZE = 0.05
-TRAIN_TEST_SPLIT = True
-PATH_RES = os.path.join(os.getcwd(), 'data', 'goodreads_poetry', 'result')
+from sklearn import metrics
 
-
-def plot_roc_auc(y_true, y_pred, ax):
-    fpr, tpr, thresholds = metrics.roc_curve(y_true,  y_pred) 
-    auc = metrics.roc_auc_score(y_true, y_pred)
-
-    ax.plot(fpr, tpr, label='Adamic Adar')
-    ax.set_title(f'ROC AUC Curve - AUC = {auc:.4f}', weight='bold')
-    ax.legend()
+from concepts import Context
 
 
 def run_toy_concept_lattice():
@@ -151,26 +135,6 @@ def run_prediction():
     print(total)"""
     
 
-def load_predictions(path):
-    # Load predictions
-    D = {}
-    # Convert list of dicts into one big dictionary of values
-    print(f'Load result values...')
-    with open(path) as f:
-        lines = f.read().splitlines()
-        for l in lines:            
-            pair = l.strip('{}').split(': ')
-            k = pair[0]
-            v = pair[1]
-            vals = []
-            for idx, i in enumerate(v.strip('[]').split(', ')):
-                if idx <= 1:
-                    vals.append(i.strip('""'))
-                else:
-                    vals.append(float(i))
-            D.update({k: vals})
-
-    return D
 
 def run_auc_test_graph():
 
@@ -199,46 +163,57 @@ def run_auc_test_graph():
     plt.savefig(os.path.join(PATH_RES, 'img', 'adamic_adar_test_graph.eps'))
 
 
-def run_concept_lattice():
+def run_concept_lattice(path: str):
+
     # Build graph
     g = BipartiteGraph()
     g.load_data(IN_PATH, use_cache=USE_CACHE)
 
     # Load predictions
-    path = os.path.join(PATH_RES, 'adamic_adar_test_graph.json')
+    path = os.path.join(PATH_RES, path)
     preds = load_predictions(path)
 
     # Formal Concept Analysis
     # -----------------------
     # Subgraph in the vicinity of an edge
     pred_scores, pred_edges = zip(*[(values[2], (values[0], values[1])) for _, values in preds.items()])
-    
-    # Max score edge is for edge ('fd379cf294fc1937e41f3f7df3c9eabe', '1381'):
-    #   book '1381' is "The Odyssey (Homere)"
-    #score_edge = pred_edges[np.argmax(pred_scores)]
-    #print(f'Predicted edge: {score_edge}')
 
     # Random score edge
     i = np.random.randint(len(pred_scores))
     score_edge = pred_edges[i]
     
-    # Specific edge
+    # Specific edge    
+    # Poetry
     #score_edge = ('fd379cf294fc1937e41f3f7df3c9eabe', '1381') # max score edge
     #score_edge = ('bc1d727746e210f315138932e0aacb11', '13637887') # small context
-    score_edge = ('c36d77d30d627e8ad5eccbab8d92f54d', '22237148') # medium context
+    #score_edge = ('c36d77d30d627e8ad5eccbab8d92f54d', '22237148') # medium context
     #score_edge = ('18bf7556e8f06efd9269db97880dd9ef', '5289') # Medium context (20, 92)
     #score_edge = ('0f9695b816f80ed7dd2768beaab2fabc', '8744427') # Large context (173, 491)
-    #score_edge = ('9ec2bf0c6452ee5be914cb3330e233e6', '25052044') # Large context (225, 718) - InClose -> 40s
+    #score_edge = ('9ec2bf0c6452ee5be914cb3330e233e6', '25052044') # Large context (225, 718) - InClose: 40s
+    #score_edge = ('c05512c006dd9ccb49b147ce619621d5', '11737010') # XL context (566, 1450) - InClose: 257s
+    #score_edge = ('f2bac05b3932fe7c68960041744e5058', '489000') # XXL context (2332, 5375) -> ?
+    # Comics
+    #score_edge = ('2fea1cb2a1a8ef86c3dd751493d81b6b', '23310817')
+    #score_edge = ('d2448cb7ff0e7a7a62875d6cb9a8abed', '9648722')
 
     print(f'Predicted edge: {score_edge}')
 
-    subgraph = g.subgraph_vicinity(score_edge)
+    # Larger vicinity
+    subgraph = g.subgraph_vicinity_degree(score_edge)
+    print(subgraph.adjacency_csr.shape)
+    
+    # Smaller vicinity
+    #subgraph2 = g.subgraph_vicinity(score_edge)
+    #print(subgraph2.adjacency_csr.shape)
+
     print(f"# nodes in subgraph: {len(subgraph.V['left'])}, {len(subgraph.V['right'])}")
     print(f'# edges in subgraph: {len(subgraph.E)}')
     print(f"# of edge attributes: {len(subgraph.edge_attr)}")
     print(f"# of node attributes right: {len(subgraph.node_attr['right'])}")
     print(f'Edge exists in graph: {g.has_edge(u=score_edge[0], v=score_edge[1])}')
-    
+    if len(subgraph.V['left']) > 1000:
+        raise Exception('Number of left node is too large')
+
     # Formal Context
     # --------------
     fc = FormalContext(subgraph)
@@ -247,13 +222,6 @@ def run_concept_lattice():
     fc_path = os.path.join(PATH_RES, 'context', f'context_{score_edge[0]}_{score_edge[1]}.csv')
     #fc.to_csv(fc_path, sep=',')
     fc.to_concept_csv(fc_path)
-
-    # Derivation operators: intention, extention
-    #a = fc.G[0:2]
-    #b = fc.M[0:2]
-    #print(f'Intention of objects {a}: {fc.intention(a)}')
-    #print(f'Extension of attributes {b}: {fc.extension(b)}')
-    #print(f'Extention(intention({a})): {fc.extension(fc.intention(a))}')
 
     # Concept Lattice
     # ---------------
@@ -296,112 +264,89 @@ def run_concept_lattice():
         else:
             print(f'X Concept DOES NOT exists in other result {c[0]} ')"""
 
-    # Print all concepts in lattices
-    # ======================================
-    """print(f'\nLattice CbO')
-    print(f'-------------------------------')
-    for c in lattice_cbo.concepts:
+    """topk_concepts_jaccard = lattice.top_k(metric='Jaccard')
+    print(f'\n ****** Selected concepts using Jaccard: ')
+    for c in topk_concepts_jaccard:
         print(c)
 
-    print(f'\nLattice Concepts')
-    print(f'-------------------------------')
-    for e, i in l:
-        print(e, i)
-
-    print(f'\nLattice inclose')
-    print(f'-------------------------------')
-    for c in lattice.concepts:
-        print(c)"""
+    plot_subgraphs(score_edge, subgraph, topk_concepts_jaccard, title=f'topk_jaccard_{score_edge}')"""
+    
     
     topk_concepts = lattice.top_k(metric='MILP')
-    print(f'\n ****** Selected concepts: ')
+    print(f'\n ****** Selected concepts using MILP: ')
+    sel = []
     for c in topk_concepts:
-        print(c)
+        if score_edge[1] in c[0]:
+            print(c)
+            sel.append(c)
+
+    #plot_subgraphs(score_edge, subgraph, topk_concepts, title=f'topk_MILP_{score_edge}')
+    plot_subgraphs(score_edge, subgraph, sel, title=f'topk_MILP_{score_edge}')
     
-    query_ext = {'degree_left': 2, 'degree_right': 1}
-    query_int = ['country_code_US', 'language_code_eng']
+    # User query
+    # ----------
+    query_ext = {'degree_left': 1, 'degree_right': 1, 'node_right': [score_edge[1]]}
+    query_int = []
+    # ----------
+
     filtered_concepts = lattice.filter(query_ext, query_int)
     print(f'\n ****** Filtered concepts: ')
     for c in filtered_concepts:
         print(c)
 
+    plot_subgraphs(score_edge, subgraph, filtered_concepts, title=f'filt_subgraphs_{score_edge}')
 
+
+def plot_subgraphs(pred_edge, subgraph, concepts, title):
+    
+    excluded_attributes = ['popular_shelves', 'description', 'link', 'url', 'image_url', \
+                                                'book_id', 'isbn13', 'isbn', 'work_id', 'text_reviews_count', 'asin', \
+                                                'kindle_asin', 'average_rating', 'ratings_count', 'num_pages', \
+                                                'publication_day', 'similar_books', 'authors']
+    
+
+    fig, axs = plt.subplots(3, 3, figsize=(30, 15))
+
+    suptitle = [str(k)+'_'+str(v) for k, v in subgraph.node_attr['right'].get(pred_edge[1]).items() if k not in excluded_attributes]
+    plt.suptitle(render_title(suptitle), weight='bold')
+
+    # Subgraph in the vicinity of the predicted edge
     G = nx.Graph()
     G.add_nodes_from(subgraph.V['left'], bipartite=0)
     G.add_nodes_from(subgraph.V['right'], bipartite=1)
     for e in subgraph.E:
-        if e == score_edge:
+        if e == pred_edge:
             G.add_edge(e[0], e[1], color='r', weight=2)
         else:
             G.add_edge(e[0], e[1], color='black', weight=1)
 
-    fig, axs = plt.subplots(3, 3, figsize=(30, 15))
-    nx.draw_networkx(
-                G,
-                pos = nx.drawing.layout.bipartite_layout(G, nx.bipartite.sets(G)[0]),
-                edge_color = [G[u][v]['color'] for u, v in G.edges()],
-                width = [G[u][v]['weight'] for u, v in G.edges()],
-                ax = axs.ravel()[0]
-        )
+    draw_bipartite_graph(G, subgraph.V['left'], axs.ravel()[0])
 
-    def render_title(title):
-        res = ''
-        i = 0
-        for elem in title:
-            if i >= 2:
-                res += elem + ', '
-            else:
-                res += elem + ', \n'
-            i += 1
-        return res
-        
-    for c, ax in zip(filtered_concepts, axs.ravel()[1:]):
-        # Build graph induced by concept        
+    # Subgraphs induced by concepts
+    for c, ax in zip(concepts[:8], axs.ravel()[1:]):
+        # Build graph
         G_sub = G.copy()
         r_nodes_to_remove = list(set(subgraph.V['right']).difference(set(c[0])))
         G_sub.remove_nodes_from(r_nodes_to_remove)
         l_nodes_to_remove = list(set(subgraph.V['left']).difference(set([e[0] for e in G_sub.edges()])))
         G_sub.remove_nodes_from(l_nodes_to_remove)
-        # Draw graph
-        nx.draw_networkx(
-                G_sub,
-                pos = nx.drawing.layout.bipartite_layout(G_sub, nx.bipartite.sets(G_sub)[0]),
-                edge_color = [G[u][v]['color'] for u, v in G.edges()],
-                width = [G[u][v]['weight'] for u, v in G.edges()],
-                ax = ax
-        )
-        ax.set_title(f'{render_title(c[1])}', fontsize=6)
-    plt.show()
-
-    """for c in filtered_concepts:
-        col_idxs = [lattice.context.G2idx.get(i) for i in c[0]]
-        g_concept = lattice.context.graph.adjacency_csr.T[col_idxs].T
-        row_idxs = np.flatnonzero(get_degrees(g_concept))
-        g_concept = g_concept[row_idxs, :]
-        g_coo = g_concept.to_coo()
-
-        G = nx.graph()
-        G.add_nodes_from(lattice.context.G[row_idxs], bipartite=0)
-        G.add_nodes_from(lattice.context.M[col_idxs], bipartite=1)
-        G.add_edges_from()"""
-
-
-    """mat = lattice.pairwise_concept_distance()
-    fig, ax = plt.subplots()
-    ax.matshow(mat, cmap=plt.cm.Blues)
-    tick_marks = np.arange(len(lattice.concepts))
-    plt.xticks(tick_marks, range(len(lattice.concepts)), fontsize=7)
-    plt.yticks(tick_marks, [x[0] for x in lattice.concepts], fontsize=7)
-    for i in range(mat.shape[0]):
-        for j in range(mat.shape[1]):
-            c = round(mat[j, i], 2)
-            ax.text(i, j, str(c), va='center', ha='center')
-    #plt.title(f'Pairwise concept distance (Jaccard) for {score_edge}', weight='bold')
+        
+        draw_bipartite_graph(G_sub, subgraph.V['left'], ax)
+        ax.set_title(f'{render_title(c[1])}', fontsize=10)
     
-    plt.show()
-    res = os.path.join(PATH_RES, 'img', f'top_5_concepts_{score_edge[0]}_{score_edge[1]}.eps')
-    plt.tight_layout()
-    plt.savefig(res)"""
+    title = title + '.eps'
+    res = os.path.join(PATH_RES, 'img', title)
+    plt.savefig(res)
+
+
+# Data path
+IN_PATH = 'goodreads_comics' #'goodreads_poetry'
+USE_CACHE = True
+TEST_SIZE = 0.05
+TRAIN_TEST_SPLIT = True
+PATH_RES = os.path.join(os.getcwd(), 'data', IN_PATH, 'result')
+LINK_PRED_METHOD = 'spectral_emb' # 'adamic_adar'
+
 
 if __name__ == '__main__':
     
@@ -419,4 +364,5 @@ if __name__ == '__main__':
     #run_toy_concept_lattice()
     
     # Full data
-    run_concept_lattice()
+    #run_concept_lattice('adamic_adar_test_graph.json')
+    run_concept_lattice(f'{LINK_PRED_METHOD}_test_graph.json')
