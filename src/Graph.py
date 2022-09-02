@@ -343,14 +343,15 @@ class BipartiteGraph:
         # Get subgraph nodes and node attributes
         n_u = self.get_neighbors(u, transpose=False)
         n_v = self.get_neighbors(v, transpose=True)
-        subgraph.V['right'] = n_u
-        subgraph.V['left'] = n_v
-        subgraph.node_attr['right'] = {x: self.node_attr['right'].get(x) for x in n_u}
+        subgraph.V['right'] = list(set(n_u).union(set([v])))
+        subgraph.V['left'] = list(set(n_v).union(set([u])))
+        subgraph.node_attr['right'] = {x: self.node_attr['right'].get(x) for x in subgraph.V['right']}
         
         # Get subgraph edges and edge attributes
         edges_u = set([(u, x) for x in n_u])
         edges_v = set([(x, v) for x in n_v])
-        subgraph.E = [(u, v)] + list(edges_u.union(edges_v))
+        subgraph.E = list(edges_u.union(edges_v).union(set([(u, v)])))
+        #subgraph.E = [(u, v)] + list(edges_u.union(edges_v))
         # TODO : retrieve edge information is too long
         #for e in tqdm(subgraph.E):
         #    idx = np.where(np.array(self.E)==e)[0][0]
