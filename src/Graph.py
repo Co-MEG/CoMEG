@@ -350,7 +350,7 @@ class BipartiteGraph:
         # Get subgraph edges and edge attributes
         edges_u = set([(u, x) for x in n_u])
         edges_v = set([(x, v) for x in n_v])
-        subgraph.E = list(edges_u.union(edges_v))
+        subgraph.E = [(u, v)] + list(edges_u.union(edges_v))
         # TODO : retrieve edge information is too long
         #for e in tqdm(subgraph.E):
         #    idx = np.where(np.array(self.E)==e)[0][0]
