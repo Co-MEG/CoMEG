@@ -323,6 +323,62 @@ class BipartiteGraph:
             print(f'u, v: {u}, {v}')
         return v in neighbors
 
+    def subgraph_vicinity_degree(self, edge: Tuple, min_degree_left: int = 2, min_degree_right: int = 3) -> BipartiteGraph:
+        subgraph = BipartiteGraph()
+        src, dst = edge
+        u_idx = self.label2idx_rows.get(src)
+        v_idx = self.label2idx_cols.get(dst)
+
+        # Apply filter on node degrees
+        degrees_left = self.adjacency_csr.dot(np.ones(self.adjacency_csr.shape[1])) >= min_degree_left
+        degrees_right = self.adjacency_csr.T.dot(np.ones(self.adjacency_csr.shape[0])) >= min_degree_right
+
+        # 2-hops left nodes
+        neighbs_idx = self.adjacency_csr.indices[self.adjacency_csr.indptr[u_idx]:self.adjacency_csr.indptr[u_idx + 1]]
+        nnz_idx = np.flatnonzero(neighbs_idx * degrees_right[neighbs_idx])
+        n_u = neighbs_idx[nnz_idx]
+        edges_u = [(src, self.names_col[x]) for x in n_u]
+
+        edges_2hops_u = []
+        for v in n_u:
+            neighbs_idx = self.adjacency_csr.T.indices[self.adjacency_csr.T.indptr[v]:self.adjacency_csr.T.indptr[v+1]]
+            nnz_idx = np.flatnonzero(neighbs_idx * degrees_left[neighbs_idx])
+            n_2hops_u = neighbs_idx[nnz_idx]
+            edges_2hops_u.append([(u, v) for u in n_2hops_u])
+        
+        edges_2hops_u_rav = [(self.names_row[x[0]], self.names_col[x[1]]) for sublist in edges_2hops_u for x in sublist]
+
+        # 2-hops right nodes
+        neighbs_idx = self.adjacency_csr.T.indices[self.adjacency_csr.T.indptr[v_idx]:self.adjacency_csr.T.indptr[v_idx + 1]]
+        nnz_idx = np.flatnonzero(neighbs_idx * degrees_left[neighbs_idx])
+        n_v = neighbs_idx[nnz_idx]
+        edges_v = [(self.names_row[x], dst) for x in n_v]
+
+        edges_2hops_v = []
+        for u in n_v:
+            neighbs_idx = self.adjacency_csr.indices[self.adjacency_csr.indptr[u]:self.adjacency_csr.indptr[u+1]]
+            nnz_idx = np.flatnonzero(neighbs_idx * degrees_right[neighbs_idx])
+            n_2hops_v = neighbs_idx[nnz_idx]
+            edges_2hops_v.append([(u, v) for v in n_2hops_v])
+        
+        edges_2hops_v_rav = [(self.names_row[x[0]], self.names_col[x[1]]) for sublist in edges_2hops_v for x in sublist]
+
+        edges = list(set([(src, dst)])
+                    .union(set(edges_u))
+                    .union(set(edges_v))
+                    .union(set(edges_2hops_u_rav))
+                    .union(set(edges_2hops_v_rav))
+                )
+        u_list, v_list = zip(*edges)
+        subgraph.V['left'] = list(set(u_list))
+        subgraph.V['right'] = list(set(v_list))
+        subgraph.node_attr['right'] = {x: self.node_attr['right'].get(x) for x in subgraph.V['right']}
+        subgraph.E = edges
+
+        subgraph._build_csr()
+        
+        return subgraph
+
     def subgraph_vicinity(self, edge: Tuple) -> BipartiteGraph:
         """Build subgraph in the vicinity of an edge (u, v). The subgraph is made of the edge itself, as well as all 
         the edges (y, x) such that x is in N(u) and y is in N(v).
@@ -351,11 +407,6 @@ class BipartiteGraph:
         edges_u = set([(u, x) for x in n_u])
         edges_v = set([(x, v) for x in n_v])
         subgraph.E = list(edges_u.union(edges_v).union(set([(u, v)])))
-        #subgraph.E = [(u, v)] + list(edges_u.union(edges_v))
-        # TODO : retrieve edge information is too long
-        #for e in tqdm(subgraph.E):
-        #    idx = np.where(np.array(self.E)==e)[0][0]
-        #    subgraph.edge_attr.append(self.edge_attr[idx])
 
         # Build adjacency matrix of the subgraph
         subgraph._build_csr()
