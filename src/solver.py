@@ -29,7 +29,10 @@ class Solver():
         Tuple of lists containing initialized variables.
         """        
         ext_len, int_len = [], []
-        n_unique_attr = len(np.unique([x.split('_')[:-1] for x in self.lattice.context.M]))
+        if self.lattice.context.use_description:
+            n_unique_attr = len(self.lattice.context.M)
+        else:
+            n_unique_attr = len(np.unique([x.split('_')[:-1] for x in self.lattice.context.M]))
         
         for c in self.concepts:
             
@@ -87,17 +90,17 @@ class Solver():
                 min_prob = prob
 
         # Plot Pareto frontier
-        """fig, ax = plt.subplots(1, 1, figsize=(12, 7))
-        print(solutionTable)
-        plt.plot(solutionTable['alpha'], solutionTable['obj_value'], color='g')
-        plt.xlabel('alpha')
-        plt.ylabel('Objective value')
-        plt.show()
+        #fig, ax = plt.subplots(1, 1, figsize=(12, 7))
+        #print(solutionTable)
+        #plt.plot(solutionTable['alpha'], solutionTable['obj_value'], color='g')
+        #plt.xlabel('alpha')
+        #plt.ylabel('Objective value')
+        #plt.show()
         # Save result img
-        PATH_RES = os.path.join(os.getcwd(), 'data', 'goodreads_poetry', 'result')
-        res = os.path.join(PATH_RES, 'img', f'LO_pareto_bc1d727746e210f315138932e0aacb11_13637887.eps')
-        plt.tight_layout()
-        plt.savefig(res)"""
+        #PATH_RES = os.path.join(os.getcwd(), 'data', 'goodreads_poetry', 'result')
+        #res = os.path.join(PATH_RES, 'img', f'LO_pareto_bc1d727746e210f315138932e0aacb11_13637887.eps')
+        #plt.tight_layout()
+        #plt.savefig(res)
 
         return min_prob
         

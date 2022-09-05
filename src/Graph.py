@@ -67,7 +67,7 @@ class BipartiteGraph:
                     if 'books' in f:
                         print(f'   Loading book information...')
                         books = {}
-                        excluded_attributes = ['popular_shelves', 'description', 'link', 'url', 'image_url', \
+                        excluded_attributes = ['popular_shelves', 'link', 'url', 'image_url', \
                                                 'book_id', 'isbn13', 'isbn', 'work_id', 'text_reviews_count', 'asin', \
                                                 'kindle_asin', 'average_rating', 'ratings_count', 'num_pages', \
                                                 'publication_day']
@@ -76,7 +76,7 @@ class BipartiteGraph:
                             data = json.loads(book)
                             books[data['book_id']] = {attr: val for attr, val in data.items() \
                                 if attr not in excluded_attributes}
-                    
+
                     # Interaction information
                     elif 'interactions' in f:
                         print(f'   Loading interactions information...')

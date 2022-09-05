@@ -87,7 +87,7 @@ def draw_bipartite_graph(G: nx.classes.graph.Graph, top_nodes, ax):
         ax = ax
     )
 
-def render_title(title: list, k: int = 3) -> str:
+def render_title(title: list, k: int = 5) -> str:
     """Format elements in list into a title displayed on :math:`k` lines.
 
     Parameters

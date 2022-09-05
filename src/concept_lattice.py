@@ -52,7 +52,9 @@ class ConceptLattice:
         if algo == 'in-close':
             
             global r_new
+            global right_degrees
             r_new = 0
+            right_degrees = context.I.T.dot(np.ones(context.I.shape[0]))
             extents, intents = init_in_close(context)
             concepts = algo_func(context, extents, intents, r=0, y=0, **kwargs)
         else:
@@ -248,7 +250,7 @@ def process(A: list, attrs: list, L: list, context: FormalContext, current_obj: 
 
 
 def in_close(context: FormalContext, extents: list, intents: list, r: int = 0, y: int = 0, minimum_support: int = 0,
-            maximum_support: int = np.inf) -> list:
+            maximum_support: int = np.inf, max_right_degree: int = 10) -> list:
     """In Close algorithm. 
 
     Parameters
@@ -286,28 +288,30 @@ def in_close(context: FormalContext, extents: list, intents: list, r: int = 0, y
         except IndexError:
             extents.append([])
 
-        # Form a new extent by adding extension of attribute j to current concept extent
-        extents[r_new] = list(sorted(set(extents[r]).intersection(set(context.extension([j])))))
+        if right_degrees[context.M2idx.get(j)] < max_right_degree:
 
-        # If the extent is empty, skip recursion and move to next attribute. 
-        # If the extent is unchanged, add attribute j to current concept intent, skip recursion and move to next attribute.
-        # Otherwise, extent must be a smaller (lexicographically) intersection. If the extent already exists, skip recursion and move on to next attribute.
-        if (len(extents[r_new]) > minimum_support) and (len(extents[r_new]) < maximum_support):
-            if len(extents[r_new]) == len(extents[r]):
-                intents[r] = list(sorted(set(intents[r]).union(set([j]))))
-            else:
-                # Test if extent has already be generated using is_cannonical()
-                if is_cannonical(context, extents, intents, r, context.M2idx.get(j) - 1):
-                    try:
-                        intents[r_new] = []
-                    except IndexError:
-                        intents.append([])
+            # Form a new extent by adding extension of attribute j to current concept extent
+            extents[r_new] = list(sorted(set(extents[r]).intersection(set(context.extension([j])))))
 
-                    # Extent is cannonical, i.e new concept 
-                    # -> Initialize intent and recursive call to begin closure
-                    intents[r_new] = list(sorted(set(intents[r]).union(set([j]))))
-                    in_close(context, extents, intents, r=r_new, y=context.M2idx.get(j) + 1, 
-                            minimum_support=minimum_support)
+            # If the extent is empty, skip recursion and move to next attribute. 
+            # If the extent is unchanged, add attribute j to current concept intent, skip recursion and move to next attribute.
+            # Otherwise, extent must be a smaller (lexicographically) intersection. If the extent already exists, skip recursion and move on to next attribute.
+            if (len(extents[r_new]) > minimum_support) and (len(extents[r_new]) < maximum_support):
+                if len(extents[r_new]) == len(extents[r]):
+                    intents[r] = list(sorted(set(intents[r]).union(set([j]))))
+                else:
+                    # Test if extent has already be generated using is_cannonical()
+                    if is_cannonical(context, extents, intents, r, context.M2idx.get(j) - 1):
+                        try:
+                            intents[r_new] = []
+                        except IndexError:
+                            intents.append([])
+
+                        # Extent is cannonical, i.e new concept 
+                        # -> Initialize intent and recursive call to begin closure
+                        intents[r_new] = list(sorted(set(intents[r]).union(set([j]))))
+                        in_close(context, extents, intents, r=r_new, y=context.M2idx.get(j) + 1, 
+                                minimum_support=minimum_support)
 
     return [*zip(extents, intents)]
 

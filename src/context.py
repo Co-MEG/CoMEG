@@ -3,19 +3,20 @@ import numpy as np
 import pandas as pd
 import os
 from typing import Optional, Union, TYPE_CHECKING
+from nltk.tokenize import word_tokenize
+from sknetwork.data.parse import from_edge_list
+from sknetwork.data import from_csv
 
 from src.graph import BipartiteGraph
 from src.concept_lattice import ConceptLattice
 from src.utils import get_oserror_dir
 
-from sknetwork.data.parse import from_edge_list
-from sknetwork.data import from_csv
-
 
 class FormalContext:
-    def __init__(self, graph: Union[BipartiteGraph, dict]):
+    def __init__(self, graph: Union[BipartiteGraph, dict], use_description: bool = False):
+        self.use_description = use_description
         if isinstance(graph, BipartiteGraph):
-            bunch = self._get_ohe_attributes(graph.node_attr['right'])
+            bunch = self._get_ohe_attributes(graph.node_attr['right'], use_description)
         elif isinstance(graph, dict):
             # for "from_csv" usage
             bunch = graph
@@ -24,9 +25,9 @@ class FormalContext:
         self.M = bunch.names_col
         self.I = bunch.biadjacency
         self.M2idx = {}
-        self.G2idx = {}
+        self.G2idx = {} 
 
-    def _get_ohe_attributes(self, attributes: dict) -> dict:
+    def _get_ohe_attributes(self, attributes: dict, use_description: bool = False) -> dict:
         """Get set of attributes for Formal Context. For this purpose, original attributes are transformed into their
         one-hot-encoded form.
 
@@ -34,6 +35,9 @@ class FormalContext:
         ----------
         attributes : dict
             Dictionary of attributes with name of original attribute as key.
+        use_description : bool
+            If `True`, use words in ``description`` of each book as attributes. The tokenizer used is 
+            ``nltk.word_tokenizer()``, False by default.
 
         Returns
         -------
@@ -46,11 +50,20 @@ class FormalContext:
 
         edge_list = []
 
-        for k, attributes in attributes.items():
-            for attr, value in attributes.items():
-                if not isinstance(value, (list, dict)):
-                    ohe_attr = f'{attr}_{value}'
-                    edge_list.append((k, ohe_attr))
+        if not use_description:
+            for k, attributes in attributes.items():
+                for attr, value in attributes.items():
+                    if attr != 'description' and not isinstance(value, (list, dict)):
+                        ohe_attr = f'{attr}_{value}'
+                        edge_list.append((k, ohe_attr))
+        else:
+            for k, attributes in attributes.items():
+                if attributes.get('language_code') in ('', 'eng', 'en-GB', 'en-US') and \
+                    len(attributes.get('description')) > 0:
+                    for word in word_tokenize(attributes.get('description')):
+                        if len(word) > 2:
+                            ohe_attr = word
+                            edge_list.append((k, ohe_attr))
 
         bunch = from_edge_list(edge_list, bipartite=True, reindex=True)
 
