@@ -29,7 +29,7 @@ class ConceptLattice:
         return len(self.concepts)
 
     @classmethod
-    def from_context(cls, context: FormalContext, algo: str = 'in-close') -> ConceptLattice:
+    def from_context(cls, context: FormalContext, algo: str = 'in-close', **kwargs) -> ConceptLattice:
         """Return a ``ConceptLattice`` according to ``context``, created using algorithm ``algo``.
 
         Parameters
@@ -54,7 +54,7 @@ class ConceptLattice:
             global r_new
             r_new = 0
             extents, intents = init_in_close(context)
-            concepts = algo_func(context, extents, intents, r=0, y=0)
+            concepts = algo_func(context, extents, intents, r=0, y=0, **kwargs)
         else:
             concepts = algo_func(context)
         
@@ -247,8 +247,8 @@ def process(A: list, attrs: list, L: list, context: FormalContext, current_obj: 
                 process(Z_labels, f_intention, L, context, current_obj)
 
 
-def in_close(context: FormalContext, extents: list, intents: list, r: int = 0, y: int = 0, minimum_support: int = 0) \
-    -> list:
+def in_close(context: FormalContext, extents: list, intents: list, r: int = 0, y: int = 0, minimum_support: int = 0,
+            maximum_support: int = np.inf) -> list:
     """In Close algorithm. 
 
     Parameters
@@ -292,7 +292,7 @@ def in_close(context: FormalContext, extents: list, intents: list, r: int = 0, y
         # If the extent is empty, skip recursion and move to next attribute. 
         # If the extent is unchanged, add attribute j to current concept intent, skip recursion and move to next attribute.
         # Otherwise, extent must be a smaller (lexicographically) intersection. If the extent already exists, skip recursion and move on to next attribute.
-        if len(extents[r_new]) > minimum_support:
+        if (len(extents[r_new]) > minimum_support) and (len(extents[r_new]) < maximum_support):
             if len(extents[r_new]) == len(extents[r]):
                 intents[r] = list(sorted(set(intents[r]).union(set([j]))))
             else:

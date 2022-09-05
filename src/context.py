@@ -164,7 +164,7 @@ class FormalContext:
 
         return list(int_is)
 
-    def lattice(self, algo: str = 'in-close') -> ConceptLattice:
+    def lattice(self, algo: str = 'in-close', **kwargs) -> ConceptLattice:
         """Return Concept Lattice of the Formal Context.
 
         Parameters
@@ -181,7 +181,7 @@ class FormalContext:
         """        
         self._build_attr_indx()
         self._build_obj_indx()
-        return ConceptLattice.from_context(self, algo=algo)
+        return ConceptLattice.from_context(self, algo=algo, **kwargs)
 
     def _check_attr(self, attr: str):
         if not attr in self.M2idx:
