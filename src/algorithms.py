@@ -18,7 +18,7 @@ class TfIdf():
 
     def _idf(self, biadjacency):
         count = biadjacency.T.astype(bool).dot(np.ones(self.n))
-        return 1 + np.log((self.n+1) / (count+1))
+        return np.log((self.n) / (count+1))
 
     def _tf(self, biadjacency):
         diag = sparse.diags(biadjacency.dot(np.ones(self.m)))
