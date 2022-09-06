@@ -18,11 +18,16 @@ class Solver():
                                 lowBound=0, upBound=1, 
                                 cat='Integer', indexStart=[])
     
-    def init_model_variables(self) -> Tuple:
+    def init_model_variables(self, metric: str = 'size') -> Tuple:
         """Initialize ``Pulp`` optimization variables.
-            Variables are:
+            
+        Parameters
+        ----------
+        metric : str
+            * 'size': Size of extent and intent. Variables are:
                 * Coverage of graph induced by the extent wrt the graph in the vicinity of the prediction
                 * Ratio between size of the intent and number of unique attributes
+            * 'tf-idf': Sum of `tf-idf` scores for each object-attribute pair
 
         Returns
         -------
@@ -34,12 +39,24 @@ class Solver():
         else:
             n_unique_attr = len(np.unique([x.split('_')[:-1] for x in self.lattice.context.M]))
         
+        tfidf = self.lattice.context.get_attributes_tfidf()
+
         for c in self.concepts:
             
-            # Size of intent
-            #int_len.append(len(c[1]) / len(self.lattice.context.M))
-            int_len.append(len(c[1]) / n_unique_attr)
+            if metric == 'tf-idf':
+                tfidf_val = 0
+                idx_row = [self.lattice.context.G2idx.get(obj) for obj in c[0]]
+                idx_col = [self.lattice.context.M2idx.get(attr) for attr in c[1]]
+                for i in idx_row:
+                    for j in idx_col:        
+                        tfidf_val += tfidf[i, j]
+                int_len.append(tfidf_val)
 
+            # Size of intent
+            else:
+                #int_len.append(len(c[1]) / len(self.lattice.context.M))
+                int_len.append(len(c[1]) / n_unique_attr)
+            
             # Size of extent
             #ext_len.append(len(c[0]))
 
@@ -65,7 +82,7 @@ class Solver():
         ``pulp`` problem object.
         """        
         # Variables are lengths of extent and intent of concepts
-        ext_len, int_len = self.init_model_variables()
+        ext_len, int_len = self.init_model_variables(metric='size')
         
         # Find subset of 5 concepts that maximize both lengths of extents and intents
         step_size = 0.1
@@ -104,35 +121,41 @@ class Solver():
 
         return min_prob
         
-    def model(self, k: int = 5):
+    def model(self, k: int = 5, metric: str = 'size'):
         """Build optmization model with objective and constraints.
 
         Parameters
         ----------
         k : int, optional
             Number of concepts to select, by default 5
+        metric : str
+            * 'size': Size of extent and intent
+            * 'tf-idf': Sum of `tf-idf` scores for each object-attribute pair
 
         Returns
         -------
         ``pulp`` problem object.
         """        
-        # Variables are lengths of extent and intent of concepts
-        ext_len, int_len = self.init_model_variables()
+        # Initialize variables to optimize according to metric
+        ext_len, int_len = self.init_model_variables(metric=metric)
 
-        # Find subset of 5 concepts that maximize both lengths of extents and intents
+        # Find subset of 5 concepts that maximize variable
         prob = pulp.LpProblem("Best_concepts", LpMaximize)
-        prob += pulp.lpSum([self.x[i] * (ext_len[i] + int_len[i]) for i in self.concepts_idx])
+        prob += pulp.lpSum([self.x[i] * (int_len[i]) for i in self.concepts_idx])
         prob += pulp.lpSum([self.x[i] for i in self.concepts_idx]) == k
         
         return prob
 
-    def solve(self, k: int = 5, solver: object = PULP_CBC_CMD, msg: bool = False) -> list:
+    def solve(self, k: int = 5, metric: str = 'size', solver: object = PULP_CBC_CMD, msg: bool = False) -> list:
         """Solve optimization problem (default solver is CBC MILP).
 
         Parameters
         ----------
         k : int, optional
             Number of concepts to select, by default 5
+        metric : str
+            * 'size': Size of extent and intent
+            * 'tf-idf': Sum of `tf-idf` scores for each object-attribute pair
         msg : bool, optional
             If `True`, print solver log in standard output, by default False
 
@@ -142,12 +165,12 @@ class Solver():
             List of concepts maximizing optimization problem.
         """        
         
-        # Multiple objective optimization
-        prob = self.multi_obj_model(k=k)
-
-        # Simple objective optimization
-        """prob = self.model(k=k)
-        prob.solve(solver(msg=msg))"""
+        # Solve optimization
+        if metric == 'size':
+            prob = self.multi_obj_model(k=k)
+        elif metric == 'tf-idf':
+            prob = self.model(k=k, metric=metric)
+            prob.solve(solver(msg=msg))
         
         concept_idxs = np.array([int(v.name.split('_')[1]) for v in prob.variables() if v.varValue > 0])
         scores = np.array([v.dj for v in prob.variables()])
