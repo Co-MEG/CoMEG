@@ -3,12 +3,32 @@ import json
 import numpy as np
 import os
 import random
+from scipy import sparse
 from tqdm import tqdm
 from typing import Tuple
 
 from sknetwork.embedding import Spectral
 
 from src.graph import BipartiteGraph
+
+class TfIdf():
+    def __init__(self):
+        self.n = None
+        self.m = None
+
+    def _idf(self, biadjacency):
+        count = biadjacency.T.astype(bool).dot(np.ones(self.n))
+        return 1 + np.log((self.n+1) / (count+1))
+
+    def _tf(self, biadjacency):
+        diag = sparse.diags(biadjacency.dot(np.ones(self.m)))
+        diag.data = 1 / diag.data
+        return diag.dot(biadjacency)
+
+    def fit_transform(self, biadjacency):
+        self.n, self.m = biadjacency.shape
+        diag_idf = sparse.diags(self._idf(biadjacency))
+        return self._tf(biadjacency).dot(diag_idf)
 
 
 class SpectralEmb:
@@ -80,24 +100,28 @@ class SpectralEmb:
         scores_neg = (self.embedding_row[g_coo.row] * self.embedding_col[rand_n_right]).sum(axis=1)
         y_true_neg = []
         # Verify if edge exists in original graph (i.e. train+test)
-        for src, dst in zip(g_coo.row, rand_n_right):
+        idxs = []
+        for idx, (src, dst) in enumerate(zip(g_coo.row, rand_n_right)):
             edge_exist = max(self.train_g.adjacency_csr[src, dst], self.test_g.adjacency_csr[src, dst])
-            y_true_neg.append(edge_exist)
+            if edge_exist == 0:
+                y_true_neg.append(edge_exist)
+                idxs.append(idx)
+        scores_neg = scores_neg[np.array(idxs)]
 
         y_pred = np.hstack((scores_pos, scores_neg))
         y_true = np.hstack((np.ones(len(scores_pos)), y_true_neg))
 
         if save_result:
-            with open(os.path.join(path, 'spectral_emb_test_graph.json'), 'w') as f:
+            with open(path, 'w') as f:
                 i = 0
-                for idx, (u, v, s) in enumerate(zip(np.array(self.train_g.V['left'])[g_coo.row], 
-                                                    np.array(self.train_g.V['right'])[g_coo.col], 
+                for idx, (u, v, s) in enumerate(zip(self.train_g.names_row[g_coo.row], 
+                                                    self.train_g.names_col[g_coo.col], 
                                                     scores_pos)):
                     json.dump({idx: (u, v, s)}, f)
                     f.write(os.linesep)
                     i = idx
-                for u, v, s in zip(np.array(self.train_g.V['left'])[g_coo.row], 
-                                   np.array(self.train_g.V['right'])[rand_n_right], 
+                for u, v, s in zip(self.train_g.names_row[g_coo.row], 
+                                   self.train_g.names_col[rand_n_right], 
                                    scores_neg):
                     i += 1
                     json.dump({i: (u, v, s)}, f)
