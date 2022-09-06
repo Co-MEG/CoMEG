@@ -131,7 +131,12 @@ class ConceptLattice:
         
         elif metric == 'MILP':
             solver = Solver(self)
-            concepts, _ = solver.solve(k=k, msg=msg)
+            concepts, _ = solver.solve(k=k, metric='size', msg=msg)
+            return [(x[0], x[1]) for x in concepts]
+
+        elif metric == 'tf-idf':
+            solver = Solver(self)
+            concepts, _ = solver.solve(k=k, metric='tf-idf', msg=msg)
             return [(x[0], x[1]) for x in concepts]
             
     def filter(self, ext_query: dict, int_query: list) -> list:
@@ -288,7 +293,8 @@ def in_close(context: FormalContext, extents: list, intents: list, r: int = 0, y
         except IndexError:
             extents.append([])
 
-        if right_degrees[context.M2idx.get(j)] < max_right_degree:
+        #if right_degrees[context.M2idx.get(j)] < max_right_degree:
+        if right_degrees[context.M2idx.get(j)] < (0.1 * context.I.shape[1]):
 
             # Form a new extent by adding extension of attribute j to current concept extent
             extents[r_new] = list(sorted(set(extents[r]).intersection(set(context.extension([j])))))
