@@ -69,7 +69,7 @@ def load_predictions(path: str) -> dict:
 
     return D
 
-def draw_bipartite_graph(G: nx.classes.graph.Graph, top_nodes, ax):
+def draw_bipartite_graph(G: nx.classes.graph.Graph, top_nodes, color_map, ax):
     """Draw networkX bipartite graph
 
     Parameters
@@ -83,6 +83,7 @@ def draw_bipartite_graph(G: nx.classes.graph.Graph, top_nodes, ax):
         G,
         pos = nx.drawing.layout.bipartite_layout(G, top_nodes),
         edge_color = [G[u][v]['color'] for u, v in G.edges()],
+        node_color = color_map,
         width = [G[u][v]['weight'] for u, v in G.edges()],
         ax = ax
     )
