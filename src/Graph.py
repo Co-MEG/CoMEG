@@ -404,9 +404,10 @@ class BipartiteGraph:
         subgraph.node_attr['right'] = {x: self.node_attr['right'].get(x) for x in subgraph.V['right']}
         
         # Get subgraph edges and edge attributes
-        edges_u = set([(u, x) for x in n_u])
+        edges_u = set([(u, y) for y in n_u])
         edges_v = set([(x, v) for x in n_v])
-        subgraph.E = list(edges_u.union(edges_v).union(set([(u, v)])))
+        edges = set([(x, y) for y in n_u for x in n_v if self.adjacency_csr[self.label2idx_rows.get(x), self.label2idx_cols.get(y)] > 0])
+        subgraph.E = list(edges_u.union(edges_v).union(edges).union(set([(u, v)])))
 
         # Build adjacency matrix of the subgraph
         subgraph._build_csr()
