@@ -6,7 +6,7 @@ import pandas as pd
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from src.concept_lattice import ConceptLattice
-
+from src.algorithms import TfIdf
 
 class Solver():
     def __init__(self, lattice: 'ConceptLattice'):
@@ -36,10 +36,10 @@ class Solver():
         ext_len, int_len = [], []
         if self.lattice.context.use_description:
             n_unique_attr = len(self.lattice.context.M)
+            if metric == 'tf-idf':
+                tfidf = TfIdf().fit_transform(self.lattice.context.I) 
         else:
             n_unique_attr = len(np.unique([x.split('_')[:-1] for x in self.lattice.context.M]))
-        
-        tfidf = self.lattice.context.get_attributes_tfidf()
 
         for c in self.concepts:
             
