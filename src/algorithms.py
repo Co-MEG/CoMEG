@@ -16,18 +16,54 @@ class TfIdf():
         self.n = None
         self.m = None
 
-    def _idf(self, biadjacency):
+    def _idf(self, biadjacency: sparse.csr_matrix) -> np.ndarray:
+        """Compute inverse document frequency for each word columns of `biadjacency`.
+
+        Parameters
+        ----------
+        biadjacency : sparse.csr_matrix
+            Rows are documents, words are columns
+
+        Returns
+        -------
+        Array of inverse document frequency value for each word in biadjacency.
+        """        
         count = biadjacency.T.astype(bool).dot(np.ones(self.n))
+        
         return np.log((self.n) / (count+1))
 
-    def _tf(self, biadjacency):
+    def _tf(self, biadjacency: sparse.csr_matrix) -> np.ndarray:
+        """Compute term frequency for each word in each row of `biadjacency`.
+
+        Parameters
+        ----------
+        biadjacency : sparse.csr_matrix
+            Rows are documents, words are columns
+
+        Returns
+        -------
+        Array of term frequencies with same size as `biadjacency`
+        """        
         diag = sparse.diags(biadjacency.dot(np.ones(self.m)))
         diag.data = 1 / diag.data
+
         return diag.dot(biadjacency)
 
-    def fit_transform(self, biadjacency):
+    def fit_transform(self, biadjacency: sparse.csr_matrix) -> np.ndarray:
+        """Compute tf-idf.
+
+        Parameters
+        ----------
+        biadjacency : sparse.csr_matrix
+            Rows are documents, words are columns
+
+        Returns
+        -------
+        Array of tf-idf values for each word in each document.
+        """        
         self.n, self.m = biadjacency.shape
         diag_idf = sparse.diags(self._idf(biadjacency))
+
         return self._tf(biadjacency).dot(diag_idf)
 
 
