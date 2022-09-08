@@ -5,11 +5,11 @@ import json
 import numpy as np
 import os
 import random
-from sknetwork.data.parse import from_edge_list
 from scipy import sparse
+from sknetwork.data.parse import from_edge_list
+from sknetwork.ranking import PageRank, top_k
 from typing import Tuple
-import time
-from tqdm import tqdm
+
 
 class BipartiteGraph:
     """Bipartite graph class.
@@ -379,14 +379,18 @@ class BipartiteGraph:
         
         return subgraph
 
-    def subgraph_vicinity(self, edge: Tuple) -> BipartiteGraph:
+    def subgraph_vicinity(self, edge: Tuple, method: str = 'ppr') -> BipartiteGraph:
         """Build subgraph in the vicinity of an edge (u, v). The subgraph is made of the edge itself, as well as all 
-        the edges (y, x) such that x is in N(u) and y is in N(v).
+        the edges (x, y) such that x and y are in the sets of nodes obtained using 'method'.
 
         Parameters
         ----------
         edge : Tuple
             Edge on which subgraph is built.
+        method : str
+            Method used to extract nodes in the vicinity of the prediction. Either:
+                * 'ppr': Personalized PageRank with predicted nodes as seeds
+                * 'neighbors': 1-hop neighbors of predicted nodes 
 
         Returns
         -------
@@ -396,18 +400,45 @@ class BipartiteGraph:
         subgraph = BipartiteGraph()
         u, v = edge[0], edge[1]
 
-        # Get subgraph nodes and node attributes
-        n_u = self.get_neighbors(u, transpose=False)
-        n_v = self.get_neighbors(v, transpose=True)
-        subgraph.V['right'] = list(set(n_u).union(set([v])))
-        subgraph.V['left'] = list(set(n_v).union(set([u])))
-        subgraph.node_attr['right'] = {x: self.node_attr['right'].get(x) for x in subgraph.V['right']}
-        
-        # Get subgraph edges and edge attributes
-        edges_u = set([(u, y) for y in n_u])
-        edges_v = set([(x, v) for x in n_v])
-        edges = set([(x, y) for y in n_u for x in n_v if self.adjacency_csr[self.label2idx_rows.get(x), self.label2idx_cols.get(y)] > 0])
-        subgraph.E = list(edges_u.union(edges_v).union(edges).union(set([(u, v)])))
+        if method == 'neighbors':
+            # Get subgraph nodes and node attributes
+            n_u = self.get_neighbors(u, transpose=False)
+            n_v = self.get_neighbors(v, transpose=True)
+            subgraph.V['right'] = list(set(n_u).union(set([v])))
+            subgraph.V['left'] = list(set(n_v).union(set([u])))
+            subgraph.node_attr['right'] = {x: self.node_attr['right'].get(x) for x in subgraph.V['right']}
+            
+            # Get subgraph edges and edge attributes
+            edges_u = set([(u, y) for y in n_u])
+            edges_v = set([(x, v) for x in n_v])
+            edges = set([(x, y) for y in n_u for x in n_v if self.adjacency_csr[self.label2idx_rows.get(x), self.label2idx_cols.get(y)] > 0])
+            subgraph.E = list(edges_u.union(edges_v).union(edges).union(set([(u, v)])))
+
+        elif method == 'ppr':
+            k = 10 # number of nodes to select from each personalized PageRank
+            pagerank = PageRank()
+            seed_row = {self.label2idx_rows.get(u): 1}
+            seed_col = {self.label2idx_cols.get(v): 1}
+            
+            # Ppr with seed on left node
+            pagerank.fit_transform(self.adjacency_csr, seeds_row=seed_row)
+            top_row_left = top_k(pagerank.scores_row_, k)
+            top_col_left = top_k(pagerank.scores_col_, k)
+            # Ppr with seed on right node
+            pagerank.fit_transform(self.adjacency_csr, seeds_col=seed_col)
+            top_row_right = top_k(pagerank.scores_row_, k)
+            top_col_right = top_k(pagerank.scores_col_, k)
+            # Union of selected nodes on left and right
+            n_u = set(top_row_left).union(set(top_row_right))
+            n_v = set(top_col_left).union(set(top_col_right))
+            
+            edges = set([(self.names_row[x], self.names_col[y]) for x in n_u for y in n_v if self.adjacency_csr[x, y] > 0])
+            subgraph.E = list(edges)
+
+            n_left, n_right = zip(*(edges))
+            subgraph.V['left'] = list(set(n_left))
+            subgraph.V['right'] = list(set(n_right))
+            subgraph.node_attr['right'] = {x: self.node_attr['right'].get(x) for x in subgraph.V['right']}
 
         # Build adjacency matrix of the subgraph
         subgraph._build_csr()
