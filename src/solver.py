@@ -33,11 +33,9 @@ class Solver():
         -------
         Tuple of lists containing initialized variables.
         """        
-        ext_len, int_len = [], []
+        ext_var, int_var = [], []
         if self.lattice.context.use_description:
             n_unique_attr = len(self.lattice.context.M)
-            #if metric == 'tf-idf':
-            #    tfidf = TfIdf().fit_transform(self.lattice.context.I) 
         else:
             n_unique_attr = len(np.unique([x.split('_')[:-1] for x in self.lattice.context.M]))
 
@@ -48,23 +46,19 @@ class Solver():
                 idx_row = [self.lattice.context.G2idx.get(obj) for obj in c[0]]
                 idx_col = [self.lattice.context.M2idx.get(attr) for attr in c[1]]
                 tfidf_val = self.lattice.context.I[idx_row, :][:, idx_col].sum()
-                int_len.append(tfidf_val)
-
-                ext_len.append(np.exp(-len(c[1])/4))
-
-                print(f"ext:{(np.exp(-len(c[1])/4)):.3f} int:{tfidf_val:.3f} mutual inf: {tfidf_val * (1 / len(idx_row)):.3f} - {[x for x in c[0]]}, {[y for y in c[1]]}")
+                int_var.append(tfidf_val)
+                ext_var.append(np.exp(-len(c[1])/4)) # size of intent is stored in ext_var 
 
             else:
-                int_len.append(len(c[1]) / n_unique_attr)
-
+                int_var.append(len(c[1]) / n_unique_attr)
                 # Size of graph induced by concept
                 attr_idxs = [self.lattice.context.G2idx.get(i) for i in c[0]]
                 g_concept = self.lattice.context.graph.adjacency_csr.T[attr_idxs]
                 n_right, n_left = g_concept.shape
                 m = g_concept.nnz
-                ext_len.append((n_right + n_left + m) / self.lattice.context.graph.size())
+                ext_var.append((n_right + n_left + m) / self.lattice.context.graph.size())
 
-        return ext_len, int_len
+        return ext_var, int_var
     
     def multi_obj_model(self, k: int = 5, metric: str = 'size'):
         """Build optmization multi-objective model with constraints, using weighted sum approach.
@@ -84,7 +78,7 @@ class Solver():
         ``pulp`` problem object.
         """        
         # Variables are lengths of extent and intent of concepts
-        ext_len, int_len = self.init_model_variables(metric=metric)
+        ext_var, int_var = self.init_model_variables(metric=metric)
         
         # Find subset of 5 concepts that maximize both lengths of extents and intents
         step_size = 0.1
@@ -94,13 +88,13 @@ class Solver():
         for alpha in np.arange(0, 1 + step_size, step_size):
             # Model definition
             prob = pulp.LpProblem("Best_concepts Multi objectives", LpMaximize)
-            prob += alpha * pulp.lpSum([self.x[c] * ext_len[c] for c in self.concepts_idx]) \
-                + (1 - alpha) * pulp.lpSum([self.x[c] * int_len[c] for c in self.concepts_idx])
+            prob += alpha * pulp.lpSum([self.x[c] * ext_var[c] for c in self.concepts_idx]) \
+                + (1 - alpha) * pulp.lpSum([self.x[c] * int_var[c] for c in self.concepts_idx])
             prob += pulp.lpSum([self.x[c] for c in self.concepts_idx]) == k
             if metric == 'size':
                 for c in self.concepts_idx:
-                    prob += self.x[c] * ext_len[c] <= 0.95
-                    prob += self.x[c] * int_len[c] <= 0.95
+                    prob += self.x[c] * ext_var[c] <= 0.95
+                    prob += self.x[c] * int_var[c] <= 0.95
             # Solving model
             solution = prob.solve(PULP_CBC_CMD(msg=False))
             solutionTable.loc[int(alpha*1/step_size)] = [alpha, pulp.value(prob.objective)]
@@ -111,7 +105,7 @@ class Solver():
 
         # Plot Pareto frontier
         #fig, ax = plt.subplots(1, 1, figsize=(12, 7))
-        print(solutionTable)
+        #print(solutionTable)
         #plt.plot(solutionTable['alpha'], solutionTable['obj_value'], color='g')
         #plt.xlabel('alpha')
         #plt.ylabel('Objective value')
@@ -140,14 +134,14 @@ class Solver():
         ``pulp`` problem object.
         """        
         # Initialize variables to optimize according to metric
-        ext_len, int_len = self.init_model_variables(metric=metric)
+        ext_var, int_var = self.init_model_variables(metric=metric)
 
         # Find subset of 5 concepts that maximize variable
         prob = pulp.LpProblem("Best_concepts", LpMaximize)
-        prob += pulp.lpSum([self.x[i] * (int_len[i] + ext_len[i]) for i in self.concepts_idx])
+        prob += pulp.lpSum([self.x[i] * (int_var[i] + ext_var[i]) for i in self.concepts_idx])
         prob += pulp.lpSum([self.x[i] for i in self.concepts_idx]) == k
         for i in self.concepts_idx:
-            prob += self.x[i] * ext_len[i] <= 0.95
+            prob += self.x[i] * ext_var[i] <= 0.95
         
         return prob
 
