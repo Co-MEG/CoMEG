@@ -12,7 +12,7 @@ from sknetwork.embedding import Spectral
 from src.graph import BipartiteGraph
 
 class TfIdf():
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.n = None
         self.m = None
 
@@ -32,24 +32,31 @@ class TfIdf():
         
         return np.log((self.n) / (count+1))
 
-    def _tf(self, biadjacency: sparse.csr_matrix) -> np.ndarray:
+    def _tf(self, biadjacency: sparse.csr_matrix, weight: str = None) -> np.ndarray:
         """Compute term frequency for each word in each row of `biadjacency`.
 
         Parameters
         ----------
         biadjacency : sparse.csr_matrix
             Rows are documents, words are columns
+        weight : str
+            * 'None' : no scaling
+            * 'log' : logarithmic scale. Term frequency :math:`tf=log(1+f(w,d))`
 
         Returns
         -------
         Array of term frequencies with same size as `biadjacency`
         """        
-        diag = sparse.diags(biadjacency.dot(np.ones(self.m)))
-        diag.data = 1 / diag.data
+        if weight == 'log':
+            tf = biadjacency.copy()
+            tf.data = np.log(1 + tf.data)
+            return tf
+        else:
+            diag = sparse.diags(biadjacency.dot(np.ones(self.m)))
+            diag.data = 1 / diag.data
+            return diag.dot(biadjacency)
 
-        return diag.dot(biadjacency)
-
-    def fit_transform(self, biadjacency: sparse.csr_matrix) -> np.ndarray:
+    def fit_transform(self, biadjacency: sparse.csr_matrix, **kwargs) -> np.ndarray:
         """Compute tf-idf.
 
         Parameters
@@ -64,7 +71,7 @@ class TfIdf():
         self.n, self.m = biadjacency.shape
         diag_idf = sparse.diags(self._idf(biadjacency))
 
-        return self._tf(biadjacency).dot(diag_idf)
+        return self._tf(biadjacency, **kwargs).dot(diag_idf)
 
 
 class SpectralEmb:
