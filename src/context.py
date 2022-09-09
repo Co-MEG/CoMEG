@@ -7,6 +7,7 @@ from nltk.tokenize import word_tokenize
 from sknetwork.data.parse import from_edge_list
 from sknetwork.data import from_csv
 
+from src.algorithms import TfIdf
 from src.graph import BipartiteGraph
 from src.concept_lattice import ConceptLattice
 from src.utils import get_oserror_dir
@@ -26,6 +27,27 @@ class FormalContext:
         self.I = bunch.biadjacency
         self.M2idx = {}
         self.G2idx = {} 
+
+    def filter_transform(self, method: str = 'tf-idf', k: int = 100):
+        """Filter context according to `method` and select `k` first attributes.
+
+        Parameters
+        ----------
+        method : str, optional
+            Filtering method, by default 'tf-idf'
+        k : int, optional
+            Number of attributes to keep, by default 100
+        """        
+        tfidf = TfIdf().fit_transform(self.I)
+        tfidf_csc = tfidf.tocsc()
+
+        # Select attributes with highest average tfidf
+        means = np.array([tfidf_csc.data[tfidf_csc.indptr[i]:tfidf_csc.indptr[i+1]].mean() for i in range(tfidf_csc.shape[1])])
+        cols = np.argsort(-means)[:k]
+
+        self.I = tfidf[:, cols]
+        self.M = self.M[cols]
+        self.M2idx = {attr: idx for idx, attr in enumerate(self.M)}
 
     def _get_ohe_attributes(self, attributes: dict, use_description: bool = False) -> dict:
         """Get set of attributes for Formal Context. For this purpose, original attributes are transformed into their
