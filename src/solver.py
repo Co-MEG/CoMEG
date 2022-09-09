@@ -36,8 +36,8 @@ class Solver():
         ext_len, int_len = [], []
         if self.lattice.context.use_description:
             n_unique_attr = len(self.lattice.context.M)
-            if metric == 'tf-idf':
-                tfidf = TfIdf().fit_transform(self.lattice.context.I) 
+            #if metric == 'tf-idf':
+            #    tfidf = TfIdf().fit_transform(self.lattice.context.I) 
         else:
             n_unique_attr = len(np.unique([x.split('_')[:-1] for x in self.lattice.context.M]))
 
@@ -47,12 +47,12 @@ class Solver():
                 tfidf_val = 0
                 idx_row = [self.lattice.context.G2idx.get(obj) for obj in c[0]]
                 idx_col = [self.lattice.context.M2idx.get(attr) for attr in c[1]]
-                tfidf_val = tfidf[idx_row, :][:, idx_col].sum()
+                tfidf_val = self.lattice.context.I[idx_row, :][:, idx_col].sum()
                 int_len.append(tfidf_val)
 
                 ext_len.append(np.exp(-len(c[1])/4))
 
-                print(f"ext:{(np.exp(-len(c[1])/4)):.3f} int:{tfidf_val:.3f} - {[x for x in c[0]]}, {[y for y in c[1]]}")
+                print(f"ext:{(np.exp(-len(c[1])/4)):.3f} int:{tfidf_val:.3f} mutual inf: {tfidf_val * (1 / len(idx_row)):.3f} - {[x for x in c[0]]}, {[y for y in c[1]]}")
 
             else:
                 int_len.append(len(c[1]) / n_unique_attr)
@@ -144,8 +144,10 @@ class Solver():
 
         # Find subset of 5 concepts that maximize variable
         prob = pulp.LpProblem("Best_concepts", LpMaximize)
-        prob += pulp.lpSum([self.x[i] * (int_len[i]+ext_len[i]) for i in self.concepts_idx])
+        prob += pulp.lpSum([self.x[i] * (int_len[i] + ext_len[i]) for i in self.concepts_idx])
         prob += pulp.lpSum([self.x[i] for i in self.concepts_idx]) == k
+        for i in self.concepts_idx:
+            prob += self.x[i] * ext_len[i] <= 0.95
         
         return prob
 
