@@ -8,7 +8,7 @@ import os
 import random
 from sklearn import metrics
 import time
-import warnings 
+import warnings
 warnings.filterwarnings("ignore")
 
 from sknetwork.utils import get_neighbors as gn
@@ -20,6 +20,7 @@ from src.algorithms import AdamicAdar
 from src.concept_lattice import ConceptLattice
 from src.context import FormalContext
 from src.graph import BipartiteGraph
+from src.metric import jaccard_score
 from src.utils import *
 
 
@@ -192,9 +193,10 @@ def run_concept_lattice(path: str, verify: str = True):
     #score_edge = ('c05512c006dd9ccb49b147ce619621d5', '11737010') # XL context (566, 1450) - InClose: 257s
     #score_edge = ('f2bac05b3932fe7c68960041744e5058', '489000') # XXL context (2332, 5375) -> ?
     # Comics
-    score_edge = ('7b3befb2bef070b8c04e9865270fd0c1', '23356133') # Spiderman
+    #score_edge = ('7b3befb2bef070b8c04e9865270fd0c1', '23356133') # Spiderman
     #score_edge = ('e9e8653b26d73f4c94f1b5e1a59146a2', '12962439') # GoT vol.1
     #score_edge = ('2bebb8e83292c4e65fb970eb953fbec5', '26109143') # Everything Is Teeth
+    score_edge = ('3c057894279fd958980fbe7777c3942c', '25167353')
 
     print(f"Predicted edge: {score_edge} (random index: {i})")
     print(f"Title: {g.node_attr['right'].get(score_edge[1]).get('title')}")
@@ -230,6 +232,7 @@ def run_concept_lattice(path: str, verify: str = True):
     print(f'Filtering context using tf-idf...')
     fc.filter_transform(method='tf-idf', k=100)
     print(f'Filtered context using tf-idf: {fc.I.shape}')
+    
 
     # Concept Lattice
     # ---------------
@@ -240,7 +243,7 @@ def run_concept_lattice(path: str, verify: str = True):
     #   * `B = intention(A)`
     algo = 'in-close'
     start = time.time()
-    lattice = fc.lattice(algo=algo, minimum_support = 1, maximum_support = 1000)
+    lattice = fc.lattice(algo=algo, minimum_support = 0, maximum_support = 1000)
     print(f'Elapsed time using {algo}: {time.time()-start}')
     print(f'Number of concepts in lattice: {len(lattice)}')
 
@@ -278,7 +281,11 @@ def run_concept_lattice(path: str, verify: str = True):
 
     plot_subgraphs(score_edge, subgraph, topk_concepts_jaccard, title=f'topk_jaccard_{score_edge}')"""
     
-    topk_tfidf_concepts = lattice.top_k(k=7, metric='tf-idf')
+    all_tfidf_concepts = lattice.top_k(k=25, metric='tf-idf')
+    print(f'\n ****** All concepts using TFIDF: ')
+    for c in all_tfidf_concepts:
+        print(c)
+    topk_tfidf_concepts = lattice.top_k(k=5, metric='tf-idf')
     print(f'\n ****** Selected concepts using TFIDF: ')
     for c in topk_tfidf_concepts:
         print(c)
@@ -322,6 +329,29 @@ def run_concept_lattice(path: str, verify: str = True):
         print(c)"""
 
     plot_subgraphs(score_edge, subgraph, filtered_concepts, title=f'filt_subgraphs_{score_edge}', use_description=True)
+
+
+    # Evaluate explanations
+    # ----------------------
+
+    # we compute average-Jaccard between sets of attributes of predicted book and top-k sets of attributes derives from concepts intents
+    # we compare average Jaccard scores with ExplaiNE method
+
+    print()
+    predicted_book_idx = fc.G2idx.get(score_edge[1])
+    predicted_book_attrs = fc.M[fc.I.indices[fc.I.indptr[predicted_book_idx]:fc.I.indptr[predicted_book_idx+1]]]
+    print(f'Attributes of predicted book (after tf-idf): {predicted_book_attrs}')
+    
+    j_score = 0
+    for c in topk_tfidf_concepts:
+        print(f'Score with {c[1]} = {jaccard_score(predicted_book_attrs, c[1]):.4f} ')
+        j_score += jaccard_score(predicted_book_attrs, c[1])
+
+    j_score = j_score / len(topk_tfidf_concepts)
+    print(f'Avg J score: {j_score:.4f}')
+    print()
+
+
 
 
 def plot_subgraphs(pred_edge, subgraph, concepts, title, use_description):  
