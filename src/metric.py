@@ -1,4 +1,8 @@
 from typing import Union
+import numpy as np
+
+def cosine_similarity(c1: Union[list, set], c2: Union[list, set]) -> float:
+    return c1.dot(c2) / (np.linalg.norm(c1) * np.linalg.norm(c2))
 
 def jaccard_score(c1: Union[list, set], c2: Union[list, set]) -> int:
     """Jaccard similarity coefficient score, i.e. the size of the intersection divided by the size of the union of two
