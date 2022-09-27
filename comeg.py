@@ -20,9 +20,14 @@ from src.algorithms import AdamicAdar
 from src.concept_lattice import ConceptLattice
 from src.context import FormalContext
 from src.graph import BipartiteGraph
-from src.metric import jaccard_score
+from src.metric import cosine_similarity, jaccard_score
 from src.utils import *
 
+import nltk
+from gensim.models import Word2Vec
+from sklearn.manifold import TSNE
+import seaborn as sns
+from sklearn.decomposition import PCA
 
 def run_toy_concept_lattice():
     # Toy context
@@ -230,7 +235,7 @@ def run_concept_lattice(path: str, verify: str = True):
     print(f'Formal context dimensions: {fc.I.shape}')
 
     print(f'Filtering context using tf-idf...')
-    fc.filter_transform(method='tf-idf', k=100)
+    fc.filter_transform(method='tf-idf', k=200)
     print(f'Filtered context using tf-idf: {fc.I.shape}')
     
 
@@ -281,11 +286,11 @@ def run_concept_lattice(path: str, verify: str = True):
 
     plot_subgraphs(score_edge, subgraph, topk_concepts_jaccard, title=f'topk_jaccard_{score_edge}')"""
     
-    all_tfidf_concepts = lattice.top_k(k=25, metric='tf-idf')
+    all_tfidf_concepts = lattice.top_k(k=100, metric='tf-idf')
     print(f'\n ****** All concepts using TFIDF: ')
     for c in all_tfidf_concepts:
         print(c)
-    topk_tfidf_concepts = lattice.top_k(k=5, metric='tf-idf')
+    topk_tfidf_concepts = lattice.top_k(k=10, metric='tf-idf')
     print(f'\n ****** Selected concepts using TFIDF: ')
     for c in topk_tfidf_concepts:
         print(c)
@@ -342,14 +347,80 @@ def run_concept_lattice(path: str, verify: str = True):
     predicted_book_attrs = fc.M[fc.I.indices[fc.I.indptr[predicted_book_idx]:fc.I.indptr[predicted_book_idx+1]]]
     print(f'Attributes of predicted book (after tf-idf): {predicted_book_attrs}')
     
-    j_score = 0
-    for c in topk_tfidf_concepts:
-        print(f'Score with {c[1]} = {jaccard_score(predicted_book_attrs, c[1]):.4f} ')
-        j_score += jaccard_score(predicted_book_attrs, c[1])
+    my_top_concepts = all_tfidf_concepts #topk_tfidf_concepts
 
-    j_score = j_score / len(topk_tfidf_concepts)
+    j_score = 0
+    j_concepts = []
+    j_scores = []
+    for c in my_top_concepts:
+        #print(f'Score with {c[1]} = {jaccard_score(predicted_book_attrs, c[1]):.4f} ')
+        j_score += jaccard_score(predicted_book_attrs, c[1])
+        j_concepts.append(c[1])
+        j_scores.append(jaccard_score(predicted_book_attrs, c[1]))
+
+    print(f'\n****Top selected concepts using Jaccard with predicted node')
+    mask = np.argsort(-np.asarray(j_scores))
+    for idx, c in enumerate(np.asarray(j_concepts)[mask][:10]):
+        print(f'Jaccard with {c} = {j_scores[mask[idx]]:.3f}')
+
+
+    j_score = j_score / len(my_top_concepts)
     print(f'Avg J score: {j_score:.4f}')
     print()
+
+    # word2vec embedding
+    # we use word2vec embeddings of concept attributes and predicted node attribute to verify how close each
+    # concept is compared to the predicted node. Indeed, using only Jaccard metric between sets of attributes
+    # does not allow to consider semantically similar sets !
+    
+    corpus = []
+    for c in my_top_concepts:
+        if len(c[1]) > 0:
+            corpus.append(c[1])
+
+    # Word2Vec using CBOW
+    model = Word2Vec(sentences=corpus, min_count=1, window=2)
+
+    # average of word vectors for each set of attributes: we compute the barycenter of each set and compare them between each other
+    predicted_bary = np.mean([model.wv[w] for w in predicted_book_attrs], axis=0)
+
+    result_concepts = []
+    cos_similarities = []
+    all_barys = predicted_bary.copy()
+    result_concepts.append(predicted_book_attrs)
+    cos_similarities.append(round(cosine_similarity(predicted_bary, predicted_bary), 2))
+    for c in my_top_concepts:
+        # DO NOT take into account the predicted book itself
+        if set(c[1]) != set(predicted_book_attrs) and len(c[1]) > 0:
+            concept_bary = np.mean([model.wv[w] for w in c[1]], axis=0)
+            all_barys = np.vstack((all_barys, concept_bary))
+            cos_similarities.append(round(cosine_similarity(predicted_bary, concept_bary), 2))
+            result_concepts.append(c[1])
+    
+    print('\n****Selected concepts using cosine similarity with word2vec')
+    mask = np.argsort(-np.asarray(cos_similarities))
+    for idx, c in enumerate(np.asarray(result_concepts)[mask][:10]):
+        print(f'Cos sim with word2vec barycenters with {c} = {cos_similarities[mask[idx]]:.3f}')
+    
+    vectors = np.asarray(model.wv.vectors)
+    vectors_labels = np.asarray(model.wv.index_to_key)
+
+    fig, ax = plt.subplots(1, 1, figsize=(20, 15))
+    tsne = TSNE(random_state=42, perplexity=5).fit_transform(all_barys)
+    #pca = PCA(n_components=4)
+    #pca_res = pca.fit_transform(vectors)
+    #print(f'PCA explained variance ratio: {pca.explained_variance_ratio_}')
+    num_concepts = len(corpus)
+    palette = np.array(sns.color_palette('hls', num_concepts))
+    #ax.scatter(tsne[:, 0], tsne[:, 1])
+    for i in range(len(result_concepts)):
+        ax.scatter(tsne[i, 0], tsne[i, 1], color=palette[i], label=result_concepts[i])
+        if i == 0:
+            ax.text(tsne[i, 0] + 0.01, tsne[i, 1], cos_similarities[i], color='red')
+        else:
+            ax.text(tsne[i, 0] + 0.01, tsne[i, 1], cos_similarities[i], color='black')
+    #plt.legend(fontsize=5)
+    #plt.show()
 
 
 
