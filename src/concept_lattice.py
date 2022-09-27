@@ -294,7 +294,8 @@ def in_close(context: FormalContext, extents: list, intents: list, r: int = 0, y
             extents.append([])
 
         #if right_degrees[context.M2idx.get(j)] < max_right_degree:
-        if right_degrees[context.M2idx.get(j)] < (0.1 * context.I.shape[1]):
+        #if right_degrees[context.M2idx.get(j)] < (0.1 * context.I.shape[1]):
+        if right_degrees[context.M2idx.get(j)] < np.inf:
 
             # Form a new extent by adding extension of attribute j to current concept extent
             extents[r_new] = list(sorted(set(extents[r]).intersection(set(context.extension([j])))))
