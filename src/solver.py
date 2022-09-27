@@ -43,11 +43,14 @@ class Solver():
             
             if metric == 'tf-idf':
                 tfidf_val = 0
+                gamma = 5
                 idx_row = [self.lattice.context.G2idx.get(obj) for obj in c[0]]
                 idx_col = [self.lattice.context.M2idx.get(attr) for attr in c[1]]
-                tfidf_val = self.lattice.context.I[idx_row, :][:, idx_col].sum()
+                tfidf_val = self.lattice.context.I[idx_row, :][:, idx_col].sum() # fc.filter_transform(method='tf-idf', k=100) needs to be called by user
                 int_var.append(tfidf_val)
-                ext_var.append(np.exp(-len(c[1])/4)) # size of intent is stored in ext_var 
+                ext_var.append(np.exp(-len(c[1])/gamma)) # size of intent is stored in ext_var 
+                #ext_var.append(0) # size of intent is stored in ext_var 
+                #print(f'ext: {np.exp(-len(c[1])/gamma):.3f} - int: {tfidf_val:.3f} - sum: {(np.exp(-len(c[1])/gamma)+tfidf_val):.3f} - {c}')
 
             else:
                 int_var.append(len(c[1]) / n_unique_attr)
