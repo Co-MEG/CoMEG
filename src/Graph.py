@@ -415,7 +415,7 @@ class BipartiteGraph:
             subgraph.E = list(edges_u.union(edges_v).union(edges).union(set([(u, v)])))
 
         elif method == 'ppr':
-            k = 10 # number of nodes to select from each personalized PageRank
+            k = 15 # number of nodes to select from each personalized PageRank
             pagerank = PageRank()
             seed_row = {self.label2idx_rows.get(u): 1}
             seed_col = {self.label2idx_cols.get(v): 1}
