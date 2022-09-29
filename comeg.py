@@ -235,7 +235,7 @@ def run_concept_lattice(path: str, verify: str = True):
     print(f'Formal context dimensions: {fc.I.shape}')
 
     print(f'Filtering context using tf-idf...')
-    fc.filter_transform(method='tf-idf', k=200)
+    fc.filter_transform(method='tf-idf', k=150)
     print(f'Filtered context using tf-idf: {fc.I.shape}')
     
 
@@ -290,7 +290,7 @@ def run_concept_lattice(path: str, verify: str = True):
     print(f'\n ****** All concepts using TFIDF: ')
     for c in all_tfidf_concepts:
         print(c)
-    topk_tfidf_concepts = lattice.top_k(k=10, metric='tf-idf')
+    topk_tfidf_concepts = lattice.top_k(k=5, metric='tf-idf')
     print(f'\n ****** Selected concepts using TFIDF: ')
     for c in topk_tfidf_concepts:
         print(c)
@@ -360,7 +360,7 @@ def run_concept_lattice(path: str, verify: str = True):
 
     print(f'\n****Top selected concepts using Jaccard with predicted node')
     mask = np.argsort(-np.asarray(j_scores))
-    for idx, c in enumerate(np.asarray(j_concepts)[mask][:10]):
+    for idx, c in enumerate(np.asarray(j_concepts)[mask][:5]):
         print(f'Jaccard with {c} = {j_scores[mask[idx]]:.3f}')
 
 
@@ -379,7 +379,7 @@ def run_concept_lattice(path: str, verify: str = True):
             corpus.append(c[1])
 
     # Word2Vec using CBOW
-    model = Word2Vec(sentences=corpus, min_count=1, window=2)
+    model = Word2Vec(sentences=corpus, min_count=1, window=2, vector_size=100)
 
     # average of word vectors for each set of attributes: we compute the barycenter of each set and compare them between each other
     predicted_bary = np.mean([model.wv[w] for w in predicted_book_attrs], axis=0)
@@ -398,9 +398,19 @@ def run_concept_lattice(path: str, verify: str = True):
             result_concepts.append(c[1])
     
     print('\n****Selected concepts using cosine similarity with word2vec')
+    w2v_intents = []
     mask = np.argsort(-np.asarray(cos_similarities))
-    for idx, c in enumerate(np.asarray(result_concepts)[mask][:10]):
+    for idx, c in enumerate(np.asarray(result_concepts)[mask][:5]):
+        w2v_intents.append(c)
         print(f'Cos sim with word2vec barycenters with {c} = {cos_similarities[mask[idx]]:.3f}')
+
+    sel = []
+    for intent in w2v_intents:
+        for c in my_top_concepts:
+            if set(c[1]) == set(intent):
+                sel.append(c)
+    plot_subgraphs(score_edge, subgraph, sel, title=f'topk_w2v_{score_edge}', use_description=True)
+
     
     vectors = np.asarray(model.wv.vectors)
     vectors_labels = np.asarray(model.wv.index_to_key)
@@ -414,13 +424,24 @@ def run_concept_lattice(path: str, verify: str = True):
     palette = np.array(sns.color_palette('hls', num_concepts))
     #ax.scatter(tsne[:, 0], tsne[:, 1])
     for i in range(len(result_concepts)):
-        ax.scatter(tsne[i, 0], tsne[i, 1], color=palette[i], label=result_concepts[i])
-        if i == 0:
-            ax.text(tsne[i, 0] + 0.01, tsne[i, 1], cos_similarities[i], color='red')
-        else:
-            ax.text(tsne[i, 0] + 0.01, tsne[i, 1], cos_similarities[i], color='black')
+        inter = set(predicted_book_attrs).intersection(set(result_concepts[i]))
+        ax.scatter(tsne[i, 0], tsne[i, 1], color='b', label=result_concepts[i])
+        if len(inter) > 0:
+            if inter == set(predicted_book_attrs):
+                ax.text(tsne[i, 0] + 0.01, tsne[i, 1], set(result_concepts[i]), fontsize=5, color='r')            
+            elif set(result_concepts[i]) in [set(x) for x in w2v_intents]:
+                ax.text(tsne[i, 0] + 0.01, tsne[i, 1], str(set( result_concepts[i])) + " " + str(round(cos_similarities[i], 3)), fontsize=5, color='g')
+            else:
+                ax.text(tsne[i, 0] + 0.01, tsne[i, 1], str(set( result_concepts[i])) + " " + str(round(cos_similarities[i], 3)), fontsize=5)
+        # Extreme values
+        elif tsne[i, 0] < -300 or tsne[i, 1] < -300:
+            ax.text(tsne[i, 0] + 0.01, tsne[i, 1], str(set( result_concepts[i])) + " " + str(round(cos_similarities[i], 3)), fontsize=5, color='blue')
+            
     #plt.legend(fontsize=5)
     #plt.show()
+    title = 'embedding_darth_vader' + '.eps'
+    res = os.path.join(PATH_RES, 'img', title)
+    plt.savefig(res)
 
 
 
