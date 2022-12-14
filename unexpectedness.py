@@ -6,7 +6,7 @@ from scipy import sparse, special
 from tqdm import tqdm
 
 from sknetwork.data import load_netset
-from sknetwork.utils import get_degrees
+from sknetwork.utils import get_degrees, get_neighbors
 
 from line_profiler import LineProfiler
 
@@ -52,12 +52,20 @@ def is_cannonical(context, extents, intents, r, y):
     return True
 
 def intention(nodes, context):
+    intent = get_neighbors(context, node=nodes[0])
     if len(nodes) == 0:
         return np.arange(0, context.shape[1])
+    elif len(nodes) == 1:
+        return intent
     else:
-        return context[nodes, :].indices
+        intent = set(intent)
+        for o in nodes[1:]:
+            intent &= set(get_neighbors(context, node=o))
+            if len(intent) == 0:
+                break
+        return np.array(list(intent))
     
-def extension(attributes, context_csc):
+def extension_csc(attributes, context_csc):
     if len(attributes) == 0:
         return np.arange(0, context_csc.shape[0])
     else:
@@ -68,6 +76,19 @@ def extension(attributes, context_csc):
                 if len(res) == 0:
                     break
         return np.array(list(res))
+
+def extension(attributes, context):
+    """Slower than extension_csc function, because of use of transpose?"""
+    ext = get_neighbors(context, node=attributes[0], transpose=True)
+    if len(attributes) == 1:
+        return ext
+    else:
+        ext = set(ext)
+        for a in attributes[1:]:
+            ext &= set(get_neighbors(context, node=a, transpose=True))
+            if len(ext) == 0:
+                break
+        return np.array(list(ext))
 
 def graph_unexpectedness(adjacency, gen_complexities):
     n = adjacency.shape[0]
@@ -118,70 +139,76 @@ def comeg(adjacency, context, context_csc, extents, intents, r=0, y=0, min_suppo
             unexs_a.append(0)
 
         # Form a new extent by adding extension of attribute j to current concept extent
-        unset_ext_j = extension([j], context_csc)
-        ext_j = set(unset_ext_j)
+        ext_j = set(extension([j], context_csc))
+        #ext_j = set(extension([j], context))
         extents[r_new] = list(sorted(set(extents[r]).intersection(ext_j)))
         len_new_extent = len(extents[r_new])
+
+        # Verify that length of intention of new extent is greater than a threshold (e.g min_support)
+        # In other words, we only enter the loop if the new extent still has "space" to welcome enough new attributes
+        # Using this, we can trim all patterns with not enough attributes from the recursion tree
+        size_intention = len(intention(extents[r_new], context))
+        if size_intention >= min_support:
         
-        if (len_new_extent >= min_support) and (len_new_extent <= max_support):
-                       
-            new_intent = list(sorted(set(intents[r]).union(set([j]))))
-            
-            # Compute Unexpectedness on pattern (i.e on graph and attributes)
-            # ------------------------------------------------------------------------------------------------------------
-            print(f'  Extent size {len(extents[r_new])} - intent {new_intent}')
-            unex_g = graph_unexpectedness(adjacency[extents[r_new], :][:, extents[r_new]], comp_gen_graph)
-            unexs_g[r_new] = unex_g
-            # Attributes unexpectedness
-            unex_a = attr_unexpectedness(context, new_intent, degs)
-            unexs_a[r_new] = unex_a
-            # Total unexpectedness
-            unex = unex_g + unex_a
-            #unexs[r_new] = unex
-            print(f'  U(G): {unex_g}')
-            print(f'  U(A): {unex_a}')
-            print(f'  U: {unex}')
-            print(f'unexs: {unexs} r_new: {r_new} - r: {r} - ptr: {ptr}')
-            # ------------------------------------------------------------------------------------------------------------
-            
-            if len_new_extent - len(extents[r]) == 0:
-                print(f' == comparing unex={unex} and unexs[{ptr}]={unexs[ptr]}')
-                if unex - unexs[ptr] >= 0:
-                    print(f'  Extent size did not change -> attribute {names_col[j]} is added to intent.')
-                    intents[r] = new_intent
-                    unexs[-1] = unex
-                else:
-                    print(f'STOP rec, unexpectedness difference is {unex - unexs[ptr]}')
-                    print(f'Attribute {names_col[j]} ({j}) does not add any unexpectedness to pattern')
-                    #extents[r_new].pop(-1) -> no need to change the extent since we are in the block where it did not move by adding attribute
-                    #intents[r_new].pop(-1) -> at this stage, we only use new-intent, so no need to remove anything from intents parameter
-                    #raise Exception('end')
-                    break
+            if (len_new_extent >= min_support) and (len_new_extent <= max_support):
+                        
+                new_intent = list(sorted(set(intents[r]).union(set([j]))))
                 
-            else:
-                is_canno = is_cannonical(context, extents, intents, r, j - 1)
-                if is_canno:
-                    print(f'extents {extents[r]} intents {intents[r]} r {r} rnew {r_new}')
-                    print(f'  Extent size DID change. IsCannonical: {is_canno}')
-                    try:
-                        intents[r_new] = []
-                    except IndexError:
-                        intents.append([])
-
-                    intents[r_new] = new_intent 
-                    len_new_intent = len(intents[r_new])
-
-                    print(f'r:{r} rnew:{r_new}')
-                    print(f' ISCANNO comparing unex={unex} and unexs[{ptr}]=={unexs[ptr]}')
-                    if unex - unexs[ptr] >= 0 or r == 0:   
-                        unexs.append(unex)
-                        ptr += 1
-                        print(f'  --> Enter recursion with Intent: {names_col[intents[r_new]]}...')
-                        comeg(adjacency, context, context_csc, extents, intents, r=r_new, y=j+1, min_support=min_support, max_support=max_support, 
-                                     degs=degs, unexs_g=unexs_g, unexs_a=unexs_a, unexs=unexs, names_col=names_col, comp_gen_graph=comp_gen_graph)
+                # Compute Unexpectedness on pattern (i.e on graph and attributes)
+                # ------------------------------------------------------------------------------------------------------------
+                print(f'  Extent size {len(extents[r_new])} - intent {new_intent}')
+                unex_g = graph_unexpectedness(adjacency[extents[r_new], :][:, extents[r_new]], comp_gen_graph)
+                unexs_g[r_new] = unex_g
+                # Attributes unexpectedness
+                unex_a = attr_unexpectedness(context, new_intent, degs)
+                unexs_a[r_new] = unex_a
+                # Total unexpectedness
+                unex = unex_g + unex_a
+                #unexs[r_new] = unex
+                print(f'  U(G): {unex_g}')
+                print(f'  U(A): {unex_a}')
+                print(f'  U: {unex}')
+                print(f'unexs: {unexs} r_new: {r_new} - r: {r} - ptr: {ptr}')
+                # ------------------------------------------------------------------------------------------------------------
                 
+                if len_new_extent - len(extents[r]) == 0:
+                    print(f' == comparing unex={unex} and unexs[{ptr}]={unexs[ptr]}')
+                    if unex - unexs[ptr] >= 0:
+                        print(f'  Extent size did not change -> attribute {names_col[j]} is added to intent.')
+                        intents[r] = new_intent
+                        unexs[-1] = unex
+                    else:
+                        print(f'STOP rec, unexpectedness difference is {unex - unexs[ptr]}')
+                        print(f'Attribute {names_col[j]} ({j}) does not add any unexpectedness to pattern')
+                        #extents[r_new].pop(-1) -> no need to change the extent since we are in the block where it did not move by adding attribute
+                        #intents[r_new].pop(-1) -> at this stage, we only use new-intent, so no need to remove anything from intents parameter
+                        #raise Exception('end')
+                        break
+                    
                 else:
-                    print(f'IsCannonical: False --> do not enter recursion.')
+                    is_canno = is_cannonical(context, extents, intents, r, j - 1)
+                    if is_canno:
+                        print(f'extents {extents[r]} intents {intents[r]} r {r} rnew {r_new}')
+                        print(f'  Extent size DID change. IsCannonical: {is_canno}')
+                        try:
+                            intents[r_new] = []
+                        except IndexError:
+                            intents.append([])
+
+                        intents[r_new] = new_intent 
+                        len_new_intent = len(intents[r_new])
+
+                        print(f'r:{r} rnew:{r_new}')
+                        print(f' ISCANNO comparing unex={unex} and unexs[{ptr}]=={unexs[ptr]}')
+                        if unex - unexs[ptr] >= 0 or r == 0:   
+                            unexs.append(unex)
+                            ptr += 1
+                            print(f'  --> Enter recursion with Intent: {names_col[intents[r_new]]}...')
+                            comeg(adjacency, context, context_csc, extents, intents, r=r_new, y=j+1, min_support=min_support, max_support=max_support, 
+                                        degs=degs, unexs_g=unexs_g, unexs_a=unexs_a, unexs=unexs, names_col=names_col, comp_gen_graph=comp_gen_graph)
+                    
+                    else:
+                        print(f'IsCannonical: False --> do not enter recursion.')
                     
     print(f'inexs: {unexs}')        
     print(f'r:{r} - r_new:{r_new}')
@@ -261,7 +288,8 @@ biadjacency_csc = biadjacency.tocsc()
 for num_n in tqdm(range(1, 100)):
     for j in range(30):
         sel_attrs = np.random.choice(attrs_indexes, size=num_n, replace=False, p=attrs_degrees)
-        sel_nodes = extension(sel_attrs, biadjacency_csc)
+        sel_nodes = extension_csc(sel_attrs, biadjacency_csc)
+        #sel_nodes = extension(sel_attrs, biadjacency)
         sel_g = adjacency[sel_nodes, :][:, sel_nodes]
         mdl = mdl_graph(sel_g)
         #mdl = np.log2(len(sel_nodes)) # mdl is just the complexity of the number of nodes
