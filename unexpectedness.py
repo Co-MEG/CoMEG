@@ -65,6 +65,8 @@ def extension(attributes, context_csc):
         if len(attributes) > 1:
             for a in attributes[1:]:
                 res &= set(context_csc[:, a].indices)
+                if len(res) == 0:
+                    break
         return np.array(list(res))
 
 def graph_unexpectedness(adjacency, gen_complexities):
@@ -150,8 +152,10 @@ def comeg(adjacency, context, context_csc, extents, intents, r=0, y=0, min_suppo
                     unexs[-1] = unex
                 else:
                     print(f'STOP rec, unexpectedness difference is {unex - unexs[ptr]}')
-                    extents.pop(-1)
-                    intents.pop(-1)
+                    print(f'Attribute {names_col[j]} ({j}) does not add any unexpectedness to pattern')
+                    #extents[r_new].pop(-1) -> no need to change the extent since we are in the block where it did not move by adding attribute
+                    #intents[r_new].pop(-1) -> at this stage, we only use new-intent, so no need to remove anything from intents parameter
+                    #raise Exception('end')
                     break
                 
             else:
@@ -201,7 +205,7 @@ def run_comeg(adjacency, biadjacency, words, complexity_gen_graphs):
 
     # Degree of attribute = # articles in which it appears
     freq_attribute = get_degrees(biadjacency.astype(bool), transpose=True)
-    index = np.flatnonzero((freq_attribute <= 50) & (freq_attribute >= 10))
+    index = np.flatnonzero((freq_attribute <= 1000) & (freq_attribute >= 5))
 
     # Filter data with index
     biadjacency = biadjacency[:, index]
@@ -226,7 +230,7 @@ def run_comeg(adjacency, biadjacency, words, complexity_gen_graphs):
             lp = LineProfiler()
             lp_wrapper = lp(comeg)
             lp_wrapper(adjacency, filt_biadjacency, filt_biadjacency_csc, extents, intents, r=0, y=0, 
-                                    min_support=5, max_support=800,
+                                    min_support=5, max_support=15,
                                     degs=sorted_degs, unexs_g=[0], unexs_a=[0], unexs=[0], names_col=sorted_names_col,
                                     comp_gen_graph=complexity_gen_graphs)
             lp.print_stats()
