@@ -11,21 +11,21 @@ from sknetwork.utils import get_degrees, get_neighbors
 from line_profiler import LineProfiler
 
 def mdl_graph(adjacency):
-    n = max(1, adjacency.shape[0])
-    m = max(1, adjacency.nnz)
-    
-    # nodes
-    nodes_mdl = np.log2(n)
-    
-    # edges
-    #degrees = adjacency.dot(np.ones(n))
-    #max_degree = np.max(degrees)
-    #edges_mdl = (n + 1) * np.log2(max_degree + 1) + np.sum([np.log2(special.comb(n, deg)) for deg in degrees])
-    edges_mdl = np.log2(m)
+    n = adjacency.shape[0]
+    m = adjacency.nnz
 
-    if n == 1:
-        return 1
+    if n == 0:
+        return 0
     else:
+        # nodes
+        nodes_mdl = np.log2(n + 1)
+        
+        # edges
+        degrees = adjacency.dot(np.ones(n))
+        max_degree = np.max(degrees)
+        edges_mdl = (n + 1) * np.log2(max_degree + 1) + np.sum([np.log2(special.comb(n, deg)) for deg in degrees])
+        #edges_mdl = np.log2(m+1)
+
         return nodes_mdl + edges_mdl
         
 def is_cannonical(context, extents, intents, r, y):
@@ -90,9 +90,9 @@ def extension(attributes, context):
                 break
         return np.array(list(ext))
 
-def graph_unexpectedness(adjacency, gen_complexities):
+def graph_unexpectedness(adjacency, size, gen_complexities):
     n = adjacency.shape[0]
-    complexity_desc_g = mdl_graph(adjacency)
+    complexity_desc_g = mdl_graph(adjacency.astype(bool) + sparse.identity(n).astype(bool))
     complexity_gen_g = np.mean(gen_complexities.get(n))
     return complexity_gen_g - complexity_desc_g
 
@@ -143,21 +143,22 @@ def comeg(adjacency, context, context_csc, extents, intents, r=0, y=0, min_suppo
         #ext_j = set(extension([j], context))
         extents[r_new] = list(sorted(set(extents[r]).intersection(ext_j)))
         len_new_extent = len(extents[r_new])
-
-        # Verify that length of intention of new extent is greater than a threshold (e.g min_support)
-        # In other words, we only enter the loop if the new extent still has "space" to welcome enough new attributes
-        # Using this, we can trim all patterns with not enough attributes from the recursion tree
-        size_intention = len(intention(extents[r_new], context))
-        if size_intention >= min_support:
         
-            if (len_new_extent >= min_support) and (len_new_extent <= max_support):
-                        
+        if (len_new_extent >= min_support) and (len_new_extent <= max_support):
+
+            # Verify that length of intention of new extent is greater than a threshold (e.g min_support)
+            # In other words, we only enter the loop if the new extent still has "space" to welcome enough new attributes
+            # Using this, we can trim all patterns with not enough attributes from the recursion tree
+            size_intention = len(intention(extents[r_new], context))
+            if size_intention >= min_support:
+                    
                 new_intent = list(sorted(set(intents[r]).union(set([j]))))
                 
                 # Compute Unexpectedness on pattern (i.e on graph and attributes)
                 # ------------------------------------------------------------------------------------------------------------
                 print(f'  Extent size {len(extents[r_new])} - intent {new_intent}')
-                unex_g = graph_unexpectedness(adjacency[extents[r_new], :][:, extents[r_new]], comp_gen_graph)
+                size = len(new_intent)
+                unex_g = graph_unexpectedness(adjacency[extents[r_new], :][:, extents[r_new]], size, comp_gen_graph)
                 unexs_g[r_new] = unex_g
                 # Attributes unexpectedness
                 unex_a = attr_unexpectedness(context, new_intent, degs)
@@ -195,17 +196,24 @@ def comeg(adjacency, context, context_csc, extents, intents, r=0, y=0, min_suppo
                         except IndexError:
                             intents.append([])
 
-                        intents[r_new] = new_intent 
-                        len_new_intent = len(intents[r_new])
+                        #intents[r_new] = new_intent 
+                        #len_new_intent = len(intents[r_new])
 
                         print(f'r:{r} rnew:{r_new}')
                         print(f' ISCANNO comparing unex={unex} and unexs[{ptr}]=={unexs[ptr]}')
                         if unex - unexs[ptr] >= 0 or r == 0:   
+                            
+                            intents[r_new] = new_intent 
+                            len_new_intent = len(intents[r_new])
+
                             unexs.append(unex)
                             ptr += 1
                             print(f'  --> Enter recursion with Intent: {names_col[intents[r_new]]}...')
                             comeg(adjacency, context, context_csc, extents, intents, r=r_new, y=j+1, min_support=min_support, max_support=max_support, 
                                         degs=degs, unexs_g=unexs_g, unexs_a=unexs_a, unexs=unexs, names_col=names_col, comp_gen_graph=comp_gen_graph)
+                        else:
+                            print(f'IsCANNO but no U improvement')
+                            break
                     
                     else:
                         print(f'IsCannonical: False --> do not enter recursion.')
@@ -263,15 +271,14 @@ def run_comeg(adjacency, biadjacency, words, complexity_gen_graphs):
             lp.print_stats()
 
     res = [*zip(extents, intents)]
-    print(len(res))
 
     # Save result
-    #with open("result_time_function.bin", "wb") as output:
-    #    pickle.dump(concepts_iscanno, output)
+    with open("result_time_function.bin", "wb") as output:
+        pickle.dump(res, output)
 
-    #print(len(concepts_iscanno))
+    print(len(res))
 
-graph = load_netset('wikischools')
+graph = load_netset('wikivitals')
 adjacency = graph.adjacency
 biadjacency = graph.biadjacency
 names = graph.names
@@ -285,14 +292,15 @@ attrs_indexes = np.arange(0, biadjacency.shape[1])
 complexity_gen_graphs = defaultdict(list)
 biadjacency_csc = biadjacency.tocsc()
 
-for num_n in tqdm(range(1, 100)):
-    for j in range(30):
-        sel_attrs = np.random.choice(attrs_indexes, size=num_n, replace=False, p=attrs_degrees)
+for i in tqdm(range(300)):
+    for num_a in range(15):
+        sel_attrs = np.random.choice(attrs_indexes, size=num_a, replace=False, p=attrs_degrees)
         sel_nodes = extension_csc(sel_attrs, biadjacency_csc)
         #sel_nodes = extension(sel_attrs, biadjacency)
-        sel_g = adjacency[sel_nodes, :][:, sel_nodes]
+        sel_g = adjacency[sel_nodes, :][:, sel_nodes].astype(bool) + sparse.identity(len(sel_nodes)).astype(bool)
         mdl = mdl_graph(sel_g)
         #mdl = np.log2(len(sel_nodes)) # mdl is just the complexity of the number of nodes
-        complexity_gen_graphs[num_n].append(mdl)
+        if mdl != np.inf and len(sel_nodes) > 0:
+            complexity_gen_graphs[len(sel_nodes)].append(mdl)
 
 run_comeg(adjacency, biadjacency, words, complexity_gen_graphs)
