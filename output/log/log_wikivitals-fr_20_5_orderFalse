@@ -1,0 +1,1822 @@
+starts profiling...
+NEW ITERATION 
+ --------
+r: 0 - r_new: 1
+|extents[r]|: 9945 - intents[r]: []
+  Extent size 7 - intent [414]
+  U(G): -6.307044511302031
+  U(A): 10.87410312815267
+  U: 4.567058616850639
+unexs: [0] r_new: 1 - r: 0 - ptr: 0
+extents [   0    1    2 ... 9942 9943 9944] intents [] r 0 rnew 1
+  Extent size DID change. IsCannonical: True
+r:0 rnew:1
+ ISCANNO comparing unex=4.567058616850639 and unexs[0]==0
+  --> Enter recursion with Intent: ['kuiper']...
+NEW ITERATION 
+ --------
+r: 1 - r_new: 2
+|extents[r]|: 7 - intents[r]: ['kuiper']
+  Extent size 5 - intent [414, 899]
+  U(G): 7.296367366121462
+  U(A): 17.288664822631574
+  U: 24.585032188753036
+unexs: [0, 4.567058616850639] r_new: 2 - r: 1 - ptr: 1
+extents [1, 1468, 1913, 6364, 7071, 8612, 9471] intents [414] r 1 rnew 2
+  Extent size DID change. IsCannonical: True
+r:1 rnew:2
+ ISCANNO comparing unex=24.585032188753036 and unexs[1]==4.567058616850639
+  --> Enter recursion with Intent: ['kuiper' 'astronomique']...
+NEW ITERATION 
+ --------
+r: 2 - r_new: 3
+|extents[r]|: 5 - intents[r]: ['kuiper' 'astronomique']
+  Extent size 5 - intent [414, 899, 1045]
+  U(G): 7.296367366121462
+  U(A): 21.63005323152476
+  U: 28.92642059764622
+unexs: [0, 4.567058616850639, 24.585032188753036] r_new: 3 - r: 2 - ptr: 2
+ == comparing unex=28.92642059764622 and unexs[2]=24.585032188753036
+  Extent size did not change -> attribute planète is added to intent.
+  Extent size 5 - intent [414, 899, 1045, 2589]
+  U(G): 7.296367366121462
+  U(A): 26.884917056843648
+  U: 34.181284422965106
+unexs: [0, 4.567058616850639, 28.92642059764622] r_new: 3 - r: 2 - ptr: 2
+ == comparing unex=34.181284422965106 and unexs[2]=28.92642059764622
+  Extent size did not change -> attribute orbite is added to intent.
+  Extent size 5 - intent [414, 899, 1045, 2589, 3556]
+  U(G): 7.296367366121462
+  U(A): 29.22998723154346
+  U: 36.52635459766492
+unexs: [0, 4.567058616850639, 34.181284422965106] r_new: 3 - r: 2 - ptr: 2
+ == comparing unex=36.52635459766492 and unexs[2]=34.181284422965106
+  Extent size did not change -> attribute corps is added to intent.
+  Extent size 5 - intent [414, 899, 1045, 2589, 3556, 3726]
+  U(G): 7.296367366121462
+  U(A): 32.98608361935753
+  U: 40.28245098547899
+unexs: [0, 4.567058616850639, 36.52635459766492] r_new: 3 - r: 2 - ptr: 2
+ == comparing unex=40.28245098547899 and unexs[2]=36.52635459766492
+  Extent size did not change -> attribute solaire is added to intent.
+  Extent size 5 - intent [414, 899, 1045, 2589, 3556, 3726, 3956]
+  U(G): 7.296367366121462
+  U(A): 34.62830655116173
+  U: 41.92467391728319
+unexs: [0, 4.567058616850639, 40.28245098547899] r_new: 3 - r: 2 - ptr: 2
+ == comparing unex=41.92467391728319 and unexs[2]=40.28245098547899
+  Extent size did not change -> attribute composer is added to intent.
+  Extent size 5 - intent [414, 899, 1045, 2589, 3556, 3726, 3956, 9792]
+  U(G): 7.296367366121462
+  U(A): 35.460372780092584
+  U: 42.75674014621404
+unexs: [0, 4.567058616850639, 41.92467391728319] r_new: 3 - r: 2 - ptr: 2
+ == comparing unex=42.75674014621404 and unexs[2]=41.92467391728319
+  Extent size did not change -> attribute système is added to intent.
+  Extent size 5 - intent [414, 899, 1045, 2589, 3556, 3726, 3956, 9792, 11967]
+  U(G): 7.296367366121462
+  U(A): 40.51159545579323
+  U: 47.807962821914685
+unexs: [0, 4.567058616850639, 42.75674014621404] r_new: 3 - r: 2 - ptr: 2
+ == comparing unex=47.807962821914685 and unexs[2]=42.75674014621404
+  Extent size did not change -> attribute ceinture is added to intent.
+inexs: [0, 4.567058616850639, 47.807962821914685]
+r:2 - r_new:3
+inexs after pop: [0, 4.567058616850639]
+**END FUNCTION
+  Extent size 5 - intent [414, 998]
+  U(G): 7.296367366121462
+  U(A): 16.841205845660355
+  U: 24.137573211781817
+unexs: [0, 4.567058616850639] r_new: 3 - r: 1 - ptr: 1
+extents [1, 1468, 1913, 6364, 7071, 8612, 9471] intents [414] r 1 rnew 3
+  Extent size DID change. IsCannonical: True
+r:1 rnew:3
+ ISCANNO comparing unex=24.137573211781817 and unexs[1]==4.567058616850639
+  --> Enter recursion with Intent: ['kuiper' 'glace']...
+NEW ITERATION 
+ --------
+r: 3 - r_new: 4
+|extents[r]|: 5 - intents[r]: ['kuiper' 'glace']
+  Extent size 5 - intent [414, 998, 1045]
+  U(G): 7.296367366121462
+  U(A): 21.182594254553536
+  U: 28.478961620674998
+unexs: [0, 4.567058616850639, 24.137573211781817] r_new: 4 - r: 3 - ptr: 2
+ == comparing unex=28.478961620674998 and unexs[2]=24.137573211781817
+  Extent size did not change -> attribute planète is added to intent.
+  Extent size 5 - intent [414, 998, 1045, 2589]
+  U(G): 7.296367366121462
+  U(A): 26.437458079872428
+  U: 33.73382544599389
+unexs: [0, 4.567058616850639, 28.478961620674998] r_new: 4 - r: 3 - ptr: 2
+ == comparing unex=33.73382544599389 and unexs[2]=28.478961620674998
+  Extent size did not change -> attribute orbite is added to intent.
+  Extent size 5 - intent [414, 998, 1045, 2589, 3556]
+  U(G): 7.296367366121462
+  U(A): 28.78252825457224
+  U: 36.0788956206937
+unexs: [0, 4.567058616850639, 33.73382544599389] r_new: 4 - r: 3 - ptr: 2
+ == comparing unex=36.0788956206937 and unexs[2]=33.73382544599389
+  Extent size did not change -> attribute corps is added to intent.
+  Extent size 5 - intent [414, 998, 1045, 2589, 3556, 3726]
+  U(G): 7.296367366121462
+  U(A): 32.53862464238631
+  U: 39.83499200850777
+unexs: [0, 4.567058616850639, 36.0788956206937] r_new: 4 - r: 3 - ptr: 2
+ == comparing unex=39.83499200850777 and unexs[2]=36.0788956206937
+  Extent size did not change -> attribute solaire is added to intent.
+  Extent size 5 - intent [414, 998, 1045, 2589, 3556, 3726, 3956]
+  U(G): 7.296367366121462
+  U(A): 34.18084757419051
+  U: 41.47721494031197
+unexs: [0, 4.567058616850639, 39.83499200850777] r_new: 4 - r: 3 - ptr: 2
+ == comparing unex=41.47721494031197 and unexs[2]=39.83499200850777
+  Extent size did not change -> attribute composer is added to intent.
+  Extent size 5 - intent [414, 998, 1045, 2589, 3556, 3726, 3956, 9792]
+  U(G): 7.296367366121462
+  U(A): 35.012913803121364
+  U: 42.30928116924282
+unexs: [0, 4.567058616850639, 41.47721494031197] r_new: 4 - r: 3 - ptr: 2
+ == comparing unex=42.30928116924282 and unexs[2]=41.47721494031197
+  Extent size did not change -> attribute système is added to intent.
+  Extent size 5 - intent [414, 998, 1045, 2589, 3556, 3726, 3956, 9792, 11967]
+  U(G): 7.296367366121462
+  U(A): 40.06413647882201
+  U: 47.360503844943466
+unexs: [0, 4.567058616850639, 42.30928116924282] r_new: 4 - r: 3 - ptr: 2
+ == comparing unex=47.360503844943466 and unexs[2]=42.30928116924282
+  Extent size did not change -> attribute ceinture is added to intent.
+  Extent size 5 - intent [414, 998, 1045, 2589, 3556, 3726, 3956, 9792, 11967, 12671]
+  U(G): 7.296367366121462
+  U(A): 43.109794842482145
+  U: 50.406162208603604
+unexs: [0, 4.567058616850639, 47.360503844943466] r_new: 4 - r: 3 - ptr: 2
+ == comparing unex=50.406162208603604 and unexs[2]=47.360503844943466
+  Extent size did not change -> attribute soleil is added to intent.
+inexs: [0, 4.567058616850639, 50.406162208603604]
+r:3 - r_new:4
+inexs after pop: [0, 4.567058616850639]
+**END FUNCTION
+  Extent size 6 - intent [414, 1045]
+  U(G): 11.032096385082905
+  U(A): 15.80056386116301
+  U: 26.832660246245915
+unexs: [0, 4.567058616850639] r_new: 4 - r: 1 - ptr: 1
+extents [1, 1468, 1913, 6364, 7071, 8612, 9471] intents [414] r 1 rnew 4
+  Extent size DID change. IsCannonical: True
+r:1 rnew:4
+ ISCANNO comparing unex=26.832660246245915 and unexs[1]==4.567058616850639
+  --> Enter recursion with Intent: ['kuiper' 'planète']...
+NEW ITERATION 
+ --------
+r: 4 - r_new: 5
+|extents[r]|: 6 - intents[r]: ['kuiper' 'planète']
+  Extent size 6 - intent [414, 1045, 2589]
+  U(G): 11.032096385082905
+  U(A): 21.47057501751756
+  U: 32.50267140260047
+unexs: [0, 4.567058616850639, 26.832660246245915] r_new: 5 - r: 4 - ptr: 2
+ == comparing unex=32.50267140260047 and unexs[2]=26.832660246245915
+  Extent size did not change -> attribute orbite is added to intent.
+  Extent size 6 - intent [414, 1045, 2589, 3556]
+  U(G): 11.032096385082905
+  U(A): 24.137683127223617
+  U: 35.16977951230652
+unexs: [0, 4.567058616850639, 32.50267140260047] r_new: 5 - r: 4 - ptr: 2
+ == comparing unex=35.16977951230652 and unexs[2]=32.50267140260047
+  Extent size did not change -> attribute corps is added to intent.
+  Extent size 6 - intent [414, 1045, 2589, 3556, 3726]
+  U(G): 11.032096385082905
+  U(A): 28.15692376935374
+  U: 39.18902015443665
+unexs: [0, 4.567058616850639, 35.16977951230652] r_new: 5 - r: 4 - ptr: 2
+ == comparing unex=39.18902015443665 and unexs[2]=35.16977951230652
+  Extent size did not change -> attribute solaire is added to intent.
+  Extent size 6 - intent [414, 1045, 2589, 3556, 3726, 3956]
+  U(G): 11.032096385082905
+  U(A): 30.021648979341244
+  U: 41.053745364424145
+unexs: [0, 4.567058616850639, 39.18902015443665] r_new: 5 - r: 4 - ptr: 2
+ == comparing unex=41.053745364424145 and unexs[2]=39.18902015443665
+  Extent size did not change -> attribute composer is added to intent.
+  Extent size 5 - intent [414, 1045, 2589, 3556, 3726, 3956, 5823]
+  U(G): 7.296367366121462
+  U(A): 36.25123690208191
+  U: 43.54760426820337
+unexs: [0, 4.567058616850639, 41.053745364424145] r_new: 5 - r: 4 - ptr: 2
+extents [1, 1468, 1913, 6364, 7071, 8612] intents [414, 1045, 2589, 3556, 3726, 3956] r 4 rnew 5
+  Extent size DID change. IsCannonical: True
+r:4 rnew:5
+ ISCANNO comparing unex=43.54760426820337 and unexs[2]==41.053745364424145
+  --> Enter recursion with Intent: ['kuiper' 'planète' 'orbite' 'corps' 'solaire' 'composer' 'comète']...
+NEW ITERATION 
+ --------
+r: 5 - r_new: 6
+|extents[r]|: 5 - intents[r]: ['kuiper' 'planète' 'orbite' 'corps' 'solaire' 'composer' 'comète']
+  Extent size 5 - intent [414, 1045, 2589, 3556, 3726, 3956, 5823, 9792]
+  U(G): 7.296367366121462
+  U(A): 37.08330313101276
+  U: 44.37967049713423
+unexs: [0, 4.567058616850639, 41.053745364424145, 43.54760426820337] r_new: 6 - r: 5 - ptr: 3
+ == comparing unex=44.37967049713423 and unexs[3]=43.54760426820337
+  Extent size did not change -> attribute système is added to intent.
+  Extent size 5 - intent [414, 1045, 2589, 3556, 3726, 3956, 5823, 9792, 11967]
+  U(G): 7.296367366121462
+  U(A): 42.134525806713405
+  U: 49.43089317283487
+unexs: [0, 4.567058616850639, 41.053745364424145, 44.37967049713423] r_new: 6 - r: 5 - ptr: 3
+ == comparing unex=49.43089317283487 and unexs[3]=44.37967049713423
+  Extent size did not change -> attribute ceinture is added to intent.
+inexs: [0, 4.567058616850639, 41.053745364424145, 49.43089317283487]
+r:5 - r_new:6
+inexs after pop: [0, 4.567058616850639, 41.053745364424145]
+**END FUNCTION
+  Extent size 5 - intent [414, 1045, 2589, 3556, 3726, 3956, 9249]
+  U(G): 7.296367366121462
+  U(A): 31.367616085796236
+  U: 38.6639834519177
+unexs: [0, 4.567058616850639, 41.053745364424145] r_new: 6 - r: 4 - ptr: 2
+extents [1, 1468, 1913, 6364, 7071, 8612] intents [414, 1045, 2589, 3556, 3726, 3956] r 4 rnew 6
+  Extent size DID change. IsCannonical: True
+r:4 rnew:6
+ ISCANNO comparing unex=38.6639834519177 and unexs[2]==41.053745364424145
+IsCANNO but no U improvement
+inexs: [0, 4.567058616850639, 41.053745364424145]
+r:4 - r_new:6
+inexs after pop: [0, 4.567058616850639]
+**END FUNCTION
+  Extent size 5 - intent [414, 1216]
+  U(G): -2.991345013427985
+  U(A): 15.834352174619292
+  U: 12.843007161191307
+unexs: [0, 4.567058616850639] r_new: 6 - r: 1 - ptr: 1
+extents [1, 1468, 1913, 6364, 7071, 8612, 9471] intents [414] r 1 rnew 6
+  Extent size DID change. IsCannonical: True
+r:1 rnew:6
+ ISCANNO comparing unex=12.843007161191307 and unexs[1]==4.567058616850639
+  --> Enter recursion with Intent: ['kuiper' 'distance']...
+NEW ITERATION 
+ --------
+r: 6 - r_new: 7
+|extents[r]|: 5 - intents[r]: ['kuiper' 'distance']
+  Extent size 5 - intent [414, 1216, 2589]
+  U(G): -2.991345013427985
+  U(A): 21.504363330973845
+  U: 18.51301831754586
+unexs: [0, 4.567058616850639, 12.843007161191307] r_new: 7 - r: 6 - ptr: 2
+ == comparing unex=18.51301831754586 and unexs[2]=12.843007161191307
+  Extent size did not change -> attribute orbite is added to intent.
+  Extent size 5 - intent [414, 1216, 2589, 3726]
+  U(G): -2.991345013427985
+  U(A): 25.84564190811021
+  U: 22.854296894682225
+unexs: [0, 4.567058616850639, 18.51301831754586] r_new: 7 - r: 6 - ptr: 2
+ == comparing unex=22.854296894682225 and unexs[2]=18.51301831754586
+  Extent size did not change -> attribute solaire is added to intent.
+  Extent size 5 - intent [414, 1216, 2589, 3726, 9249]
+  U(G): -2.991345013427985
+  U(A): 27.67725554706456
+  U: 24.685910533636577
+unexs: [0, 4.567058616850639, 22.854296894682225] r_new: 7 - r: 6 - ptr: 2
+ == comparing unex=24.685910533636577 and unexs[2]=22.854296894682225
+  Extent size did not change -> attribute objet is added to intent.
+  Extent size 5 - intent [414, 1216, 2589, 3726, 9249, 9792]
+  U(G): -2.991345013427985
+  U(A): 28.924578997333917
+  U: 25.933233983905932
+unexs: [0, 4.567058616850639, 24.685910533636577] r_new: 7 - r: 6 - ptr: 2
+ == comparing unex=25.933233983905932 and unexs[2]=24.685910533636577
+  Extent size did not change -> attribute système is added to intent.
+  Extent size 5 - intent [414, 1216, 2589, 3726, 9249, 9792, 11967]
+  U(G): -2.991345013427985
+  U(A): 34.33859149121201
+  U: 31.347246477784022
+unexs: [0, 4.567058616850639, 25.933233983905932] r_new: 7 - r: 6 - ptr: 2
+ == comparing unex=31.347246477784022 and unexs[2]=25.933233983905932
+  Extent size did not change -> attribute ceinture is added to intent.
+  Extent size 5 - intent [414, 1216, 2589, 3726, 9249, 9792, 11967, 12671]
+  U(G): -2.991345013427985
+  U(A): 37.70639770528784
+  U: 34.71505269185985
+unexs: [0, 4.567058616850639, 31.347246477784022] r_new: 7 - r: 6 - ptr: 2
+ == comparing unex=34.71505269185985 and unexs[2]=31.347246477784022
+  Extent size did not change -> attribute soleil is added to intent.
+inexs: [0, 4.567058616850639, 34.71505269185985]
+r:6 - r_new:7
+inexs after pop: [0, 4.567058616850639]
+**END FUNCTION
+  Extent size 7 - intent [414, 2589]
+  U(G): -6.307044511302031
+  U(A): 17.12918660862438
+  U: 10.822142097322349
+unexs: [0, 4.567058616850639] r_new: 7 - r: 1 - ptr: 1
+ == comparing unex=10.822142097322349 and unexs[1]=4.567058616850639
+  Extent size did not change -> attribute orbite is added to intent.
+  Extent size 6 - intent [414, 2589, 3556]
+  U(G): 11.032096385082905
+  U(A): 20.2114420493661
+  U: 31.243538434449004
+unexs: [0, 10.822142097322349] r_new: 7 - r: 1 - ptr: 1
+IsCannonical: False --> do not enter recursion.
+  Extent size 7 - intent [414, 2589, 3726]
+  U(G): -6.307044511302031
+  U(A): 21.885612516796407
+  U: 15.578568005494375
+unexs: [0, 10.822142097322349] r_new: 7 - r: 1 - ptr: 1
+ == comparing unex=15.578568005494375 and unexs[1]=10.822142097322349
+  Extent size did not change -> attribute solaire is added to intent.
+  Extent size 6 - intent [414, 2589, 3726, 3956]
+  U(G): 11.032096385082905
+  U(A): 24.335519916106207
+  U: 35.367616301189116
+unexs: [0, 15.578568005494375] r_new: 7 - r: 1 - ptr: 1
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [414, 2589, 3726, 5823]
+  U(G): 7.296367366121462
+  U(A): 28.922884907042672
+  U: 36.21925227316413
+unexs: [0, 15.578568005494375] r_new: 7 - r: 1 - ptr: 1
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [414, 2589, 3726, 6582]
+  U(G): -2.991345013427985
+  U(A): 25.183036804343345
+  U: 22.19169179091536
+unexs: [0, 15.578568005494375] r_new: 7 - r: 1 - ptr: 1
+extents [1, 1468, 1913, 6364, 7071, 8612, 9471] intents [414, 2589, 3726] r 1 rnew 7
+  Extent size DID change. IsCannonical: True
+r:1 rnew:7
+ ISCANNO comparing unex=22.19169179091536 and unexs[1]==15.578568005494375
+  --> Enter recursion with Intent: ['kuiper' 'orbite' 'solaire' 'autour']...
+NEW ITERATION 
+ --------
+r: 7 - r_new: 8
+|extents[r]|: 5 - intents[r]: ['kuiper' 'orbite' 'solaire' 'autour']
+  Extent size 5 - intent [414, 2589, 3726, 6582, 9792]
+  U(G): -2.991345013427985
+  U(A): 26.693504508928754
+  U: 23.70215949550077
+unexs: [0, 15.578568005494375, 22.19169179091536] r_new: 8 - r: 7 - ptr: 2
+ == comparing unex=23.70215949550077 and unexs[2]=22.19169179091536
+  Extent size did not change -> attribute système is added to intent.
+  Extent size 5 - intent [414, 2589, 3726, 6582, 9792, 11967]
+  U(G): -2.991345013427985
+  U(A): 32.33001928099015
+  U: 29.338674267562165
+unexs: [0, 15.578568005494375, 23.70215949550077] r_new: 8 - r: 7 - ptr: 2
+ == comparing unex=29.338674267562165 and unexs[2]=23.70215949550077
+  Extent size did not change -> attribute ceinture is added to intent.
+  Extent size 5 - intent [414, 2589, 3726, 6582, 9792, 11967, 12280]
+  U(G): -2.991345013427985
+  U(A): 34.284600156230944
+  U: 31.29325514280296
+unexs: [0, 15.578568005494375, 29.338674267562165] r_new: 8 - r: 7 - ptr: 2
+ == comparing unex=31.29325514280296 and unexs[2]=29.338674267562165
+  Extent size did not change -> attribute kilomètre is added to intent.
+  Extent size 5 - intent [414, 2589, 3726, 6582, 9792, 11967, 12280, 12671]
+  U(G): -2.991345013427985
+  U(A): 37.65240637030678
+  U: 34.66106135687879
+unexs: [0, 15.578568005494375, 31.29325514280296] r_new: 8 - r: 7 - ptr: 2
+ == comparing unex=34.66106135687879 and unexs[2]=31.29325514280296
+  Extent size did not change -> attribute soleil is added to intent.
+inexs: [0, 15.578568005494375, 34.66106135687879]
+r:7 - r_new:8
+inexs after pop: [0, 15.578568005494375]
+**END FUNCTION
+  Extent size 6 - intent [414, 2589, 3726, 9249]
+  U(G): -3.6296817126890843
+  U(A): 24.039264090757
+  U: 20.409582378067917
+unexs: [0, 15.578568005494375] r_new: 8 - r: 1 - ptr: 1
+extents [1, 1468, 1913, 6364, 7071, 8612, 9471] intents [414, 2589, 3726] r 1 rnew 8
+  Extent size DID change. IsCannonical: True
+r:1 rnew:8
+ ISCANNO comparing unex=20.409582378067917 and unexs[1]==15.578568005494375
+  --> Enter recursion with Intent: ['kuiper' 'orbite' 'solaire' 'objet']...
+NEW ITERATION 
+ --------
+r: 8 - r_new: 9
+|extents[r]|: 6 - intents[r]: ['kuiper' 'orbite' 'solaire' 'objet']
+  Extent size 6 - intent [414, 2589, 3726, 9249, 9792]
+  U(G): -3.6296817126890843
+  U(A): 25.54973179534241
+  U: 21.920050082653326
+unexs: [0, 15.578568005494375, 20.409582378067917] r_new: 9 - r: 8 - ptr: 2
+ == comparing unex=21.920050082653326 and unexs[2]=20.409582378067917
+  Extent size did not change -> attribute système is added to intent.
+  Extent size 5 - intent [414, 2589, 3726, 9249, 9792, 10299]
+  U(G): -3.735066673312584
+  U(A): 29.800188135096725
+  U: 26.06512146178414
+unexs: [0, 15.578568005494375, 21.920050082653326] r_new: 9 - r: 8 - ptr: 2
+extents [1, 1468, 6364, 7071, 8612, 9471] intents [414, 2589, 3726, 9249, 9792] r 8 rnew 9
+  Extent size DID change. IsCannonical: True
+r:8 rnew:9
+ ISCANNO comparing unex=26.06512146178414 and unexs[2]==21.920050082653326
+  --> Enter recursion with Intent: ['kuiper' 'orbite' 'solaire' 'objet' 'système' 'similaire']...
+NEW ITERATION 
+ --------
+r: 9 - r_new: 10
+|extents[r]|: 5 - intents[r]: ['kuiper' 'orbite' 'solaire' 'objet' 'système' 'similaire']
+  Extent size 5 - intent [414, 2589, 3726, 9249, 9792, 10299, 11967]
+  U(G): -3.735066673312584
+  U(A): 35.214200628974815
+  U: 31.47913395566223
+unexs: [0, 15.578568005494375, 21.920050082653326, 26.06512146178414] r_new: 10 - r: 9 - ptr: 3
+ == comparing unex=31.47913395566223 and unexs[3]=26.06512146178414
+  Extent size did not change -> attribute ceinture is added to intent.
+inexs: [0, 15.578568005494375, 21.920050082653326, 31.47913395566223]
+r:9 - r_new:10
+inexs after pop: [0, 15.578568005494375, 21.920050082653326]
+**END FUNCTION
+  Extent size 6 - intent [414, 2589, 3726, 9249, 9792, 11967]
+  U(G): -3.6296817126890843
+  U(A): 31.186246567403806
+  U: 27.556564854714722
+unexs: [0, 15.578568005494375, 21.920050082653326] r_new: 10 - r: 8 - ptr: 2
+ == comparing unex=27.556564854714722 and unexs[2]=21.920050082653326
+  Extent size did not change -> attribute ceinture is added to intent.
+  Extent size 5 - intent [414, 2589, 3726, 9249, 9792, 11967, 12671]
+  U(G): -2.991345013427985
+  U(A): 34.746807724634834
+  U: 31.75546271120685
+unexs: [0, 15.578568005494375, 27.556564854714722] r_new: 10 - r: 8 - ptr: 2
+IsCannonical: False --> do not enter recursion.
+inexs: [0, 15.578568005494375, 27.556564854714722]
+r:8 - r_new:10
+inexs after pop: [0, 15.578568005494375]
+**END FUNCTION
+  Extent size 7 - intent [414, 2589, 3726, 9792]
+  U(G): -6.307044511302031
+  U(A): 23.71811815638806
+  U: 17.411073645086027
+unexs: [0, 15.578568005494375] r_new: 10 - r: 1 - ptr: 1
+ == comparing unex=17.411073645086027 and unexs[1]=15.578568005494375
+  Extent size did not change -> attribute système is added to intent.
+  Extent size 5 - intent [414, 2589, 3726, 9792, 10299]
+  U(G): -3.735066673312584
+  U(A): 28.231718750458427
+  U: 24.496652077145843
+unexs: [0, 17.411073645086027] r_new: 10 - r: 1 - ptr: 1
+IsCannonical: False --> do not enter recursion.
+  Extent size 7 - intent [414, 2589, 3726, 9792, 11967]
+  U(G): -6.307044511302031
+  U(A): 29.617777182765508
+  U: 23.310732671463477
+unexs: [0, 17.411073645086027] r_new: 10 - r: 1 - ptr: 1
+ == comparing unex=23.310732671463477 and unexs[1]=17.411073645086027
+  Extent size did not change -> attribute ceinture is added to intent.
+  Extent size 5 - intent [414, 2589, 3726, 9792, 11967, 12280]
+  U(G): -2.991345013427985
+  U(A): 31.794860336189608
+  U: 28.803515322761623
+unexs: [0, 23.310732671463477] r_new: 10 - r: 1 - ptr: 1
+IsCannonical: False --> do not enter recursion.
+  Extent size 6 - intent [414, 2589, 3726, 9792, 11967, 12671]
+  U(G): -3.6296817126890843
+  U(A): 33.40084061817984
+  U: 29.771158905490758
+unexs: [0, 23.310732671463477] r_new: 10 - r: 1 - ptr: 1
+extents [1, 1468, 1913, 6364, 7071, 8612, 9471] intents [414, 2589, 3726, 9792, 11967] r 1 rnew 10
+  Extent size DID change. IsCannonical: True
+r:1 rnew:10
+ ISCANNO comparing unex=29.771158905490758 and unexs[1]==23.310732671463477
+  --> Enter recursion with Intent: ['kuiper' 'orbite' 'solaire' 'système' 'ceinture' 'soleil']...
+NEW ITERATION 
+ --------
+r: 10 - r_new: 11
+|extents[r]|: 6 - intents[r]: ['kuiper' 'orbite' 'solaire' 'système' 'ceinture' 'soleil']
+inexs: [0, 23.310732671463477, 29.771158905490758]
+r:10 - r_new:11
+inexs after pop: [0, 23.310732671463477]
+**END FUNCTION
+inexs: [0, 23.310732671463477]
+r:1 - r_new:11
+inexs after pop: [0]
+**END FUNCTION
+  Extent size 5 - intent [491]
+  U(G): -1.6694169185406231
+  U(A): 11.359529955322913
+  U: 9.69011303678229
+unexs: [0] r_new: 11 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 7 - intent [695]
+  U(G): 10.051658193873351
+  U(A): 10.87410312815267
+  U: 20.92576132202602
+unexs: [0] r_new: 11 - r: 0 - ptr: 0
+extents [   0    1    2 ... 9942 9943 9944] intents [] r 0 rnew 11
+  Extent size DID change. IsCannonical: True
+r:0 rnew:11
+ ISCANNO comparing unex=20.92576132202602 and unexs[0]==0
+  --> Enter recursion with Intent: ['Éris']...
+NEW ITERATION 
+ --------
+r: 11 - r_new: 12
+|extents[r]|: 7 - intents[r]: ['Éris']
+  Extent size 5 - intent [695, 899]
+  U(G): 7.296367366121462
+  U(A): 17.288664822631574
+  U: 24.585032188753036
+unexs: [0, 20.92576132202602] r_new: 12 - r: 11 - ptr: 1
+extents [1, 1468, 7029, 7032, 7071, 8612, 9095] intents [695] r 11 rnew 12
+  Extent size DID change. IsCannonical: True
+r:11 rnew:12
+ ISCANNO comparing unex=24.585032188753036 and unexs[1]==20.92576132202602
+  --> Enter recursion with Intent: ['Éris' 'astronomique']...
+NEW ITERATION 
+ --------
+r: 12 - r_new: 13
+|extents[r]|: 5 - intents[r]: ['Éris' 'astronomique']
+  Extent size 5 - intent [695, 899, 1045]
+  U(G): 7.296367366121462
+  U(A): 21.63005323152476
+  U: 28.92642059764622
+unexs: [0, 20.92576132202602, 24.585032188753036] r_new: 13 - r: 12 - ptr: 2
+ == comparing unex=28.92642059764622 and unexs[2]=24.585032188753036
+  Extent size did not change -> attribute planète is added to intent.
+  Extent size 5 - intent [695, 899, 1045, 2589]
+  U(G): 7.296367366121462
+  U(A): 26.884917056843648
+  U: 34.181284422965106
+unexs: [0, 20.92576132202602, 28.92642059764622] r_new: 13 - r: 12 - ptr: 2
+ == comparing unex=34.181284422965106 and unexs[2]=28.92642059764622
+  Extent size did not change -> attribute orbite is added to intent.
+  Extent size 5 - intent [695, 899, 1045, 2589, 3556]
+  U(G): 7.296367366121462
+  U(A): 29.22998723154346
+  U: 36.52635459766492
+unexs: [0, 20.92576132202602, 34.181284422965106] r_new: 13 - r: 12 - ptr: 2
+ == comparing unex=36.52635459766492 and unexs[2]=34.181284422965106
+  Extent size did not change -> attribute corps is added to intent.
+  Extent size 5 - intent [695, 899, 1045, 2589, 3556, 3603]
+  U(G): 7.296367366121462
+  U(A): 36.51857870018455
+  U: 43.81494606630601
+unexs: [0, 20.92576132202602, 36.52635459766492] r_new: 13 - r: 12 - ptr: 2
+ == comparing unex=43.81494606630601 and unexs[2]=36.52635459766492
+  Extent size did not change -> attribute Pluton is added to intent.
+  Extent size 5 - intent [695, 899, 1045, 2589, 3556, 3603, 3726]
+  U(G): 7.296367366121462
+  U(A): 40.05217280981531
+  U: 47.348540175936776
+unexs: [0, 20.92576132202602, 43.81494606630601] r_new: 13 - r: 12 - ptr: 2
+ == comparing unex=47.348540175936776 and unexs[2]=43.81494606630601
+  Extent size did not change -> attribute solaire is added to intent.
+  Extent size 5 - intent [695, 899, 1045, 2589, 3556, 3603, 3726, 5969]
+  U(G): 7.296367366121462
+  U(A): 45.27343036053821
+  U: 52.56979772665967
+unexs: [0, 20.92576132202602, 47.348540175936776] r_new: 13 - r: 12 - ptr: 2
+ == comparing unex=52.56979772665967 and unexs[2]=47.348540175936776
+  Extent size did not change -> attribute nain is added to intent.
+  Extent size 5 - intent [695, 899, 1045, 2589, 3556, 3603, 3726, 5969, 6327]
+  U(G): 7.296367366121462
+  U(A): 49.12587317212435
+  U: 56.422240538245816
+unexs: [0, 20.92576132202602, 52.56979772665967] r_new: 13 - r: 12 - ptr: 2
+ == comparing unex=56.422240538245816 and unexs[2]=52.56979772665967
+  Extent size did not change -> attribute satellite is added to intent.
+  Extent size 5 - intent [695, 899, 1045, 2589, 3556, 3603, 3726, 5969, 6327, 9249]
+  U(G): 7.296367366121462
+  U(A): 49.95693748500844
+  U: 57.2533048511299
+unexs: [0, 20.92576132202602, 56.422240538245816] r_new: 13 - r: 12 - ptr: 2
+ == comparing unex=57.2533048511299 and unexs[2]=56.422240538245816
+  Extent size did not change -> attribute objet is added to intent.
+  Extent size 5 - intent [695, 899, 1045, 2589, 3556, 3603, 3726, 5969, 6327, 9249, 9792]
+  U(G): 7.296367366121462
+  U(A): 50.329242449455506
+  U: 57.625609815576965
+unexs: [0, 20.92576132202602, 57.2533048511299] r_new: 13 - r: 12 - ptr: 2
+ == comparing unex=57.625609815576965 and unexs[2]=57.2533048511299
+  Extent size did not change -> attribute système is added to intent.
+inexs: [0, 20.92576132202602, 57.625609815576965]
+r:12 - r_new:13
+inexs after pop: [0, 20.92576132202602]
+**END FUNCTION
+  Extent size 5 - intent [695, 1036]
+  U(G): 4.9744392712341
+  U(A): 19.09601974468918
+  U: 24.07045901592328
+unexs: [0, 20.92576132202602] r_new: 13 - r: 11 - ptr: 1
+extents [1, 1468, 7029, 7032, 7071, 8612, 9095] intents [695] r 11 rnew 13
+  Extent size DID change. IsCannonical: True
+r:11 rnew:13
+ ISCANNO comparing unex=24.07045901592328 and unexs[1]==20.92576132202602
+  --> Enter recursion with Intent: ['Éris' 'Neptune']...
+NEW ITERATION 
+ --------
+r: 13 - r_new: 14
+|extents[r]|: 5 - intents[r]: ['Éris' 'Neptune']
+  Extent size 5 - intent [695, 1036, 1045]
+  U(G): 4.9744392712341
+  U(A): 23.43740815358236
+  U: 28.41184742481646
+unexs: [0, 20.92576132202602, 24.07045901592328] r_new: 14 - r: 13 - ptr: 2
+ == comparing unex=28.41184742481646 and unexs[2]=24.07045901592328
+  Extent size did not change -> attribute planète is added to intent.
+  Extent size 5 - intent [695, 1036, 1045, 2589]
+  U(G): 4.9744392712341
+  U(A): 28.692271978901253
+  U: 33.66671125013535
+unexs: [0, 20.92576132202602, 28.41184742481646] r_new: 14 - r: 13 - ptr: 2
+ == comparing unex=33.66671125013535 and unexs[2]=28.41184742481646
+  Extent size did not change -> attribute orbite is added to intent.
+  Extent size 5 - intent [695, 1036, 1045, 2589, 3556]
+  U(G): 4.9744392712341
+  U(A): 31.037342153601067
+  U: 36.01178142483516
+unexs: [0, 20.92576132202602, 33.66671125013535] r_new: 14 - r: 13 - ptr: 2
+ == comparing unex=36.01178142483516 and unexs[2]=33.66671125013535
+  Extent size did not change -> attribute corps is added to intent.
+  Extent size 5 - intent [695, 1036, 1045, 2589, 3556, 3603]
+  U(G): 4.9744392712341
+  U(A): 38.325933622242154
+  U: 43.30037289347625
+unexs: [0, 20.92576132202602, 36.01178142483516] r_new: 14 - r: 13 - ptr: 2
+ == comparing unex=43.30037289347625 and unexs[2]=36.01178142483516
+  Extent size did not change -> attribute Pluton is added to intent.
+  Extent size 5 - intent [695, 1036, 1045, 2589, 3556, 3603, 3726]
+  U(G): 4.9744392712341
+  U(A): 41.859527731872916
+  U: 46.83396700310702
+unexs: [0, 20.92576132202602, 43.30037289347625] r_new: 14 - r: 13 - ptr: 2
+ == comparing unex=46.83396700310702 and unexs[2]=43.30037289347625
+  Extent size did not change -> attribute solaire is added to intent.
+  Extent size 5 - intent [695, 1036, 1045, 2589, 3556, 3603, 3726, 5969]
+  U(G): 4.9744392712341
+  U(A): 47.08078528259581
+  U: 52.055224553829916
+unexs: [0, 20.92576132202602, 46.83396700310702] r_new: 14 - r: 13 - ptr: 2
+ == comparing unex=52.055224553829916 and unexs[2]=46.83396700310702
+  Extent size did not change -> attribute nain is added to intent.
+  Extent size 5 - intent [695, 1036, 1045, 2589, 3556, 3603, 3726, 5969, 6327]
+  U(G): 4.9744392712341
+  U(A): 50.933228094181956
+  U: 55.90766736541606
+unexs: [0, 20.92576132202602, 52.055224553829916] r_new: 14 - r: 13 - ptr: 2
+ == comparing unex=55.90766736541606 and unexs[2]=52.055224553829916
+  Extent size did not change -> attribute satellite is added to intent.
+  Extent size 5 - intent [695, 1036, 1045, 2589, 3556, 3603, 3726, 5969, 6327, 9249]
+  U(G): 4.9744392712341
+  U(A): 51.76429240706605
+  U: 56.738731678300155
+unexs: [0, 20.92576132202602, 55.90766736541606] r_new: 14 - r: 13 - ptr: 2
+ == comparing unex=56.738731678300155 and unexs[2]=55.90766736541606
+  Extent size did not change -> attribute objet is added to intent.
+  Extent size 5 - intent [695, 1036, 1045, 2589, 3556, 3603, 3726, 5969, 6327, 9249, 9792]
+  U(G): 4.9744392712341
+  U(A): 52.13659737151312
+  U: 57.11103664274722
+unexs: [0, 20.92576132202602, 56.738731678300155] r_new: 14 - r: 13 - ptr: 2
+ == comparing unex=57.11103664274722 and unexs[2]=56.738731678300155
+  Extent size did not change -> attribute système is added to intent.
+inexs: [0, 20.92576132202602, 57.11103664274722]
+r:13 - r_new:14
+inexs after pop: [0, 20.92576132202602]
+**END FUNCTION
+  Extent size 7 - intent [695, 1045]
+  U(G): 10.051658193873351
+  U(A): 15.80056386116301
+  U: 25.85222205503636
+unexs: [0, 20.92576132202602] r_new: 14 - r: 11 - ptr: 1
+ == comparing unex=25.85222205503636 and unexs[1]=20.92576132202602
+  Extent size did not change -> attribute planète is added to intent.
+  Extent size 7 - intent [695, 1045, 2589]
+  U(G): 10.051658193873351
+  U(A): 21.47057501751756
+  U: 31.522233211390912
+unexs: [0, 25.85222205503636] r_new: 14 - r: 11 - ptr: 1
+ == comparing unex=31.522233211390912 and unexs[1]=25.85222205503636
+  Extent size did not change -> attribute orbite is added to intent.
+  Extent size 5 - intent [695, 1045, 2589, 2895]
+  U(G): 7.296367366121462
+  U(A): 30.829775502651188
+  U: 38.12614286877265
+unexs: [0, 31.522233211390912] r_new: 14 - r: 11 - ptr: 1
+extents [1, 1468, 7029, 7032, 7071, 8612, 9095] intents [695, 1045, 2589] r 11 rnew 14
+  Extent size DID change. IsCannonical: True
+r:11 rnew:14
+ ISCANNO comparing unex=38.12614286877265 and unexs[1]==31.522233211390912
+  --> Enter recursion with Intent: ['Éris' 'planète' 'orbite' 'Makémaké']...
+NEW ITERATION 
+ --------
+r: 14 - r_new: 15
+|extents[r]|: 5 - intents[r]: ['Éris' 'planète' 'orbite' 'Makémaké']
+  Extent size 5 - intent [695, 1045, 2589, 2895, 3556]
+  U(G): 7.296367366121462
+  U(A): 33.174845677351
+  U: 40.47121304347246
+unexs: [0, 31.522233211390912, 38.12614286877265] r_new: 15 - r: 14 - ptr: 2
+ == comparing unex=40.47121304347246 and unexs[2]=38.12614286877265
+  Extent size did not change -> attribute corps is added to intent.
+  Extent size 5 - intent [695, 1045, 2589, 2895, 3556, 3603]
+  U(G): 7.296367366121462
+  U(A): 40.46343714599209
+  U: 47.75980451211355
+unexs: [0, 31.522233211390912, 40.47121304347246] r_new: 15 - r: 14 - ptr: 2
+ == comparing unex=47.75980451211355 and unexs[2]=40.47121304347246
+  Extent size did not change -> attribute Pluton is added to intent.
+  Extent size 5 - intent [695, 1045, 2589, 2895, 3556, 3603, 3726]
+  U(G): 7.296367366121462
+  U(A): 43.99703125562285
+  U: 51.293398621744316
+unexs: [0, 31.522233211390912, 47.75980451211355] r_new: 15 - r: 14 - ptr: 2
+ == comparing unex=51.293398621744316 and unexs[2]=47.75980451211355
+  Extent size did not change -> attribute solaire is added to intent.
+  Extent size 5 - intent [695, 1045, 2589, 2895, 3556, 3603, 3726, 5969]
+  U(G): 7.296367366121462
+  U(A): 49.21828880634575
+  U: 56.51465617246721
+unexs: [0, 31.522233211390912, 51.293398621744316] r_new: 15 - r: 14 - ptr: 2
+ == comparing unex=56.51465617246721 and unexs[2]=51.293398621744316
+  Extent size did not change -> attribute nain is added to intent.
+  Extent size 5 - intent [695, 1045, 2589, 2895, 3556, 3603, 3726, 5969, 6327]
+  U(G): 7.296367366121462
+  U(A): 53.07073161793189
+  U: 60.36709898405336
+unexs: [0, 31.522233211390912, 56.51465617246721] r_new: 15 - r: 14 - ptr: 2
+ == comparing unex=60.36709898405336 and unexs[2]=56.51465617246721
+  Extent size did not change -> attribute satellite is added to intent.
+  Extent size 5 - intent [695, 1045, 2589, 2895, 3556, 3603, 3726, 5969, 6327, 6376]
+  U(G): 7.296367366121462
+  U(A): 61.10734484198902
+  U: 68.40371220811048
+unexs: [0, 31.522233211390912, 60.36709898405336] r_new: 15 - r: 14 - ptr: 2
+ == comparing unex=68.40371220811048 and unexs[2]=60.36709898405336
+  Extent size did not change -> attribute Hauméa is added to intent.
+  Extent size 5 - intent [695, 1045, 2589, 2895, 3556, 3603, 3726, 5969, 6327, 6376, 9249]
+  U(G): 7.296367366121462
+  U(A): 61.80079574080503
+  U: 69.09716310692649
+unexs: [0, 31.522233211390912, 68.40371220811048] r_new: 15 - r: 14 - ptr: 2
+ == comparing unex=69.09716310692649 and unexs[2]=68.40371220811048
+  Extent size did not change -> attribute objet is added to intent.
+  Extent size 5 - intent [695, 1045, 2589, 2895, 3556, 3603, 3726, 5969, 6327, 6376, 9249, 9792]
+  U(G): 7.296367366121462
+  U(A): 62.04745992447913
+  U: 69.34382729060059
+unexs: [0, 31.522233211390912, 69.09716310692649] r_new: 15 - r: 14 - ptr: 2
+ == comparing unex=69.34382729060059 and unexs[2]=69.09716310692649
+  Extent size did not change -> attribute système is added to intent.
+inexs: [0, 31.522233211390912, 69.34382729060059]
+r:14 - r_new:15
+inexs after pop: [0, 31.522233211390912]
+**END FUNCTION
+  Extent size 5 - intent [695, 1045, 2589, 2899]
+  U(G): 7.296367366121462
+  U(A): 23.95941078306778
+  U: 31.255778149189243
+unexs: [0, 31.522233211390912] r_new: 15 - r: 11 - ptr: 1
+extents [1, 1468, 7029, 7032, 7071, 8612, 9095] intents [695, 1045, 2589] r 11 rnew 15
+  Extent size DID change. IsCannonical: True
+r:11 rnew:15
+ ISCANNO comparing unex=31.255778149189243 and unexs[1]==31.522233211390912
+IsCANNO but no U improvement
+inexs: [0, 31.522233211390912]
+r:11 - r_new:15
+inexs after pop: [0]
+**END FUNCTION
+  Extent size 6 - intent [704]
+  U(G): -4.951609807576446
+  U(A): 11.096495549489118
+  U: 6.144885741912672
+unexs: [0] r_new: 15 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [791]
+  U(G): -1.9913450134279849
+  U(A): 11.359529955322913
+  U: 9.368184941894928
+unexs: [0] r_new: 15 - r: 0 - ptr: 0
+extents [   0    1    2 ... 9942 9943 9944] intents [] r 0 rnew 15
+  Extent size DID change. IsCannonical: True
+r:0 rnew:15
+ ISCANNO comparing unex=9.368184941894928 and unexs[0]==0
+  --> Enter recursion with Intent: ['Délos']...
+NEW ITERATION 
+ --------
+r: 15 - r_new: 16
+|extents[r]|: 5 - intents[r]: ['Délos']
+  Extent size 5 - intent [791, 2891]
+  U(G): -1.9913450134279849
+  U(A): 19.581446571859423
+  U: 17.59010155843144
+unexs: [0, 9.368184941894928] r_new: 16 - r: 15 - ptr: 1
+ == comparing unex=17.59010155843144 and unexs[1]=9.368184941894928
+  Extent size did not change -> attribute athénien is added to intent.
+  Extent size 5 - intent [791, 2891, 6466]
+  U(G): -1.9913450134279849
+  U(A): 22.100293654880325
+  U: 20.10894864145234
+unexs: [0, 17.59010155843144] r_new: 16 - r: 15 - ptr: 1
+ == comparing unex=20.10894864145234 and unexs[1]=17.59010155843144
+  Extent size did not change -> attribute grec is added to intent.
+  Extent size 5 - intent [791, 2891, 6466, 9019]
+  U(G): -1.9913450134279849
+  U(A): 27.89877918553947
+  U: 25.907434172111486
+unexs: [0, 20.10894864145234] r_new: 16 - r: 15 - ptr: 1
+ == comparing unex=25.907434172111486 and unexs[1]=20.10894864145234
+  Extent size did not change -> attribute Athènes is added to intent.
+  Extent size 5 - intent [791, 2891, 6466, 9019, 11140]
+  U(G): -1.9913450134279849
+  U(A): 29.439287653073357
+  U: 27.447942639645373
+unexs: [0, 25.907434172111486] r_new: 16 - r: 15 - ptr: 1
+ == comparing unex=27.447942639645373 and unexs[1]=25.907434172111486
+  Extent size did not change -> attribute guerre is added to intent.
+inexs: [0, 27.447942639645373]
+r:15 - r_new:16
+inexs after pop: [0]
+**END FUNCTION
+  Extent size 5 - intent [850]
+  U(G): -4.991345013427985
+  U(A): 11.359529955322913
+  U: 6.368184941894928
+unexs: [0] r_new: 16 - r: 0 - ptr: 0
+extents [   0    1    2 ... 9942 9943 9944] intents [] r 0 rnew 16
+  Extent size DID change. IsCannonical: True
+r:0 rnew:16
+ ISCANNO comparing unex=6.368184941894928 and unexs[0]==0
+  --> Enter recursion with Intent: ['plutonique']...
+NEW ITERATION 
+ --------
+r: 16 - r_new: 17
+|extents[r]|: 5 - intents[r]: ['plutonique']
+  Extent size 5 - intent [850, 3118]
+  U(G): -4.991345013427985
+  U(A): 17.368452848525223
+  U: 12.377107835097238
+unexs: [0, 6.368184941894928] r_new: 17 - r: 16 - ptr: 1
+ == comparing unex=12.377107835097238 and unexs[1]=6.368184941894928
+  Extent size did not change -> attribute fusion is added to intent.
+  Extent size 5 - intent [850, 3118, 3880]
+  U(G): -4.991345013427985
+  U(A): 23.464728759581874
+  U: 18.47338374615389
+unexs: [0, 12.377107835097238] r_new: 17 - r: 16 - ptr: 1
+ == comparing unex=18.47338374615389 and unexs[1]=12.377107835097238
+  Extent size did not change -> attribute volcanique is added to intent.
+  Extent size 5 - intent [850, 3118, 3880, 5175]
+  U(G): -4.991345013427985
+  U(A): 31.8239292447155
+  U: 26.832584231287516
+unexs: [0, 18.47338374615389] r_new: 17 - r: 16 - ptr: 1
+ == comparing unex=26.832584231287516 and unexs[1]=18.47338374615389
+  Extent size did not change -> attribute magma is added to intent.
+  Extent size 5 - intent [850, 3118, 3880, 5175, 9486]
+  U(G): -4.991345013427985
+  U(A): 36.55366326965064
+  U: 31.562318256222657
+unexs: [0, 26.832584231287516] r_new: 17 - r: 16 - ptr: 1
+ == comparing unex=31.562318256222657 and unexs[1]=26.832584231287516
+  Extent size did not change -> attribute roche is added to intent.
+  Extent size 5 - intent [850, 3118, 3880, 5175, 9486, 9708]
+  U(G): -4.991345013427985
+  U(A): 38.007557967421356
+  U: 33.016212953993374
+unexs: [0, 31.562318256222657] r_new: 17 - r: 16 - ptr: 1
+ == comparing unex=33.016212953993374 and unexs[1]=31.562318256222657
+  Extent size did not change -> attribute former is added to intent.
+inexs: [0, 33.016212953993374]
+r:16 - r_new:17
+inexs after pop: [0]
+**END FUNCTION
+  Extent size 5 - intent [900]
+  U(G): -2.991345013427985
+  U(A): 11.359529955322913
+  U: 8.368184941894928
+unexs: [0] r_new: 17 - r: 0 - ptr: 0
+extents [   0    1    2 ... 9942 9943 9944] intents [] r 0 rnew 17
+  Extent size DID change. IsCannonical: True
+r:0 rnew:17
+ ISCANNO comparing unex=8.368184941894928 and unexs[0]==0
+  --> Enter recursion with Intent: ['PCC']...
+NEW ITERATION 
+ --------
+r: 17 - r_new: 18
+|extents[r]|: 5 - intents[r]: ['PCC']
+  Extent size 5 - intent [900, 2896]
+  U(G): -2.991345013427985
+  U(A): 15.289334131407621
+  U: 12.297989117979636
+unexs: [0, 8.368184941894928] r_new: 18 - r: 17 - ptr: 1
+ == comparing unex=12.297989117979636 and unexs[1]=8.368184941894928
+  Extent size did not change -> attribute Chine is added to intent.
+  Extent size 5 - intent [900, 2896, 3888]
+  U(G): -2.991345013427985
+  U(A): 20.11882350176937
+  U: 17.127478488341385
+unexs: [0, 12.297989117979636] r_new: 18 - r: 17 - ptr: 1
+ == comparing unex=17.127478488341385 and unexs[1]=12.297989117979636
+  Extent size did not change -> attribute parti is added to intent.
+  Extent size 5 - intent [900, 2896, 3888, 4891]
+  U(G): -2.991345013427985
+  U(A): 23.25692026153512
+  U: 20.265575248107137
+unexs: [0, 17.127478488341385] r_new: 18 - r: 17 - ptr: 1
+ == comparing unex=20.265575248107137 and unexs[1]=17.127478488341385
+  Extent size did not change -> attribute chinois is added to intent.
+  Extent size 5 - intent [900, 2896, 3888, 4891, 7135]
+  U(G): -2.991345013427985
+  U(A): 25.539195309499036
+  U: 22.54785029607105
+unexs: [0, 20.265575248107137] r_new: 18 - r: 17 - ptr: 1
+ == comparing unex=22.54785029607105 and unexs[1]=20.265575248107137
+  Extent size did not change -> attribute république is added to intent.
+  Extent size 5 - intent [900, 2896, 3888, 4891, 7135, 7539]
+  U(G): -2.991345013427985
+  U(A): 29.657861776697814
+  U: 26.66651676326983
+unexs: [0, 22.54785029607105] r_new: 18 - r: 17 - ptr: 1
+ == comparing unex=26.66651676326983 and unexs[1]=22.54785029607105
+  Extent size did not change -> attribute communiste is added to intent.
+  Extent size 5 - intent [900, 2896, 3888, 4891, 7135, 7539, 12422]
+  U(G): -2.991345013427985
+  U(A): 31.743403329821767
+  U: 28.752058316393782
+unexs: [0, 26.66651676326983] r_new: 18 - r: 17 - ptr: 1
+ == comparing unex=28.752058316393782 and unexs[1]=26.66651676326983
+  Extent size did not change -> attribute populaire is added to intent.
+inexs: [0, 28.752058316393782]
+r:17 - r_new:18
+inexs after pop: [0]
+**END FUNCTION
+  Extent size 7 - intent [975]
+  U(G): 12.859013115930956
+  U(A): 10.87410312815267
+  U: 23.733116244083625
+unexs: [0] r_new: 18 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [1047]
+  U(G): -3.991345013427985
+  U(A): 11.359529955322913
+  U: 7.368184941894928
+unexs: [0] r_new: 18 - r: 0 - ptr: 0
+extents [   0    1    2 ... 9942 9943 9944] intents [] r 0 rnew 18
+  Extent size DID change. IsCannonical: True
+r:0 rnew:18
+ ISCANNO comparing unex=7.368184941894928 and unexs[0]==0
+  --> Enter recursion with Intent: ['Nuage']...
+NEW ITERATION 
+ --------
+r: 18 - r_new: 19
+|extents[r]|: 5 - intents[r]: ['Nuage']
+  Extent size 5 - intent [1047, 1376]
+  U(G): -3.991345013427985
+  U(A): 17.831424824867767
+  U: 13.840079811439782
+unexs: [0, 7.368184941894928] r_new: 19 - r: 18 - ptr: 1
+ == comparing unex=13.840079811439782 and unexs[1]=7.368184941894928
+  Extent size did not change -> attribute galaxie is added to intent.
+  Extent size 5 - intent [1047, 1376, 1554]
+  U(G): -3.991345013427985
+  U(A): 21.87785218647386
+  U: 17.886507173045874
+unexs: [0, 13.840079811439782] r_new: 19 - r: 18 - ptr: 1
+ == comparing unex=17.886507173045874 and unexs[1]=13.840079811439782
+  Extent size did not change -> attribute voie is added to intent.
+  Extent size 5 - intent [1047, 1376, 1554, 5540]
+  U(G): -3.991345013427985
+  U(A): 28.751625844437243
+  U: 24.760280831009258
+unexs: [0, 17.886507173045874] r_new: 19 - r: 18 - ptr: 1
+ == comparing unex=24.760280831009258 and unexs[1]=17.886507173045874
+  Extent size did not change -> attribute lacté is added to intent.
+  Extent size 5 - intent [1047, 1376, 1554, 5540, 11199]
+  U(G): -3.991345013427985
+  U(A): 35.94079148800968
+  U: 31.949446474581695
+unexs: [0, 24.760280831009258] r_new: 19 - r: 18 - ptr: 1
+ == comparing unex=31.949446474581695 and unexs[1]=24.760280831009258
+  Extent size did not change -> attribute Magellan is added to intent.
+inexs: [0, 31.949446474581695]
+r:18 - r_new:19
+inexs after pop: [0]
+**END FUNCTION
+  Extent size 5 - intent [1106]
+  U(G): -4.803498103988407
+  U(A): 11.359529955322913
+  U: 6.556031851334506
+unexs: [0] r_new: 19 - r: 0 - ptr: 0
+extents [   0    1    2 ... 9942 9943 9944] intents [] r 0 rnew 19
+  Extent size DID change. IsCannonical: True
+r:0 rnew:19
+ ISCANNO comparing unex=6.556031851334506 and unexs[0]==0
+  --> Enter recursion with Intent: ['Girl']...
+NEW ITERATION 
+ --------
+r: 19 - r_new: 20
+|extents[r]|: 5 - intents[r]: ['Girl']
+  Extent size 5 - intent [1106, 1483]
+  U(G): -4.803498103988407
+  U(A): 16.347391232997396
+  U: 11.543893129008989
+unexs: [0, 6.556031851334506] r_new: 20 - r: 19 - ptr: 1
+ == comparing unex=11.543893129008989 and unexs[1]=6.556031851334506
+  Extent size did not change -> attribute artiste is added to intent.
+  Extent size 5 - intent [1106, 1483, 2136]
+  U(G): -4.803498103988407
+  U(A): 20.449313707195188
+  U: 15.645815603206781
+unexs: [0, 11.543893129008989] r_new: 20 - r: 19 - ptr: 1
+ == comparing unex=15.645815603206781 and unexs[1]=11.543893129008989
+  Extent size did not change -> attribute film is added to intent.
+  Extent size 5 - intent [1106, 1483, 2136, 3516]
+  U(G): -4.803498103988407
+  U(A): 23.901623596720295
+  U: 19.09812549273189
+unexs: [0, 15.645815603206781] r_new: 20 - r: 19 - ptr: 1
+ == comparing unex=19.09812549273189 and unexs[1]=15.645815603206781
+  Extent size did not change -> attribute musique is added to intent.
+  Extent size 5 - intent [1106, 1483, 2136, 3516, 6182]
+  U(G): -4.803498103988407
+  U(A): 29.56027452359395
+  U: 24.756776419605544
+unexs: [0, 19.09812549273189] r_new: 20 - r: 19 - ptr: 1
+ == comparing unex=24.756776419605544 and unexs[1]=19.09812549273189
+  Extent size did not change -> attribute album is added to intent.
+inexs: [0, 24.756776419605544]
+r:19 - r_new:20
+inexs after pop: [0]
+**END FUNCTION
+  Extent size 5 - intent [1639]
+  U(G): 2.6525111763467386
+  U(A): 11.359529955322913
+  U: 14.012041131669651
+unexs: [0] r_new: 20 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [1893]
+  U(G): -4.735066673312584
+  U(A): 11.359529955322913
+  U: 6.624463282010328
+unexs: [0] r_new: 20 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [2028]
+  U(G): 4.9744392712341
+  U(A): 11.359529955322913
+  U: 16.333969226557013
+unexs: [0] r_new: 20 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [2774]
+  U(G): 7.296367366121462
+  U(A): 11.359529955322913
+  U: 18.655897321444375
+unexs: [0] r_new: 20 - r: 0 - ptr: 0
+extents [   0    1    2 ... 9942 9943 9944] intents [] r 0 rnew 20
+  Extent size DID change. IsCannonical: True
+r:0 rnew:20
+ ISCANNO comparing unex=18.655897321444375 and unexs[0]==0
+  --> Enter recursion with Intent: ['Panthera']...
+NEW ITERATION 
+ --------
+r: 20 - r_new: 21
+|extents[r]|: 5 - intents[r]: ['Panthera']
+  Extent size 5 - intent [2774, 5574]
+  U(G): 7.296367366121462
+  U(A): 14.249715301941702
+  U: 21.546082668063164
+unexs: [0, 18.655897321444375] r_new: 21 - r: 20 - ptr: 1
+ == comparing unex=21.546082668063164 and unexs[1]=18.655897321444375
+  Extent size did not change -> attribute espèce is added to intent.
+  Extent size 5 - intent [2774, 5574, 6814]
+  U(G): 7.296367366121462
+  U(A): 17.279902022540583
+  U: 24.576269388662045
+unexs: [0, 21.546082668063164] r_new: 21 - r: 20 - ptr: 1
+ == comparing unex=24.576269388662045 and unexs[1]=21.546082668063164
+  Extent size did not change -> attribute animal is added to intent.
+  Extent size 5 - intent [2774, 5574, 6814, 7894]
+  U(G): 7.296367366121462
+  U(A): 19.245068612306426
+  U: 26.541435978427888
+unexs: [0, 24.576269388662045] r_new: 21 - r: 20 - ptr: 1
+ == comparing unex=26.541435978427888 and unexs[1]=24.576269388662045
+  Extent size did not change -> attribute population is added to intent.
+  Extent size 5 - intent [2774, 5574, 6814, 7894, 11917]
+  U(G): 7.296367366121462
+  U(A): 27.144727638683875
+  U: 34.441095004805334
+unexs: [0, 26.541435978427888] r_new: 21 - r: 20 - ptr: 1
+ == comparing unex=34.441095004805334 and unexs[1]=26.541435978427888
+  Extent size did not change -> attribute félin is added to intent.
+inexs: [0, 34.441095004805334]
+r:20 - r_new:21
+inexs after pop: [0]
+**END FUNCTION
+  Extent size 5 - intent [2895]
+  U(G): 7.296367366121462
+  U(A): 11.359529955322913
+  U: 18.655897321444375
+unexs: [0] r_new: 21 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 13 - intent [3491]
+  U(G): -60.80696994564185
+  U(A): 9.981018332069182
+  U: -50.82595161357267
+unexs: [0] r_new: 21 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [3648]
+  U(G): -4.735066673312584
+  U(A): 11.359529955322913
+  U: 6.624463282010328
+unexs: [0] r_new: 21 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 6 - intent [3785]
+  U(G): -3.2146442134102386
+  U(A): 11.096495549489118
+  U: 7.8818513360788796
+unexs: [0] r_new: 21 - r: 0 - ptr: 0
+extents [   0    1    2 ... 9942 9943 9944] intents [] r 0 rnew 21
+  Extent size DID change. IsCannonical: True
+r:0 rnew:21
+ ISCANNO comparing unex=7.8818513360788796 and unexs[0]==0
+  --> Enter recursion with Intent: ['bassiste']...
+NEW ITERATION 
+ --------
+r: 21 - r_new: 22
+|extents[r]|: 6 - intents[r]: ['bassiste']
+  Extent size 6 - intent [3785, 4505]
+  U(G): -3.2146442134102386
+  U(A): 14.051625625330727
+  U: 10.836981411920489
+unexs: [0, 7.8818513360788796] r_new: 22 - r: 21 - ptr: 1
+ == comparing unex=10.836981411920489 and unexs[1]=7.8818513360788796
+  Extent size did not change -> attribute million is added to intent.
+  Extent size 6 - intent [3785, 4505, 5230]
+  U(G): -3.2146442134102386
+  U(A): 20.656048440057702
+  U: 17.441404226647464
+unexs: [0, 10.836981411920489] r_new: 22 - r: 21 - ptr: 1
+ == comparing unex=17.441404226647464 and unexs[1]=10.836981411920489
+  Extent size did not change -> attribute rock is added to intent.
+  Extent size 5 - intent [3785, 4505, 5230, 6182]
+  U(G): -2.991345013427985
+  U(A): 26.6367373019376
+  U: 23.645392288509615
+unexs: [0, 17.441404226647464] r_new: 22 - r: 21 - ptr: 1
+extents [2691, 5057, 6993, 7467, 8804, 8812] intents [3785, 4505, 5230] r 21 rnew 22
+  Extent size DID change. IsCannonical: True
+r:21 rnew:22
+ ISCANNO comparing unex=23.645392288509615 and unexs[1]==17.441404226647464
+  --> Enter recursion with Intent: ['bassiste' 'million' 'rock' 'album']...
+NEW ITERATION 
+ --------
+r: 22 - r_new: 23
+|extents[r]|: 5 - intents[r]: ['bassiste' 'million' 'rock' 'album']
+  Extent size 5 - intent [3785, 4505, 5230, 6182, 7460]
+  U(G): -2.991345013427985
+  U(A): 29.15347760353854
+  U: 26.162132590110556
+unexs: [0, 17.441404226647464, 23.645392288509615] r_new: 23 - r: 22 - ptr: 2
+ == comparing unex=26.162132590110556 and unexs[2]=23.645392288509615
+  Extent size did not change -> attribute britannique is added to intent.
+  Extent size 5 - intent [3785, 4505, 5230, 6182, 7460, 7703]
+  U(G): -2.991345013427985
+  U(A): 30.645797649251037
+  U: 27.654452635823052
+unexs: [0, 17.441404226647464, 26.162132590110556] r_new: 23 - r: 22 - ptr: 2
+ == comparing unex=27.654452635823052 and unexs[2]=26.162132590110556
+  Extent size did not change -> attribute groupe is added to intent.
+  Extent size 5 - intent [3785, 4505, 5230, 6182, 7460, 7703, 9665]
+  U(G): -2.991345013427985
+  U(A): 33.09297700706433
+  U: 30.101631993636342
+unexs: [0, 17.441404226647464, 27.654452635823052] r_new: 23 - r: 22 - ptr: 2
+ == comparing unex=30.101631993636342 and unexs[2]=27.654452635823052
+  Extent size did not change -> attribute succès is added to intent.
+  Extent size 5 - intent [3785, 4505, 5230, 6182, 7460, 7703, 9665, 10052]
+  U(G): -2.991345013427985
+  U(A): 36.85480293914993
+  U: 33.863457925721946
+unexs: [0, 17.441404226647464, 30.101631993636342] r_new: 23 - r: 22 - ptr: 2
+ == comparing unex=33.863457925721946 and unexs[2]=30.101631993636342
+  Extent size did not change -> attribute vendre is added to intent.
+  Extent size 5 - intent [3785, 4505, 5230, 6182, 7460, 7703, 9665, 10052, 12663]
+  U(G): -2.991345013427985
+  U(A): 40.765544391300736
+  U: 37.77419937787275
+unexs: [0, 17.441404226647464, 33.863457925721946] r_new: 23 - r: 22 - ptr: 2
+ == comparing unex=37.77419937787275 and unexs[2]=33.863457925721946
+  Extent size did not change -> attribute chanteur is added to intent.
+inexs: [0, 17.441404226647464, 37.77419937787275]
+r:22 - r_new:23
+inexs after pop: [0, 17.441404226647464]
+**END FUNCTION
+  Extent size 5 - intent [3785, 4505, 5230, 7386]
+  U(G): 7.296367366121462
+  U(A): 22.659457378437683
+  U: 29.955824744559145
+unexs: [0, 17.441404226647464] r_new: 23 - r: 21 - ptr: 1
+extents [2691, 5057, 6993, 7467, 8804, 8812] intents [3785, 4505, 5230] r 21 rnew 23
+  Extent size DID change. IsCannonical: True
+r:21 rnew:23
+ ISCANNO comparing unex=29.955824744559145 and unexs[1]==17.441404226647464
+  --> Enter recursion with Intent: ['bassiste' 'million' 'rock' 'temps']...
+NEW ITERATION 
+ --------
+r: 23 - r_new: 24
+|extents[r]|: 5 - intents[r]: ['bassiste' 'million' 'rock' 'temps']
+  Extent size 5 - intent [3785, 4505, 5230, 7386, 9665]
+  U(G): 7.296367366121462
+  U(A): 25.59228326875033
+  U: 32.888650634871794
+unexs: [0, 17.441404226647464, 29.955824744559145] r_new: 24 - r: 23 - ptr: 2
+ == comparing unex=32.888650634871794 and unexs[2]=29.955824744559145
+  Extent size did not change -> attribute succès is added to intent.
+  Extent size 5 - intent [3785, 4505, 5230, 7386, 9665, 10052]
+  U(G): 7.296367366121462
+  U(A): 29.76936642217443
+  U: 37.06573378829589
+unexs: [0, 17.441404226647464, 32.888650634871794] r_new: 24 - r: 23 - ptr: 2
+ == comparing unex=37.06573378829589 and unexs[2]=32.888650634871794
+  Extent size did not change -> attribute vendre is added to intent.
+  Extent size 5 - intent [3785, 4505, 5230, 7386, 9665, 10052, 12663]
+  U(G): 7.296367366121462
+  U(A): 34.042897692502684
+  U: 41.33926505862415
+unexs: [0, 17.441404226647464, 37.06573378829589] r_new: 24 - r: 23 - ptr: 2
+ == comparing unex=41.33926505862415 and unexs[2]=37.06573378829589
+  Extent size did not change -> attribute chanteur is added to intent.
+inexs: [0, 17.441404226647464, 41.33926505862415]
+r:23 - r_new:24
+inexs after pop: [0, 17.441404226647464]
+**END FUNCTION
+  Extent size 5 - intent [3785, 4505, 5230, 7460]
+  U(G): -2.991345013427985
+  U(A): 23.494826676664886
+  U: 20.5034816632369
+unexs: [0, 17.441404226647464] r_new: 24 - r: 21 - ptr: 1
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [3785, 4505, 5230, 7703]
+  U(G): -2.991345013427985
+  U(A): 22.7335506750925
+  U: 19.742205661664514
+unexs: [0, 17.441404226647464] r_new: 24 - r: 21 - ptr: 1
+IsCannonical: False --> do not enter recursion.
+  Extent size 6 - intent [3785, 4505, 5230, 9665]
+  U(G): -3.2146442134102386
+  U(A): 23.910912265376595
+  U: 20.696268051966356
+unexs: [0, 17.441404226647464] r_new: 24 - r: 21 - ptr: 1
+ == comparing unex=20.696268051966356 and unexs[1]=17.441404226647464
+  Extent size did not change -> attribute succès is added to intent.
+  Extent size 6 - intent [3785, 4505, 5230, 9665, 10052]
+  U(G): -3.2146442134102386
+  U(A): 28.351139673116748
+  U: 25.13649545970651
+unexs: [0, 20.696268051966356] r_new: 24 - r: 21 - ptr: 1
+ == comparing unex=25.13649545970651 and unexs[1]=20.696268051966356
+  Extent size did not change -> attribute vendre is added to intent.
+  Extent size 5 - intent [3785, 4505, 5230, 9665, 10052, 11994]
+  U(G): -2.991345013427985
+  U(A): 31.08076384956962
+  U: 28.089418836141636
+unexs: [0, 25.13649545970651] r_new: 24 - r: 21 - ptr: 1
+IsCannonical: False --> do not enter recursion.
+  Extent size 6 - intent [3785, 4505, 5230, 9665, 10052, 12663]
+  U(G): -3.2146442134102386
+  U(A): 32.84717322162831
+  U: 29.63252900821807
+unexs: [0, 25.13649545970651] r_new: 24 - r: 21 - ptr: 1
+ == comparing unex=29.63252900821807 and unexs[1]=25.13649545970651
+  Extent size did not change -> attribute chanteur is added to intent.
+inexs: [0, 29.63252900821807]
+r:21 - r_new:24
+inexs after pop: [0]
+**END FUNCTION
+  Extent size 5 - intent [4067]
+  U(G): -5.735066673312584
+  U(A): 11.359529955322913
+  U: 5.624463282010328
+unexs: [0] r_new: 24 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [4160]
+  U(G): -5.735066673312584
+  U(A): 11.359529955322913
+  U: 5.624463282010328
+unexs: [0] r_new: 24 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [4601]
+  U(G): -6.735066673312584
+  U(A): 11.359529955322913
+  U: 4.624463282010328
+unexs: [0] r_new: 24 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [4623]
+  U(G): -3.991345013427985
+  U(A): 11.359529955322913
+  U: 7.368184941894928
+unexs: [0] r_new: 24 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [4714]
+  U(G): -4.991345013427985
+  U(A): 11.359529955322913
+  U: 6.368184941894928
+unexs: [0] r_new: 24 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [4885]
+  U(G): -0.6694169185406231
+  U(A): 11.359529955322913
+  U: 10.69011303678229
+unexs: [0] r_new: 24 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [5015]
+  U(G): 0.33058308145937687
+  U(A): 11.359529955322913
+  U: 11.69011303678229
+unexs: [0] r_new: 24 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [5068]
+  U(G): -2.991345013427985
+  U(A): 11.359529955322913
+  U: 8.368184941894928
+unexs: [0] r_new: 24 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [5100]
+  U(G): 4.9744392712341
+  U(A): 11.359529955322913
+  U: 16.333969226557013
+unexs: [0] r_new: 24 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [5399]
+  U(G): 4.9744392712341
+  U(A): 11.359529955322913
+  U: 16.333969226557013
+unexs: [0] r_new: 24 - r: 0 - ptr: 0
+extents [   0    1    2 ... 9942 9943 9944] intents [] r 0 rnew 24
+  Extent size DID change. IsCannonical: True
+r:0 rnew:24
+ ISCANNO comparing unex=16.333969226557013 and unexs[0]==0
+  --> Enter recursion with Intent: ['Celsius']...
+NEW ITERATION 
+ --------
+r: 24 - r_new: 25
+|extents[r]|: 5 - intents[r]: ['Celsius']
+  Extent size 5 - intent [5399, 7072]
+  U(G): 4.9744392712341
+  U(A): 15.969415827940097
+  U: 20.943855099174197
+unexs: [0, 16.333969226557013] r_new: 25 - r: 24 - ptr: 1
+ == comparing unex=20.943855099174197 and unexs[1]=16.333969226557013
+  Extent size did not change -> attribute degré is added to intent.
+  Extent size 5 - intent [5399, 7072, 9642]
+  U(G): 4.9744392712341
+  U(A): 20.08841181549683
+  U: 25.06285108673093
+unexs: [0, 20.943855099174197] r_new: 25 - r: 24 - ptr: 1
+ == comparing unex=25.06285108673093 and unexs[1]=20.943855099174197
+  Extent size did not change -> attribute température is added to intent.
+  Extent size 5 - intent [5399, 7072, 9642, 11109]
+  U(G): 4.9744392712341
+  U(A): 29.18457789479666
+  U: 34.159017166030765
+unexs: [0, 25.06285108673093] r_new: 25 - r: 24 - ptr: 1
+ == comparing unex=34.159017166030765 and unexs[1]=25.06285108673093
+  Extent size did not change -> attribute Fahrenheit is added to intent.
+  Extent size 5 - intent [5399, 7072, 9642, 11109, 11769]
+  U(G): 4.9744392712341
+  U(A): 33.393921420306725
+  U: 38.36836069154083
+unexs: [0, 34.159017166030765] r_new: 25 - r: 24 - ptr: 1
+ == comparing unex=38.36836069154083 and unexs[1]=34.159017166030765
+  Extent size did not change -> attribute c is added to intent.
+inexs: [0, 38.36836069154083]
+r:24 - r_new:25
+inexs after pop: [0]
+**END FUNCTION
+  Extent size 5 - intent [5636]
+  U(G): -3.8034981039884066
+  U(A): 11.359529955322913
+  U: 7.556031851334506
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [5829]
+  U(G): 3.9744392712341003
+  U(A): 11.359529955322913
+  U: 15.333969226557013
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [6293]
+  U(G): 7.296367366121462
+  U(A): 11.359529955322913
+  U: 18.655897321444375
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [6376]
+  U(G): 7.296367366121462
+  U(A): 11.359529955322913
+  U: 18.655897321444375
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 7 - intent [6441]
+  U(G): 12.859013115930956
+  U(A): 10.87410312815267
+  U: 23.733116244083625
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [6489]
+  U(G): 7.296367366121462
+  U(A): 11.359529955322913
+  U: 18.655897321444375
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [6660]
+  U(G): 1.6525111763467386
+  U(A): 11.359529955322913
+  U: 13.012041131669651
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 6 - intent [6708]
+  U(G): 0.6922463821982845
+  U(A): 11.096495549489118
+  U: 11.788741931687403
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [6830]
+  U(G): -2.991345013427985
+  U(A): 11.359529955322913
+  U: 8.368184941894928
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [6838]
+  U(G): 4.9744392712341
+  U(A): 11.359529955322913
+  U: 16.333969226557013
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [6936]
+  U(G): -4.735066673312584
+  U(A): 11.359529955322913
+  U: 6.624463282010328
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [7082]
+  U(G): -5.735066673312584
+  U(A): 11.359529955322913
+  U: 5.624463282010328
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [7260]
+  U(G): 7.296367366121462
+  U(A): 11.359529955322913
+  U: 18.655897321444375
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [7302]
+  U(G): 4.9744392712341
+  U(A): 11.359529955322913
+  U: 16.333969226557013
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [7383]
+  U(G): -2.735066673312584
+  U(A): 11.359529955322913
+  U: 8.624463282010328
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 6 - intent [7801]
+  U(G): 11.032096385082905
+  U(A): 11.096495549489118
+  U: 22.12859193457202
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [7954]
+  U(G): -4.991345013427985
+  U(A): 11.359529955322913
+  U: 6.368184941894928
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [8547]
+  U(G): 7.296367366121462
+  U(A): 11.359529955322913
+  U: 18.655897321444375
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 6 - intent [9006]
+  U(G): -7.689331303489155
+  U(A): 11.096495549489118
+  U: 3.4071642459999634
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [9041]
+  U(G): 7.296367366121462
+  U(A): 11.359529955322913
+  U: 18.655897321444375
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [9054]
+  U(G): -0.6694169185406231
+  U(A): 11.359529955322913
+  U: 10.69011303678229
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [9196]
+  U(G): 7.296367366121462
+  U(A): 11.359529955322913
+  U: 18.655897321444375
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [9236]
+  U(G): 0.6525111763467386
+  U(A): 11.359529955322913
+  U: 12.012041131669651
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [9415]
+  U(G): -1.6694169185406231
+  U(A): 11.359529955322913
+  U: 9.69011303678229
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [9826]
+  U(G): -3.991345013427985
+  U(A): 11.359529955322913
+  U: 7.368184941894928
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [9886]
+  U(G): -3.991345013427985
+  U(A): 11.359529955322913
+  U: 7.368184941894928
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 6 - intent [9991]
+  U(G): -9.453756547274878
+  U(A): 11.096495549489118
+  U: 1.64273900221424
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [10067]
+  U(G): -3.735066673312584
+  U(A): 11.359529955322913
+  U: 7.624463282010328
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [10103]
+  U(G): -2.735066673312584
+  U(A): 11.359529955322913
+  U: 8.624463282010328
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [10321]
+  U(G): -6.735066673312584
+  U(A): 11.359529955322913
+  U: 4.624463282010328
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [10371]
+  U(G): 4.9744392712341
+  U(A): 11.359529955322913
+  U: 16.333969226557013
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 6 - intent [10378]
+  U(G): 11.032096385082905
+  U(A): 11.096495549489118
+  U: 22.12859193457202
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [10476]
+  U(G): -3.735066673312584
+  U(A): 11.359529955322913
+  U: 7.624463282010328
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 6 - intent [10826]
+  U(G): -1.951609807576446
+  U(A): 11.096495549489118
+  U: 9.144885741912672
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [10843]
+  U(G): -3.991345013427985
+  U(A): 11.359529955322913
+  U: 7.368184941894928
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 6 - intent [10928]
+  U(G): 11.032096385082905
+  U(A): 11.096495549489118
+  U: 22.12859193457202
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [10987]
+  U(G): -2.991345013427985
+  U(A): 11.359529955322913
+  U: 8.368184941894928
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [11180]
+  U(G): -2.735066673312584
+  U(A): 11.359529955322913
+  U: 8.624463282010328
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 7 - intent [11670]
+  U(G): 8.466695693152197
+  U(A): 10.87410312815267
+  U: 19.340798821304865
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [11773]
+  U(G): 7.296367366121462
+  U(A): 11.359529955322913
+  U: 18.655897321444375
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 7 - intent [11794]
+  U(G): -11.061932013465501
+  U(A): 10.87410312815267
+  U: -0.1878288853128307
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [12297]
+  U(G): -5.735066673312584
+  U(A): 11.359529955322913
+  U: 5.624463282010328
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [12598]
+  U(G): -3.991345013427985
+  U(A): 11.359529955322913
+  U: 7.368184941894928
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [12768]
+  U(G): -4.735066673312584
+  U(A): 11.359529955322913
+  U: 6.624463282010328
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [12826]
+  U(G): 2.6525111763467386
+  U(A): 11.359529955322913
+  U: 14.012041131669651
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+  Extent size 5 - intent [12848]
+  U(G): -4.735066673312584
+  U(A): 11.359529955322913
+  U: 6.624463282010328
+unexs: [0] r_new: 25 - r: 0 - ptr: 0
+IsCannonical: False --> do not enter recursion.
+inexs: [0]
+r:0 - r_new:25
+inexs after pop: []
+**END FUNCTION
+Timer unit: 1e-09 s
+
+Total time: 17.7373 s
+File: /Users/simondelarue/Documents/PhD/Research/Co-Meg/CoMEG/unexpectedness.py
+Function: comeg at line 201
+
+Line #      Hits         Time  Per Hit   % Time  Line Contents
+==============================================================
+   201                                           def comeg(adjacency, context, context_csc, extents, intents, r=0, y=0, min_support=0, max_support=np.inf, beta=0, 
+   202                                                       degs=[], unexs_g=[], unexs_a=[], unexs=[], names_col=[], comp_gen_graph=None) -> List:
+   203                                               """InClose algorithm using Unexpectedness + IsCannonical function. 
+   204                                               
+   205                                               Parameters
+   206                                               ----------
+   207                                               adjacency: sparse.csr_matrix
+   208                                                   Adjacency matrix of the graph
+   209                                               context: sparse.csr_matrix
+   210                                                   Features matrix of the graph. Contains nodes x attributes.
+   211                                               context_csc: sparse.csc_matrix
+   212                                                   Features matrix of the graph in CSC format.
+   213                                               extents: list
+   214                                                   List of extents, i.e sets of nodes.
+   215                                               intents: list
+   216                                                   List of intents, i.e sets of attributes.
+   217                                               r: int (default=0)
+   218                                                   Index of the pattern being filled.
+   219                                               y: int (default=0)
+   220                                                   Index of candidate attribute.
+   221                                               min_support: int (default=0)
+   222                                                   Minimum support value for extent.
+   223                                               max_support: int (default +inf)
+   224                                                   Maximum support value for extent.
+   225                                               beta: int (default=0)
+   226                                                   Minimum support value for intent.
+   227                                               degs, unexs_g, unexs_a, unexs, names_col: list
+   228                                                   Lists for value storage over recursion.
+   229                                               comp_gen_graph: dict (default=None)
+   230                                                   Dictionnary with number of nodes as keys and list of graph generation complexities as values.
+   231                                                   
+   232                                               Returns
+   233                                               -------
+   234                                                   List of tuples where each tuple is an unexpected pattern made of (extent, intent). 
+   235                                               """
+   236                                               global r_new
+   237                                               global ptr
+   238        25       4000.0    160.0      0.0      r_new = r_new + 1
+   239                                               
+   240        25       9000.0    360.0      0.0      print(f'NEW ITERATION \n --------')
+   241        25      16000.0    640.0      0.0      print(f'r: {r} - r_new: {r_new}')
+   242                                               # ------------------------------------------------
+   243        25     576000.0  23040.0      0.0      print(f'|extents[r]|: {len(extents[r])} - intents[r]: {names_col[intents[r]]}')
+   244                                               
+   245    229359   69077000.0    301.2      0.4      for j in np.arange(context.shape[1])[y:]:
+   246    229359   28526000.0    124.4      0.2          try:
+   247    229334   34284000.0    149.5      0.2              extents[r_new] = []
+   248    229334   34462000.0    150.3      0.2              unexs_g[r_new] = 0
+   249    229334   34944000.0    152.4      0.2              unexs_a[r_new] = 0
+   250        25       4000.0    160.0      0.0          except IndexError:
+   251        25      11000.0    440.0      0.0              extents.append([])
+   252        25       4000.0    160.0      0.0              unexs_g.append(0)
+   253        25       6000.0    240.0      0.0              unexs_a.append(0)
+   254                                           
+   255                                                   # Form a new extent by adding extension of attribute j to current concept extent
+   256    229359 9804439000.0  42747.1     55.3          ext_j = set(extension([j], context_csc))
+   257                                                   #ext_j = set(extension([j], context))
+   258    229359 4384614000.0  19116.8     24.7          extents[r_new] = list(sorted(set(extents[r]).intersection(ext_j)))
+   259    229359   43543000.0    189.8      0.2          len_new_extent = len(extents[r_new])
+   260                                                   
+   261    221799   30556000.0    137.8      0.2          if (len_new_extent >= min_support) and (len_new_extent <= max_support):
+   262                                           
+   263                                                       # Verify that length of intention of new extent is greater than a threshold (e.g min_support)
+   264                                                       # In other words, we only enter the loop if the new extent still has "space" to welcome enough new attributes
+   265                                                       # Using this, we can trim all patterns with not enough attributes from the recursion tree
+   266      7560  416939000.0  55150.7      2.4              size_intention = len(intention(extents[r_new], context))
+   267      7351    1754000.0    238.6      0.0              if size_intention >= min_support:
+   268                                                               
+   269       209     497000.0   2378.0      0.0                  new_intent = list(sorted(set(intents[r]).union(set([j]))))
+   270                                                           
+   271                                                           # Compute Unexpectedness on pattern (i.e on graph and attributes)
+   272                                                           # ------------------------------------------------------------------------------------------------------------
+   273       209    1741000.0   8330.1      0.0                  print(f'  Extent size {len(extents[r_new])} - intent {new_intent}')
+   274       209      38000.0    181.8      0.0                  size = len(new_intent)
+   275       209  107685000.0 515239.2      0.6                  unex_g = graph_unexpectedness(adjacency[extents[r_new], :][:, extents[r_new]], comp_gen_graph)
+   276       209      70000.0    334.9      0.0                  unexs_g[r_new] = unex_g
+   277                                                           # Attributes unexpectedness
+   278       209    1947000.0   9315.8      0.0                  unex_a = attr_unexpectedness(context, new_intent, degs)
+   279       209      42000.0    201.0      0.0                  unexs_a[r_new] = unex_a
+   280                                                           # Total unexpectedness
+   281       209      43000.0    205.7      0.0                  unex = unex_g + unex_a
+   282                                                           #unexs[r_new] = unex
+   283       209     795000.0   3803.8      0.0                  print(f'  U(G): {unex_g}')
+   284       209     367000.0   1756.0      0.0                  print(f'  U(A): {unex_a}')
+   285       209     177000.0    846.9      0.0                  print(f'  U: {unex}')
+   286       209     756000.0   3617.2      0.0                  print(f'unexs: {unexs} r_new: {r_new} - r: {r} - ptr: {ptr}')
+   287                                                           # ------------------------------------------------------------------------------------------------------------
+   288                                                           
+   289       110      55000.0    500.0      0.0                  if len_new_extent - len(extents[r]) == 0:
+   290       110     235000.0   2136.4      0.0                      print(f' == comparing unex={unex} and unexs[{ptr}]={unexs[ptr]}')
+   291       110      43000.0    390.9      0.0                      if unex - unexs[ptr] >= 0:
+   292       110     374000.0   3400.0      0.0                          print(f'  Extent size did not change -> attribute {names_col[j]} is added to intent.')
+   293       110      31000.0    281.8      0.0                          intents[r] = new_intent
+   294       110      35000.0    318.2      0.0                          unexs[-1] = unex
+   295                                                               else:
+   296                                                                   print(f'STOP rec, unexpectedness difference is {unex - unexs[ptr]}')
+   297                                                                   print(f'Attribute {names_col[j]} ({j}) does not add any unexpectedness to pattern')
+   298                                                                   #extents[r_new].pop(-1) -> no need to change the extent since we are in the block where it did not move by adding attribute
+   299                                                                   #intents[r_new].pop(-1) -> at this stage, we only use new-intent, so no need to remove anything from intents parameter
+   300                                                                   #raise Exception('end')
+   301                                                                   break
+   302                                                               
+   303                                                           else:
+   304        99 2735595000.0 27632272.7     15.4                      is_canno = is_cannonical(context, extents, intents, r, j - 1)
+   305        73      14000.0    191.8      0.0                      if is_canno:
+   306        26    1169000.0  44961.5      0.0                          print(f'extents {extents[r]} intents {intents[r]} r {r} rnew {r_new}')
+   307        26      38000.0   1461.5      0.0                          print(f'  Extent size DID change. IsCannonical: {is_canno}')
+   308        26       2000.0     76.9      0.0                          try:
+   309        24      32000.0   1333.3      0.0                              intents[r_new] = []
+   310        24       6000.0    250.0      0.0                          except IndexError:
+   311        24      16000.0    666.7      0.0                              intents.append([])
+   312                                           
+   313                                                                   #intents[r_new] = new_intent 
+   314                                                                   #len_new_intent = len(intents[r_new])
+   315                                           
+   316        26      19000.0    730.8      0.0                          print(f'r:{r} rnew:{r_new}')
+   317        26      77000.0   2961.5      0.0                          print(f' ISCANNO comparing unex={unex} and unexs[{ptr}]=={unexs[ptr]}')
+   318        24      18000.0    750.0      0.0                          if unex - unexs[ptr] >= 0 or r == 0:   
+   319                                                                       
+   320        24       3000.0    125.0      0.0                              intents[r_new] = new_intent 
+   321        24       7000.0    291.7      0.0                              len_new_intent = len(intents[r_new])
+   322                                           
+   323        24       5000.0    208.3      0.0                              unexs.append(unex)
+   324        24      11000.0    458.3      0.0                              ptr += 1
+   325        24    1037000.0  43208.3      0.0                              print(f'  --> Enter recursion with Intent: {names_col[intents[r_new]]}...')
+   326        24      20000.0    833.3      0.0                              comeg(adjacency, context, context_csc, extents, intents, r=r_new, y=j+1, min_support=min_support, 
+   327        24       5000.0    208.3      0.0                                          max_support=max_support, beta=beta, degs=degs, unexs_g=unexs_g, 
+   328        24       1000.0     41.7      0.0                                          unexs_a=unexs_a, unexs=unexs, names_col=names_col, comp_gen_graph=comp_gen_graph)
+   329                                                                   else:
+   330         2       1000.0    500.0      0.0                              print(f'IsCANNO but no U improvement')
+   331         2       3000.0   1500.0      0.0                              break
+   332                                                               
+   333                                                               else:
+   334        73     220000.0   3013.7      0.0                          print(f'IsCannonical: False --> do not enter recursion.')
+   335                                                               
+   336        25     106000.0   4240.0      0.0      print(f'inexs: {unexs}')        
+   337        25      16000.0    640.0      0.0      print(f'r:{r} - r_new:{r_new}')
+   338        25      26000.0   1040.0      0.0      unexs.pop(-1)
+   339        25      18000.0    720.0      0.0      ptr -= 1
+   340        25      21000.0    840.0      0.0      print(f'inexs after pop: {unexs}')        
+   341        25       6000.0    240.0      0.0      print(f'**END FUNCTION')
+   342                                               #print(f'**concept: ({[*zip(extents, intents)]})')
+   343                                               
+   344        25      73000.0   2920.0      0.0      return [*zip(extents, intents)]
+
