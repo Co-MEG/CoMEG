@@ -1,5 +1,6 @@
 from collections import defaultdict, Counter
 from contextlib import redirect_stdout
+from typing import List
 import numpy as np
 import pickle
 from scipy import sparse, special
@@ -10,7 +11,17 @@ from sknetwork.utils import get_degrees, get_neighbors
 
 from line_profiler import LineProfiler
 
-def mdl_graph(adjacency):
+def mdl_graph(adjacency) -> float:
+    """Minimum description length for graph structure.
+    
+    Parameters
+    ----------
+    adjacency: sparse.csr_matric
+        Adjacency matrix of the graph
+        
+    Outputs
+    -------
+        Minimum description length of graph structure."""
     n = adjacency.shape[0]
     m = adjacency.nnz
 
@@ -51,11 +62,23 @@ def is_cannonical(context, extents, intents, r, y):
     
     return True
 
-def intention(nodes, context):
-    intent = get_neighbors(context, node=nodes[0])
+def intention(nodes, context) -> np.ndarray:
+    """Intention of an array of nodes.
+    
+    Parameters
+    ----------
+    nodes: np.ndarray
+        Array of node indexes
+    context: sparse.csr_matrix
+        Features matrix of the graph. Contains nodes x attributes.
+        
+    Outputs
+    -------
+        Array of attributes shared by all nodes."""
     if len(nodes) == 0:
         return np.arange(0, context.shape[1])
-    elif len(nodes) == 1:
+    intent = get_neighbors(context, node=nodes[0])
+    if len(nodes) == 1:
         return intent
     else:
         intent = set(intent)
@@ -65,7 +88,19 @@ def intention(nodes, context):
                 break
         return np.array(list(intent))
     
-def extension_csc(attributes, context_csc):
+def extension_csc(attributes, context_csc) -> np.ndarray:
+    """Extension of an array of attributes, using CSC format.
+    
+    Parameters
+    ----------
+    attributes: np.ndarray
+        Array of attribute indexes
+    context_csc: sparse.csc_matrix
+        Features matrix of the graph in csc format. Contains nodes x attributes.
+        
+    Outputs
+    -------
+        Array of nodes sharing all attributes."""
     if len(attributes) == 0:
         return np.arange(0, context_csc.shape[0])
     else:
@@ -78,7 +113,18 @@ def extension_csc(attributes, context_csc):
         return np.array(list(res))
 
 def extension(attributes, context):
-    """Slower than extension_csc function, because of use of transpose?"""
+    """Extension of an array of attributes.
+    
+    Parameters
+    ----------
+    attributes: np.ndarray
+        Array of attribute indexes
+    context: sparse.csr_matrix
+        Features matrix of the graph. Contains nodes x attributes.
+        
+    Outputs
+    -------
+        Array of nodes sharing all attributes."""
     ext = get_neighbors(context, node=attributes[0], transpose=True)
     if len(attributes) == 1:
         return ext
@@ -90,13 +136,39 @@ def extension(attributes, context):
                 break
         return np.array(list(ext))
 
-def graph_unexpectedness(adjacency, size, gen_complexities):
+def graph_unexpectedness(adjacency, gen_complexities) -> float:
+    """Unexpectedness of a graph structure.
+    
+    Parameters
+    ----------
+    adjacency: sparse.csr_matrix
+        Adjacency matrix of the graph.
+    gen_complexities: dict
+         Dictionnary with number of nodes as keys and list of graph generation complexities as values.
+         
+    Outputs
+    -------
+        Unexpectedness of a graph structure as a float value. """
     n = adjacency.shape[0]
     complexity_desc_g = mdl_graph(adjacency.astype(bool) + sparse.identity(n).astype(bool))
     complexity_gen_g = np.mean(gen_complexities.get(n))
     return complexity_gen_g - complexity_desc_g
 
-def attr_unexpectedness(biadjacency, attributes, degrees):
+def attr_unexpectedness(biadjacency, attributes, degrees) -> float:
+    """Unexpectedness of a list of attributes.
+    
+    Parameters
+    ----------
+    biadjacency: sparse.csr_matrix
+        Features matrix of the graph. Contains nodes x attributes.
+    attributes: list
+        List of attribute indexes.
+    degrees: np.ndarray
+        Array of attribute degrees in biadjacency
+         
+    Outputs
+    -------
+        Unexpectedness of list of attributes as a float value. """
     complexity_gen_a = np.log2(special.comb(biadjacency.shape[1], len(attributes)))
     complexity_desc_a = 0
     for a in attributes:
@@ -108,7 +180,17 @@ def pattern_unexpectedness(adjacency, biadjacency, gen_complexities, attributes,
     u_a = attr_unexpectedness(biadjacency, attributes, degrees)
     return u_g + u_a
 
-def init_inclose(context):
+def init_comeg(context) -> tuple:
+    """Initialization for comeg algorithm.
+    
+    Parameters
+    ---------
+    context: sparse.csr_matrix
+        Features matrix of the graph. Contains nodes x attributes.
+        
+    Returns
+    -------
+        Tuple of two lists, containing all nodes in graph and empty list of attributes. """
     extents, intents = [], []
     extents_init = np.arange(context.shape[0])
     intents_init = []
@@ -117,9 +199,40 @@ def init_inclose(context):
     return extents, intents
 
 def comeg(adjacency, context, context_csc, extents, intents, r=0, y=0, min_support=0, max_support=np.inf, beta=0, 
-            degs=[], unexs_g=[], unexs_a=[], unexs=[], names_col=[], comp_gen_graph=None):
-    """InClose algorithm using Unexpectedness + IsCannonical function. """
+            degs=[], unexs_g=[], unexs_a=[], unexs=[], names_col=[], comp_gen_graph=None) -> List:
+    """InClose algorithm using Unexpectedness + IsCannonical function. 
     
+    Parameters
+    ----------
+    adjacency: sparse.csr_matrix
+        Adjacency matrix of the graph
+    context: sparse.csr_matrix
+        Features matrix of the graph. Contains nodes x attributes.
+    context_csc: sparse.csc_matrix
+        Features matrix of the graph in CSC format.
+    extents: list
+        List of extents, i.e sets of nodes.
+    intents: list
+        List of intents, i.e sets of attributes.
+    r: int (default=0)
+        Index of the pattern being filled.
+    y: int (default=0)
+        Index of candidate attribute.
+    min_support: int (default=0)
+        Minimum support value for extent.
+    max_support: int (default +inf)
+        Maximum support value for extent.
+    beta: int (default=0)
+        Minimum support value for intent.
+    degs, unexs_g, unexs_a, unexs, names_col: list
+        Lists for value storage over recursion.
+    comp_gen_graph: dict (default=None)
+        Dictionnary with number of nodes as keys and list of graph generation complexities as values.
+        
+    Returns
+    -------
+        List of tuples where each tuple is an unexpected pattern made of (extent, intent). 
+    """
     global r_new
     global ptr
     r_new = r_new + 1
@@ -159,7 +272,7 @@ def comeg(adjacency, context, context_csc, extents, intents, r=0, y=0, min_suppo
                 # ------------------------------------------------------------------------------------------------------------
                 print(f'  Extent size {len(extents[r_new])} - intent {new_intent}')
                 size = len(new_intent)
-                unex_g = graph_unexpectedness(adjacency[extents[r_new], :][:, extents[r_new]], size, comp_gen_graph)
+                unex_g = graph_unexpectedness(adjacency[extents[r_new], :][:, extents[r_new]], comp_gen_graph)
                 unexs_g[r_new] = unex_g
                 # Attributes unexpectedness
                 unex_a = attr_unexpectedness(context, new_intent, degs)
@@ -231,9 +344,30 @@ def comeg(adjacency, context, context_csc, extents, intents, r=0, y=0, min_suppo
     return [*zip(extents, intents)]
 
 
-def run_comeg(adjacency, biadjacency, words, complexity_gen_graphs, s, beta, outfile):
+def run_comeg(adjacency, biadjacency, words, complexity_gen_graphs, order_attributes, s, beta, outfile):
+    """Run concept mining algorithm.
+    
+    Parameters
+    ----------
+    adjacency: sparse.csr_matrix
+        Adjacency matrix of the graph.
+    biadjacency: sparse.csr_matrix
+        Features matrix of the graph. Contains nodes x attributes.
+    words: np.ndarray
+        Features names.
+    complexity_gen_graph: dict
+        Dictionnary with number of nodes as keys and list of graph generation complexities as values.
+    order_attributes: bool
+        If True, order attributes according to their ascending degree.
+    s: int
+        Minimum extent support.
+    beta: int
+        Minimum intent support.
+    outfile: str
+        Output filename.
+    """
     # Initialization
-    extents, intents = init_inclose(biadjacency)
+    extents, intents = init_comeg(biadjacency)
     degs = get_degrees(biadjacency, transpose=True)
     global r_new
     r_new = 0
@@ -242,7 +376,7 @@ def run_comeg(adjacency, biadjacency, words, complexity_gen_graphs, s, beta, out
 
     # Degree of attribute = # articles in which it appears
     freq_attribute = get_degrees(biadjacency.astype(bool), transpose=True)
-    index = np.flatnonzero((freq_attribute <= 1000) & (freq_attribute >= 5))
+    index = np.flatnonzero((freq_attribute <= 1000) & (freq_attribute >= s))
 
     # Filter data with index
     biadjacency = biadjacency[:, index]
@@ -251,7 +385,10 @@ def run_comeg(adjacency, biadjacency, words, complexity_gen_graphs, s, beta, out
 
     # Order attributes according to their ascending degree
     # This allows to add first attributes that will generate bigger subgraphs
-    sort_index = np.argsort(freq_attribute)
+    if order_attributes:
+        sort_index = np.argsort(freq_attribute)
+    else:
+        sort_index = np.arange(0, len(freq_attribute))
     sorted_degs = freq_attribute[sort_index]
     filt_biadjacency = biadjacency[:, sort_index]
     sorted_names_col = words[sort_index]
@@ -261,7 +398,7 @@ def run_comeg(adjacency, biadjacency, words, complexity_gen_graphs, s, beta, out
     print(f'Context: {filt_biadjacency.shape}')
 
     # Algorithm
-    with open('log_{outfile}', 'w') as f:
+    with open(f'log_{outfile}_order{order_attributes}', 'w') as f:
         with redirect_stdout(f):
             print('starts profiling...')
             lp = LineProfiler()
@@ -275,7 +412,7 @@ def run_comeg(adjacency, biadjacency, words, complexity_gen_graphs, s, beta, out
     res = [*zip(extents, intents)]
 
     # Save result
-    with open("result_{outfile}.bin", "wb") as output:
+    with open(f"result_{outfile}_order{order_attributes}.bin", "wb") as output:
         pickle.dump(res, output)
 
     print(len(res))
@@ -284,13 +421,22 @@ def run_comeg(adjacency, biadjacency, words, complexity_gen_graphs, s, beta, out
 # Run experiments
 # ******************************************************** #
 
+# -------------------------------------------------------
+# Parameters
 datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
-betas = [0, 5, 10, 15, 20]
-ss = [0, 5, 10, 15, 20]
+
+betas = [20, 15, 10, 5]
+ss = [20, 15, 10, 5]
+
+order_attributes = False
+# -------------------------------------------------------
 
 for dataset in datasets:
+    print(f'**** {dataset}')
     for beta in betas:
+        print(f'== {beta}')
         for s in ss:
+            print(f'- {s}')
 
             outfile = dataset + '_' + str(beta) + '_' + str(s)
 
@@ -319,4 +465,4 @@ for dataset in datasets:
                     if mdl != np.inf and len(sel_nodes) > 0:
                         complexity_gen_graphs[len(sel_nodes)].append(mdl)
 
-            run_comeg(adjacency, biadjacency, words, complexity_gen_graphs, s, beta, outfile)
+            run_comeg(adjacency, biadjacency, words, complexity_gen_graphs, order_attributes, s, beta, outfile)
