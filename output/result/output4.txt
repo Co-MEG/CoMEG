@@ -1,0 +1,85 @@
+Loaded data from '/Users/simondelarue/Documents/PhD/Research/Co-Meg/CoMEG/data/goodreads_comics/preproc/goodreads_comics'.
+Load result values...
+Predicted edge: ('7b3befb2bef070b8c04e9865270fd0c1', '23356133') (random index: 295218)
+Title: Amazing Spider-Man #7
+Description: Peer over the EDGE OF SPIDER-VERSE! * Spidey teams up with Ms. Marvel in a high-flying (stepping in Kamala's case) adventure! * Who is Spider-UK and what does he have to do with SPIDER-VERSE?
+(19, 18) 104
+# nodes in subgraph: 19, 18
+# edges in subgraph: 104
+# of edge attributes: 0
+# of node attributes right: 18
+Edge exists in graph: True
+Formal context dimensions: (17, 805)
+Filtering context using tf-idf...
+Filtered context using tf-idf: (17, 100)
+Attributes: ['SPIDER-VERSE' 'son' 'survivor' 'Jewish' 'cartoonist' 'come' 'terms'
+ 'father' 'tries' 'adventure' 'teams' 'case' 'Spidey' 'Spider-UK' 'Peer'
+ 'EDGE' 'high-flying' 'stepping' 'woods' 'Joker' 'very' 'Maus' 'novels'
+ 'Widow' 'breaking' 'Gordon' 'man' 'Europe' 'Hitler' 'itself' 'have'
+ 'Kamala' 'strange' 'gifts' 'Ms.' 'stories' 'creator' 'eerie' 'macabre'
+ 'follow' 'imagination' 'journeys' 'Most' 'Five' 'walk' 'Emily' 'These'
+ "'It" 'spine-tingling' 'see' 'Come' 'award-winning' 'chilling' 'came'
+ 'awaits' 'abyss' 'spring' 'Carroll' 'Who' 'soldiers' 'his' 'Black' 'may'
+ 'test' 'Nimona' 'web' 'Lord' 'Noelle' 'Blackheart' 'immense' 'ordinary'
+ 'too' 'legacy' 'become' 'ready' 'suddenly' 'weight' 'wield' 'handle'
+ 'Saga1-6' 'Sagais' 'like' 'bestselling' 'sexy' 'never-ending' 'drama'
+ 'sides' 'Fantasy' 'worlds' 'risk' 'bring' 'Brian' 'never' 'find' 'two'
+ 'universe' 'opposite' 'wed' 'galactic' 'old']
+Elapsed time using in-close: 0.04238009452819824
+Number of concepts in lattice: 12
+ext: 1.000 - int: 0.000 - sum: 1.000 - [list(['15195', '15196', '15704307', '18659623', '19351043', '19539419', '20898019', '21455124', '22554204', '23017947', '23356133', '23754', '29772863', '472331', '5805', '9516', '96358'])
+ list([])]
+ext: 0.368 - int: 0.345 - sum: 0.713 - [list(['15195', '15196']) list(['Europe', 'Hitler', 'his'])]
+ext: 0.717 - int: 0.106 - sum: 0.823 - [list(['15196', '5805']) list(['itself'])]
+ext: 0.717 - int: 0.101 - sum: 0.817 - [list(['22554204', '23356133']) list(['have'])]
+ext: 0.717 - int: 0.201 - sum: 0.918 - [list(['20898019', '21455124', '23017947', '23356133']) list(['Kamala'])]
+ext: 0.026 - int: 0.868 - sum: 0.894 - [list(['20898019', '21455124'])
+ list(['Kamala', 'become', 'gifts', 'immense', 'legacy', 'ordinary', 'ready', 'suddenly', 'too', 'weight', 'wield'])]
+ext: 0.513 - int: 0.294 - sum: 0.807 - [list(['20898019', '23017947', '23356133']) list(['Kamala', 'Ms.'])]
+ext: 0.368 - int: 0.318 - sum: 0.685 - [list(['23017947', '23356133']) list(['Kamala', 'Ms.', 'Who'])]
+ext: 0.513 - int: 0.183 - sum: 0.696 - [list(['21455124', '23017947']) list(['Kamala', 'handle'])]
+ext: 0.717 - int: 0.099 - sum: 0.815 - [list(['18659623', '21455124']) list(['strange'])]
+ext: 0.717 - int: 0.089 - sum: 0.806 - [list(['15704307', '29772863']) list(['soldiers'])]
+ext: 0.717 - int: 0.219 - sum: 0.936 - [list(['15195', '15196', '19351043', '23754', '96358']) list(['his'])]
+
+ ****** All concepts using TFIDF: 
+(['15195', '15196', '15704307', '18659623', '19351043', '19539419', '20898019', '21455124', '22554204', '23017947', '23356133', '23754', '29772863', '472331', '5805', '9516', '96358'], [])
+(['15195', '15196'], ['Europe', 'Hitler', 'his'])
+(['15704307', '29772863'], ['soldiers'])
+(['15195', '15196', '19351043', '23754', '96358'], ['his'])
+(['15196', '5805'], ['itself'])
+(['22554204', '23356133'], ['have'])
+(['20898019', '21455124', '23017947', '23356133'], ['Kamala'])
+(['20898019', '21455124'], ['Kamala', 'become', 'gifts', 'immense', 'legacy', 'ordinary', 'ready', 'suddenly', 'too', 'weight', 'wield'])
+(['20898019', '23017947', '23356133'], ['Kamala', 'Ms.'])
+(['23017947', '23356133'], ['Kamala', 'Ms.', 'Who'])
+(['21455124', '23017947'], ['Kamala', 'handle'])
+(['18659623', '21455124'], ['strange'])
+ext: 1.000 - int: 0.000 - sum: 1.000 - [list(['15195', '15196', '15704307', '18659623', '19351043', '19539419', '20898019', '21455124', '22554204', '23017947', '23356133', '23754', '29772863', '472331', '5805', '9516', '96358'])
+ list([])]
+ext: 0.368 - int: 0.345 - sum: 0.713 - [list(['15195', '15196']) list(['Europe', 'Hitler', 'his'])]
+ext: 0.717 - int: 0.106 - sum: 0.823 - [list(['15196', '5805']) list(['itself'])]
+ext: 0.717 - int: 0.101 - sum: 0.817 - [list(['22554204', '23356133']) list(['have'])]
+ext: 0.717 - int: 0.201 - sum: 0.918 - [list(['20898019', '21455124', '23017947', '23356133']) list(['Kamala'])]
+ext: 0.026 - int: 0.868 - sum: 0.894 - [list(['20898019', '21455124'])
+ list(['Kamala', 'become', 'gifts', 'immense', 'legacy', 'ordinary', 'ready', 'suddenly', 'too', 'weight', 'wield'])]
+ext: 0.513 - int: 0.294 - sum: 0.807 - [list(['20898019', '23017947', '23356133']) list(['Kamala', 'Ms.'])]
+ext: 0.368 - int: 0.318 - sum: 0.685 - [list(['23017947', '23356133']) list(['Kamala', 'Ms.', 'Who'])]
+ext: 0.513 - int: 0.183 - sum: 0.696 - [list(['21455124', '23017947']) list(['Kamala', 'handle'])]
+ext: 0.717 - int: 0.099 - sum: 0.815 - [list(['18659623', '21455124']) list(['strange'])]
+ext: 0.717 - int: 0.089 - sum: 0.806 - [list(['15704307', '29772863']) list(['soldiers'])]
+ext: 0.717 - int: 0.219 - sum: 0.936 - [list(['15195', '15196', '19351043', '23754', '96358']) list(['his'])]
+
+ ****** Selected concepts using TFIDF: 
+(['15195', '15196', '19351043', '23754', '96358'], ['his'])
+(['15196', '5805'], ['itself'])
+(['22554204', '23356133'], ['have'])
+(['20898019', '21455124', '23017947', '23356133'], ['Kamala'])
+(['20898019', '21455124'], ['Kamala', 'become', 'gifts', 'immense', 'legacy', 'ordinary', 'ready', 'suddenly', 'too', 'weight', 'wield'])
+(['20898019', '23017947', '23356133'], ['Kamala', 'Ms.'])
+(['18659623', '21455124'], ['strange'])
+
+ ****** Selected concepts using TFIDF with pred book: 
+(['22554204', '23356133'], ['have'])
+(['20898019', '21455124', '23017947', '23356133'], ['Kamala'])
+(['20898019', '23017947', '23356133'], ['Kamala', 'Ms.'])

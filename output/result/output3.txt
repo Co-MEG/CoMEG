@@ -1,0 +1,56 @@
+Loaded data from '/Users/simondelarue/Documents/PhD/Research/Co-Meg/CoMEG/data/goodreads_comics/preproc/goodreads_comics'.
+Load result values...
+Predicted edge: ('7b3befb2bef070b8c04e9865270fd0c1', '23356133') (random index: 115025)
+Title: Amazing Spider-Man #7
+Description: Peer over the EDGE OF SPIDER-VERSE! * Spidey teams up with Ms. Marvel in a high-flying (stepping in Kamala's case) adventure! * Who is Spider-UK and what does he have to do with SPIDER-VERSE?
+(19, 18) 104
+# nodes in subgraph: 19, 18
+# edges in subgraph: 104
+# of edge attributes: 0
+# of node attributes right: 18
+Edge exists in graph: True
+Formal context dimensions: (17, 805)
+Filtered context using tf-idf: (17, 50)
+['SPIDER-VERSE' 'son' 'survivor' 'Jewish' 'cartoonist' 'come' 'terms'
+ 'father' 'tries' 'adventure' 'teams' 'case' 'Spidey' 'Spider-UK' 'Peer'
+ 'EDGE' 'high-flying' 'stepping' 'woods' 'Joker' 'very' 'Maus' 'novels'
+ 'Widow' 'breaking' 'Gordon' 'man' 'Europe' 'Hitler' 'itself' 'have'
+ 'Kamala' 'strange' 'gifts' 'Ms.' 'stories' 'creator' 'eerie' 'macabre'
+ 'follow' 'imagination' 'journeys' 'Most' 'Five' 'walk' 'Emily' 'These'
+ "'It" 'spine-tingling' 'see']
+Elapsed time using in-close: 0.01142120361328125
+Number of concepts in lattice: 8
+ext:1.000 int:0.000 mutual inf: 0.000 - ['15195', '15196', '15704307', '18659623', '19351043', '19539419', '20898019', '21455124', '22554204', '23017947', '23356133', '23754', '29772863', '472331', '5805', '9516', '96358'], []
+ext:0.607 int:1.183 mutual inf: 0.591 - ['15195', '15196'], ['Europe', 'Hitler']
+ext:0.779 int:1.892 mutual inf: 0.946 - ['15196', '5805'], ['itself']
+ext:0.779 int:1.859 mutual inf: 0.929 - ['22554204', '23356133'], ['have']
+ext:0.779 int:1.740 mutual inf: 0.435 - ['20898019', '21455124', '23017947', '23356133'], ['Kamala']
+ext:0.607 int:1.785 mutual inf: 0.893 - ['20898019', '21455124'], ['Kamala', 'gifts']
+ext:0.607 int:2.477 mutual inf: 0.826 - ['20898019', '23017947', '23356133'], ['Kamala', 'Ms.']
+ext:0.779 int:0.530 mutual inf: 0.265 - ['18659623', '21455124'], ['strange']
+
+ ****** Selected concepts using TFIDF: 
+(['15195', '15196'], ['Europe', 'Hitler'])
+(['15196', '5805'], ['itself'])
+(['22554204', '23356133'], ['have'])
+(['20898019', '21455124', '23017947', '23356133'], ['Kamala'])
+(['20898019', '21455124'], ['Kamala', 'gifts'])
+(['20898019', '23017947', '23356133'], ['Kamala', 'Ms.'])
+(['18659623', '21455124'], ['strange'])
+
+ ****** Selected concepts using TFIDF with pred book: 
+(['22554204', '23356133'], ['have'])
+(['20898019', '21455124', '23017947', '23356133'], ['Kamala'])
+(['20898019', '23017947', '23356133'], ['Kamala', 'Ms.'])
+    alpha  obj_value
+0     0.0   0.160000
+1     0.1   0.297191
+2     0.2   0.434383
+3     0.3   0.571574
+4     0.4   0.710950
+5     0.5   0.853688
+6     0.6   0.996426
+7     0.7   1.139163
+8     0.8   1.281901
+9     0.9   1.424638
+10    1.0   1.567376
