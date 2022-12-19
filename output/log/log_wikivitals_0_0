@@ -1,0 +1,20 @@
+starts profiling...
+NEW ITERATION 
+ --------
+r: 0 - r_new: 1
+|extents[r]|: 10011 - intents[r]: []
+  Extent size 2 - intent [0]
+  U(G): 0.2460584659972005
+  U(A): 14.201166710575453
+  U: 14.447225176572655
+unexs: [0] r_new: 1 - r: 0 - ptr: 0
+extents [    0     1     2 ... 10008 10009 10010] intents [] r 0 rnew 1
+  Extent size DID change. IsCannonical: True
+r:0 rnew:1
+ ISCANNO comparing unex=14.447225176572655 and unexs[0]==0
+  --> Enter recursion with Intent: ['Wyler']...
+NEW ITERATION 
+ --------
+r: 1 - r_new: 2
+|extents[r]|: 2 - intents[r]: ['Wyler']
+  Extent size 0 - intent [0, 1]
