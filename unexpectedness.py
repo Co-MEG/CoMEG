@@ -260,11 +260,11 @@ def comeg(adjacency, context, context_csc, extents, intents, r=0, y=0, min_suppo
         
         if (len_new_extent >= min_support) and (len_new_extent <= max_support):
 
-            # Verify that length of intention of new extent is greater than a threshold (e.g min_support)
+            # Verify that length of intention of new extent is greater than a threshold (e.g beta)
             # In other words, we only enter the loop if the new extent still has "space" to welcome enough new attributes
             # Using this, we can trim all patterns with not enough attributes from the recursion tree
             size_intention = len(intention(extents[r_new], context))
-            if size_intention >= min_support:
+            if size_intention >= beta:
                     
                 new_intent = list(sorted(set(intents[r]).union(set([j]))))
                 
@@ -398,13 +398,13 @@ def run_comeg(adjacency, biadjacency, words, complexity_gen_graphs, order_attrib
     print(f'Context: {filt_biadjacency.shape}')
 
     # Algorithm
-    with open(f'log_{outfile}_order{order_attributes}', 'w') as f:
+    with open(f'log_{outfile}', 'w') as f:
         with redirect_stdout(f):
             print('starts profiling...')
             lp = LineProfiler()
             lp_wrapper = lp(comeg)
             lp_wrapper(adjacency, filt_biadjacency, filt_biadjacency_csc, extents, intents, r=0, y=0, 
-                                    min_support=s, max_support=15, beta=beta,
+                                    min_support=s, max_support=100, beta=beta,
                                     degs=sorted_degs, unexs_g=[0], unexs_a=[0], unexs=[0], names_col=sorted_names_col,
                                     comp_gen_graph=complexity_gen_graphs)
             lp.print_stats()
@@ -412,7 +412,7 @@ def run_comeg(adjacency, biadjacency, words, complexity_gen_graphs, order_attrib
     res = [*zip(extents, intents)]
 
     # Save result
-    with open(f"result_{outfile}_order{order_attributes}.bin", "wb") as output:
+    with open(f"result_{outfile}.bin", "wb") as output:
         pickle.dump(res, output)
 
     print(len(res))
@@ -425,10 +425,10 @@ def run_comeg(adjacency, biadjacency, words, complexity_gen_graphs, order_attrib
 # Parameters
 datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
 
-betas = [20, 15, 10, 5]
-ss = [20, 15, 10, 5]
+betas = [8, 7, 6, 5]
+ss = [8, 7, 6, 5]
 
-order_attributes = False
+order_attributes = [False, True]
 # -------------------------------------------------------
 
 for dataset in datasets:
@@ -437,32 +437,34 @@ for dataset in datasets:
         print(f'== {beta}')
         for s in ss:
             print(f'- {s}')
+            for order_attr in order_attributes:
+                print(f'---- {order_attr}')
 
-            outfile = dataset + '_' + str(beta) + '_' + str(s)
+                outfile = f'{dataset}_{str(beta)}_{str(s)}_order{str(order_attr)}'
 
-            graph = load_netset(dataset)
-            adjacency = graph.adjacency
-            biadjacency = graph.biadjacency
-            names = graph.names
-            words = graph.names_col
-            labels = graph.labels
+                graph = load_netset(dataset)
+                adjacency = graph.adjacency
+                biadjacency = graph.biadjacency
+                names = graph.names
+                words = graph.names_col
+                labels = graph.labels
 
-            print(f'Generation complexities for graph structure...')
-            # Graph structure generation complexity
-            attrs_degrees = get_degrees(biadjacency, transpose=True) / sum(get_degrees(biadjacency, transpose=True))
-            attrs_indexes = np.arange(0, biadjacency.shape[1])
-            complexity_gen_graphs = defaultdict(list)
-            biadjacency_csc = biadjacency.tocsc()
+                print(f'Generation complexities for graph structure...')
+                # Graph structure generation complexity
+                attrs_degrees = get_degrees(biadjacency, transpose=True) / sum(get_degrees(biadjacency, transpose=True))
+                attrs_indexes = np.arange(0, biadjacency.shape[1])
+                complexity_gen_graphs = defaultdict(list)
+                biadjacency_csc = biadjacency.tocsc()
 
-            for i in tqdm(range(300)):
-                for num_a in range(15):
-                    sel_attrs = np.random.choice(attrs_indexes, size=num_a, replace=False, p=attrs_degrees)
-                    sel_nodes = extension_csc(sel_attrs, biadjacency_csc)
-                    #sel_nodes = extension(sel_attrs, biadjacency)
-                    sel_g = adjacency[sel_nodes, :][:, sel_nodes].astype(bool) + sparse.identity(len(sel_nodes)).astype(bool)
-                    mdl = mdl_graph(sel_g)
-                    #mdl = np.log2(len(sel_nodes)) # mdl is just the complexity of the number of nodes
-                    if mdl != np.inf and len(sel_nodes) > 0:
-                        complexity_gen_graphs[len(sel_nodes)].append(mdl)
+                for i in tqdm(range(300)):
+                    for num_a in range(15):
+                        sel_attrs = np.random.choice(attrs_indexes, size=num_a, replace=False, p=attrs_degrees)
+                        sel_nodes = extension_csc(sel_attrs, biadjacency_csc)
+                        #sel_nodes = extension(sel_attrs, biadjacency)
+                        sel_g = adjacency[sel_nodes, :][:, sel_nodes].astype(bool) + sparse.identity(len(sel_nodes)).astype(bool)
+                        mdl = mdl_graph(sel_g)
+                        #mdl = np.log2(len(sel_nodes)) # mdl is just the complexity of the number of nodes
+                        if mdl != np.inf and len(sel_nodes) > 0:
+                            complexity_gen_graphs[len(sel_nodes)].append(mdl)
 
-            run_comeg(adjacency, biadjacency, words, complexity_gen_graphs, order_attributes, s, beta, outfile)
+                run_comeg(adjacency, biadjacency, words, complexity_gen_graphs, order_attr, s, beta, outfile)
