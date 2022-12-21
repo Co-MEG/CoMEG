@@ -418,7 +418,7 @@ def run_comeg(adjacency, biadjacency, words, complexity_gen_graphs, order_attrib
     with open(f"result_{outfile}.bin", "wb") as output:
         pickle.dump(res, output)
 
-    return len(res), 
+    return len(res) 
 
 # ******************************************************** #
 # Run experiments
@@ -439,15 +439,14 @@ nb_pattern_dict = defaultdict(dict)
 for dataset in datasets:
     print(f'**** {dataset}')
     nb_pattern_dict[dataset] = defaultdict(dict)
-    for beta in betas:
-        print(f'== {beta}')
-        for s in ss:
-            print(f'- {s}')
-            for order_attr in order_attributes:
-                print(f'---- {order_attr}')
-
-                nb_pattern_dict[dataset][order_attr] = defaultdict(list)
-                
+    for order_attr in order_attributes:
+        print(f'---- {order_attr}')
+        nb_pattern_dict[dataset][order_attr] = defaultdict(list)
+        for beta in betas:
+            print(f'== {beta}')
+            for s in ss:
+                print(f'- {s}')
+                            
                 outfile = f'{dataset}_{str(beta)}_{str(s)}_order{str(order_attr)}'
 
                 graph = load_netset(dataset)
@@ -480,6 +479,7 @@ for dataset in datasets:
                 # Save number of patterns
                 #nb_pattern_dict[dataset][order_attr][beta].append(nb_patterns)
                 nb_pattern_dict[dataset][order_attr][beta].append(nb_patterns)
+                print(nb_pattern_dict)
 
 with open(f'number_of_patterns_history.pkl', 'wb') as f:
     pickle.dump(nb_pattern_dict, f)
