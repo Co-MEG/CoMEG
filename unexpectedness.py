@@ -1,15 +1,16 @@
 from collections import defaultdict, Counter
 from contextlib import redirect_stdout
-from typing import List
+from line_profiler import LineProfiler
 import numpy as np
 import pickle
 from scipy import sparse, special
+import time
 from tqdm import tqdm
+from typing import List
 
 from sknetwork.data import load_netset
 from sknetwork.utils import get_degrees, get_neighbors
 
-from line_profiler import LineProfiler
 
 def mdl_graph(adjacency) -> float:
     """Minimum description length for graph structure.
@@ -288,7 +289,8 @@ def comeg(adjacency, context, context_csc, extents, intents, r=0, y=0, min_suppo
                 
                 if len_new_extent - len(extents[r]) == 0:
                     print(f' == comparing unex={unex} and unexs[{ptr}]={unexs[ptr]}')
-                    if unex - unexs[ptr] >= 0:
+                    #if unex - unexs[ptr] >= 0:
+                    if unex - unexs[ptr] >= -np.inf:
                         print(f'  Extent size did not change -> attribute {names_col[j]} is added to intent.')
                         intents[r] = new_intent
                         unexs[-1] = unex
@@ -315,7 +317,8 @@ def comeg(adjacency, context, context_csc, extents, intents, r=0, y=0, min_suppo
 
                         print(f'r:{r} rnew:{r_new}')
                         print(f' ISCANNO comparing unex={unex} and unexs[{ptr}]=={unexs[ptr]}')
-                        if unex - unexs[ptr] >= 0 or r == 0:   
+                        #if unex - unexs[ptr] >= 0 or r == 0:
+                        if unex - unexs[ptr] >= -np.inf:
                             
                             intents[r_new] = new_intent 
                             len_new_intent = len(intents[r_new])
@@ -415,7 +418,7 @@ def run_comeg(adjacency, biadjacency, words, complexity_gen_graphs, order_attrib
     with open(f"result_{outfile}.bin", "wb") as output:
         pickle.dump(res, output)
 
-    print(len(res))
+    return len(res), 
 
 # ******************************************************** #
 # Run experiments
@@ -429,10 +432,13 @@ betas = [8, 7, 6, 5]
 ss = [8, 7, 6, 5]
 
 order_attributes = [False, True]
+
+nb_pattern_dict = defaultdict(dict) 
 # -------------------------------------------------------
 
 for dataset in datasets:
     print(f'**** {dataset}')
+    nb_pattern_dict[dataset] = defaultdict(dict)
     for beta in betas:
         print(f'== {beta}')
         for s in ss:
@@ -440,6 +446,8 @@ for dataset in datasets:
             for order_attr in order_attributes:
                 print(f'---- {order_attr}')
 
+                nb_pattern_dict[dataset][order_attr] = defaultdict(list)
+                
                 outfile = f'{dataset}_{str(beta)}_{str(s)}_order{str(order_attr)}'
 
                 graph = load_netset(dataset)
@@ -467,4 +475,12 @@ for dataset in datasets:
                         if mdl != np.inf and len(sel_nodes) > 0:
                             complexity_gen_graphs[len(sel_nodes)].append(mdl)
 
-                run_comeg(adjacency, biadjacency, words, complexity_gen_graphs, order_attr, s, beta, outfile)
+                nb_patterns = run_comeg(adjacency, biadjacency, words, complexity_gen_graphs, order_attr, s, beta, outfile)
+
+                # Save number of patterns
+                #nb_pattern_dict[dataset][order_attr][beta].append(nb_patterns)
+                nb_pattern_dict[dataset][order_attr][beta].append(nb_patterns)
+
+with open(f'number_of_patterns_history.pkl', 'wb') as f:
+    pickle.dump(nb_pattern_dict, f)
+
