@@ -289,8 +289,9 @@ def comeg(adjacency, context, context_csc, extents, intents, r=0, y=0, min_suppo
                 
                 if len_new_extent - len(extents[r]) == 0:
                     print(f' == comparing unex={unex} and unexs[{ptr}]={unexs[ptr]}')
-                    #if unex - unexs[ptr] >= 0:
-                    if unex - unexs[ptr] >= -np.inf:
+                    #if unex - unexs[ptr] >= -np.inf:
+                    if unex - unexs[ptr] >= 0:
+                    
                         print(f'  Extent size did not change -> attribute {names_col[j]} is added to intent.')
                         intents[r] = new_intent
                         unexs[-1] = unex
@@ -317,9 +318,9 @@ def comeg(adjacency, context, context_csc, extents, intents, r=0, y=0, min_suppo
 
                         print(f'r:{r} rnew:{r_new}')
                         print(f' ISCANNO comparing unex={unex} and unexs[{ptr}]=={unexs[ptr]}')
-                        #if unex - unexs[ptr] >= 0 or r == 0:
-                        if unex - unexs[ptr] >= -np.inf:
-                            
+                        #if unex - unexs[ptr] >= -np.inf:
+                        if unex - unexs[ptr] >= 0 or r == 0:
+                           
                             intents[r_new] = new_intent 
                             len_new_intent = len(intents[r_new])
 
