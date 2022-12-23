@@ -7,7 +7,7 @@ from tqdm import tqdm
 from sknetwork.data import load_netset
 from sknetwork.utils import get_degrees
 
-from algorithm import run_comeg
+from algorithm import run_unex_patterns
 from compressors import mdl_graph
 from derivation import extension_csc
 
@@ -66,7 +66,7 @@ for dataset in datasets:
                         if mdl != np.inf and len(sel_nodes) > 0:
                             complexity_gen_graphs[len(sel_nodes)].append(mdl)
 
-                nb_patterns = run_comeg(adjacency, biadjacency, words, complexity_gen_graphs, order_attr, s, beta, outfile)
+                nb_patterns = run_unex_patterns(adjacency, biadjacency, words, complexity_gen_graphs, order_attr, s, beta, outfile)
 
                 # Save number of patterns
                 #nb_pattern_dict[dataset][order_attr][beta].append(nb_patterns)

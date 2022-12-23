@@ -35,8 +35,8 @@ def is_cannonical(context, extents, intents, r, y):
     
     return True
 
-def init_comeg(context) -> tuple:
-    """Initialization for comeg algorithm.
+def init_unex_patterns(context) -> tuple:
+    """Initialization for UnexPatterns algorithm.
     
     Parameters
     ---------
@@ -54,7 +54,7 @@ def init_comeg(context) -> tuple:
 
     return extents, intents
 
-def comeg(adjacency, context, context_csc, extents, intents, r=0, y=0, min_support=0, max_support=np.inf, beta=0, 
+def unex_patterns(adjacency, context, context_csc, extents, intents, r=0, y=0, min_support=0, max_support=np.inf, beta=0, 
             degs=[], unexs_g=[], unexs_a=[], unexs=[], names_col=[], comp_gen_graph=None) -> List:
     """InClose algorithm using Unexpectedness + IsCannonical function. 
     
@@ -182,7 +182,7 @@ def comeg(adjacency, context, context_csc, extents, intents, r=0, y=0, min_suppo
                             unexs.append(unex)
                             ptr += 1
                             print(f'  --> Enter recursion with Intent: {names_col[intents[r_new]]}...')
-                            comeg(adjacency, context, context_csc, extents, intents, r=r_new, y=j+1, min_support=min_support, 
+                            unex_patterns(adjacency, context, context_csc, extents, intents, r=r_new, y=j+1, min_support=min_support, 
                                         max_support=max_support, beta=beta, degs=degs, unexs_g=unexs_g, 
                                         unexs_a=unexs_a, unexs=unexs, names_col=names_col, comp_gen_graph=comp_gen_graph)
                         else:
@@ -202,7 +202,7 @@ def comeg(adjacency, context, context_csc, extents, intents, r=0, y=0, min_suppo
     
     return [*zip(extents, intents)]
 
-def run_comeg(adjacency, biadjacency, words, complexity_gen_graphs, order_attributes, s, beta, outfile):
+def run_unex_patterns(adjacency, biadjacency, words, complexity_gen_graphs, order_attributes, s, beta, outfile):
     """Run concept mining algorithm.
     
     Parameters
@@ -225,7 +225,7 @@ def run_comeg(adjacency, biadjacency, words, complexity_gen_graphs, order_attrib
         Output filename.
     """
     # Initialization
-    extents, intents = init_comeg(biadjacency)
+    extents, intents = init_unex_patterns(biadjacency)
     degs = get_degrees(biadjacency, transpose=True)
     global r_new
     r_new = 0
@@ -260,7 +260,7 @@ def run_comeg(adjacency, biadjacency, words, complexity_gen_graphs, order_attrib
         with redirect_stdout(f):
             print('starts profiling...')
             lp = LineProfiler()
-            lp_wrapper = lp(comeg)
+            lp_wrapper = lp(unex_patterns)
             lp_wrapper(adjacency, filt_biadjacency, filt_biadjacency_csc, extents, intents, r=0, y=0, 
                                     min_support=s, max_support=100, beta=beta,
                                     degs=sorted_degs, unexs_g=[0], unexs_a=[0], unexs=[0], names_col=sorted_names_col,
