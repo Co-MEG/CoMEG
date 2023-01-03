@@ -108,7 +108,7 @@ def unex_patterns(adjacency, context, context_csc, extents, intents, r=0, y=0, m
             unexs_g.append(0)
             unexs_a.append(0)
 
-        # Form a new extent by adding extension of attribute j to current concept extent
+        # Form a new extent by adding extension of attribute j to current pattern extent
         ext_j = set(extension([j], context_csc))
         #ext_j = set(extension([j], context))
         extents[r_new] = list(sorted(set(extents[r]).intersection(ext_j)))
@@ -198,12 +198,11 @@ def unex_patterns(adjacency, context, context_csc, extents, intents, r=0, y=0, m
     ptr -= 1
     print(f'inexs after pop: {unexs}')        
     print(f'**END FUNCTION')
-    #print(f'**concept: ({[*zip(extents, intents)]})')
     
     return [*zip(extents, intents)]
 
 def run_unex_patterns(adjacency, biadjacency, words, complexity_gen_graphs, order_attributes, s, beta, outfile):
-    """Run concept mining algorithm.
+    """Run pattern mining algorithm.
     
     Parameters
     ----------
