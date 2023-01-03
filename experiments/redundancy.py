@@ -23,7 +23,7 @@ from sknetwork.utils import get_degrees, KMeansDense
 from corpus import MyCorpus
 from distances import pairwise_wd_distance
 from summarization import get_summarized_graph
-from utils import build_concept_attributes
+from utils import build_pattern_attributes
 
 
 def load_result(path, filename):
@@ -146,7 +146,7 @@ for dataset in datasets:
             
             # Concept x attributes matrices for each method
             # ------------------------------------------------------------------
-            concept_attributes, concept_summarized_attributes, concept_louvain_attributes, concept_gnn_kmeans_attributes, concept_spectral_kmeans_attributes, concept_doc2vec_kmeans_attributes = build_concept_attributes(result, 
+            concept_attributes, concept_summarized_attributes, concept_louvain_attributes, concept_gnn_kmeans_attributes, concept_spectral_kmeans_attributes, concept_doc2vec_kmeans_attributes = build_pattern_attributes(result, 
                                                                                                     biadjacency, labels_cc_summarized, labels_louvain, kmeans_gnn_labels, kmeans_spectral_labels, kmeans_doc2vec_labels)
             
             # Pairwise Wassertein distances between embeddings
