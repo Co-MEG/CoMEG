@@ -8,7 +8,7 @@ def d2v_embedding(model, doc):
     return model.infer_vector(doc)
 
 def pairwise_wd_distance(matrix, n, model, names):
-    """Pairwise Wasserstein distances between elements in matrix."""
+    """Doc2Vec embedding + pairwise Wasserstein distances between elements in matrix."""
 
     wd_matrix = np.zeros((n, n))
     
