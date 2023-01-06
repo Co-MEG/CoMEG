@@ -3,9 +3,7 @@
 # **************************************************************************
 #   1. Compute statistics upon patterns/communities to compare them, such as:
 #           - average size of graph, size of attribute set
-#           - average number of of connected components
 #           - average density
-#           - average number of cliques of size k
 # **************************************************************************
 
 from collections import defaultdict
@@ -21,7 +19,6 @@ from sknetwork.topology import get_connected_components
 from sknetwork.utils import get_degrees, KMeansDense
 
 from corpus import MyCorpus
-from distances import pairwise_wd_distance
 from summarization import get_summarized_graph
 from utils import build_pattern_attributes, density
 
@@ -46,7 +43,7 @@ resolutions = {'wikivitals-fr': {1: 0, 3: 0, 5: 0.3, 6: 0.4, 10: 0.8, 12: 0.9, 1
                 'wikischools': {4: 0.45, 8: 1, 3: 0.4, 8: 0.58, 9: 0.9, 10: 1.18, 13: 1.4, 15: 1.5, 18: 1.69, 22: 1.95, 39: 2.75, 40: 2.75,  46: 2.99, 58: 3.7, 73: 4.41}}
 
 extent_size = False
-intent_size = True
+intent_size = False
 densities = True
 # ====================================================================
 
@@ -209,28 +206,23 @@ for dataset in datasets:
 
                 intent_size_summaries = []
                 for i in range(nb_cc):
-                    mask_cc = labels_cc_summarized == i
-                    intent_size_summaries.append(len(concept_summarized_attributes[mask_cc, :].indices))
+                    intent_size_summaries.append(len(np.flatnonzero(concept_summarized_attributes[i, :])))
 
                 intent_size_louvain = []
                 for i in range(nb_louvain):
-                    mask_cc = labels_louvain == i
-                    intent_size_louvain.append(len(concept_louvain_attributes[mask_cc, :].indices))
+                    intent_size_louvain.append(len(np.flatnonzero(concept_louvain_attributes[i, :])))
 
                 intent_size_gnn_kmeans = []
                 for i in range(nb_cc):
-                    mask_cc = kmeans_gnn_labels == i
-                    intent_size_gnn_kmeans.append(len(concept_gnn_kmeans_attributes[mask_cc, :].indices))
+                    intent_size_gnn_kmeans.append(len(np.flatnonzero(concept_gnn_kmeans_attributes[i, :])))
 
                 intent_size_kmeans_spectral = []
                 for i in range(nb_cc):
-                    mask_cc = kmeans_spectral_labels == i
-                    intent_size_kmeans_spectral.append(len(concept_spectral_kmeans_attributes[mask_cc, :].indices))
+                    intent_size_kmeans_spectral.append(len(np.flatnonzero(concept_spectral_kmeans_attributes[i, :])))
 
                 intent_size_d2v = []
                 for i in range(nb_cc):
-                    mask_cc = kmeans_doc2vec_labels == i
-                    intent_size_d2v.append(len(concept_doc2vec_kmeans_attributes[mask_cc, :].indices))
+                    intent_size_d2v.append(len(np.flatnonzero(concept_doc2vec_kmeans_attributes[i, :])))
                 
                 intent_sizes_dict[dataset][b][s]['patterns'] = intent_size_patterns
                 intent_sizes_dict[dataset][b][s]['summaries'] = intent_size_summaries
@@ -239,6 +231,7 @@ for dataset in datasets:
                 intent_sizes_dict[dataset][b][s]['spectral'] = intent_size_kmeans_spectral
                 intent_sizes_dict[dataset][b][s]['doc2vec'] = intent_size_d2v
 
+            # Graph Densities
             if densities:
                 densities_patterns = []
                 for p in result:
@@ -249,7 +242,7 @@ for dataset in datasets:
                 densities_summaries = []
                 for i in range(nb_cc):
                     mask_cc = labels_cc_summarized == i
-                    subgraph = summarized_adjacency[mask_cc, :][:, mask_cc]
+                    subgraph = summarized_adjacency[mask, :][:, mask][mask_cc, :][:, mask_cc]
                     densities_summaries.append(density(subgraph))
 
                 densities_louvain = []

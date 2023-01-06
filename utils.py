@@ -1,4 +1,5 @@
 import numpy as np
+from scipy import sparse
 
 def pattern_attributes(biadjacency, labels):
     """Build pattern x attributes matrix. Column values are count of occurrences of attributes for each pattern/community.
@@ -41,3 +42,25 @@ def build_pattern_attributes(result, biadjacency, labels_cc_summarized, labels_l
     pattern_doc2vec_kmeans_attributes = pattern_attributes(biadjacency, kmeans_doc2vec_labels)
 
     return patterns_attributes, pattern_summarized_attributes, pattern_louvain_attributes, pattern_gnn_kmeans_attributes, pattern_spectral_kmeans_attributes, pattern_doc2vec_kmeans_attributes
+
+def density(g: sparse.csr_matrix) -> float:
+    """Density of directed graph. 
+    
+    Parameters
+    ----------
+    g: sparse.csr_matrix
+        Graph
+    """
+    # Remove self-nodes
+    g.setdiag(np.zeros(g.shape[0]))
+    g.eliminate_zeros()
+
+    m = g.nnz
+    n = g.shape[0]
+    
+    if n == 1:
+        return 0
+
+    d = m / (n * (n - 1))
+
+    return d
