@@ -2,8 +2,9 @@
 
 # **************************************************************************
 #   1. Compute statistics upon patterns/communities to compare them, such as:
-#           - average size of graph, size of attribute set
-#           - average density
+#           - size of graph, size of attribute set
+#           - density
+#           - k-cores
 # **************************************************************************
 
 from collections import defaultdict
@@ -20,7 +21,7 @@ from sknetwork.utils import get_degrees, KMeansDense
 
 from corpus import MyCorpus
 from summarization import get_summarized_graph
-from utils import build_pattern_attributes, density
+from utils import build_pattern_attributes, density, kcore_decomposition
 
 
 def load_result(path, filename):
@@ -37,6 +38,7 @@ betas = [5]
 extent_sizes_dict = defaultdict(dict)
 intent_sizes_dict = defaultdict(dict)
 densities_dict = defaultdict(dict)
+kcores_dict = defaultdict(dict)
 outpath = 'output/result'
 resolutions = {'wikivitals-fr': {1: 0, 3: 0, 5: 0.3, 6: 0.4, 10: 0.8, 12: 0.9, 15: 1.1, 47: 3, 27: 1.89}, 
                 'wikivitals': {4: 0.5, 7: 0.8, 11: 1, 13: 1.3, 14: 1.18, 16: 1.5, 19: 1.6, 21: 1.76, 29: 2.4, 31: 2.5, 34: 2.7, 47: 3.903, 49: 3.95, 65: 4.70, 101: 6.4}, 
@@ -44,7 +46,8 @@ resolutions = {'wikivitals-fr': {1: 0, 3: 0, 5: 0.3, 6: 0.4, 10: 0.8, 12: 0.9, 1
 
 extent_size = False
 intent_size = False
-densities = True
+densities = False
+kcores = True
 # ====================================================================
 
 
@@ -54,14 +57,17 @@ for dataset in datasets:
     extent_sizes_dict[dataset] = defaultdict(dict)
     intent_sizes_dict[dataset] = defaultdict(dict)
     densities_dict[dataset] = defaultdict(dict)
+    kcores_dict[dataset] = defaultdict(dict)
     for b in betas:
         extent_sizes_dict[dataset][b] = defaultdict(dict)
         intent_sizes_dict[dataset][b] = defaultdict(dict)
         densities_dict[dataset][b] = defaultdict(dict)
+        kcores_dict[dataset][b] = defaultdict(dict)
         for s in ss:
             extent_sizes_dict[dataset][b][s] = defaultdict(dict)
             intent_sizes_dict[dataset][b][s] = defaultdict(dict)
             densities_dict[dataset][b][s] = defaultdict(dict)
+            kcores_dict[dataset][b][s] = defaultdict(dict)
 
             print(f'* Dataset: {dataset} - beta={b} - s={s}')
             
@@ -248,25 +254,25 @@ for dataset in datasets:
                 densities_louvain = []
                 for i in range(nb_louvain):
                     mask_cc = labels_louvain == i
-                    subgraph = summarized_adjacency[mask_cc, :][:, mask_cc]
+                    subgraph = adjacency[mask_cc, :][:, mask_cc]
                     densities_louvain.append(density(subgraph))
 
                 densities_gnn_kmeans = []
                 for i in range(nb_cc):
                     mask_cc = kmeans_gnn_labels == i
-                    subgraph = summarized_adjacency[mask_cc, :][:, mask_cc]
+                    subgraph = adjacency[mask_cc, :][:, mask_cc]
                     densities_gnn_kmeans.append(density(subgraph))
 
                 densities_kmeans_spectral = []
                 for i in range(nb_cc):
                     mask_cc = kmeans_spectral_labels == i
-                    subgraph = summarized_adjacency[mask_cc, :][:, mask_cc]
+                    subgraph = adjacency[mask_cc, :][:, mask_cc]
                     densities_kmeans_spectral.append(density(subgraph))
 
                 densities_d2v = []
                 for i in range(nb_cc):
                     mask_cc = kmeans_doc2vec_labels == i
-                    subgraph = summarized_adjacency[mask_cc, :][:, mask_cc]
+                    subgraph = adjacency[mask_cc, :][:, mask_cc]
                     densities_d2v.append(density(subgraph))
                 
                 densities_dict[dataset][b][s]['patterns'] = densities_patterns
@@ -275,6 +281,69 @@ for dataset in datasets:
                 densities_dict[dataset][b][s]['gnn'] = densities_gnn_kmeans
                 densities_dict[dataset][b][s]['spectral'] = densities_kmeans_spectral
                 densities_dict[dataset][b][s]['doc2vec'] = densities_d2v
+
+            # K-core decomposition
+            if kcores:
+                kcores_patterns = []
+                for p in result:
+                    if len(p[1]) > 0:
+                        subgraph = adjacency[p[0], :][:, p[0]]  
+                        cores_labels = kcore_decomposition(subgraph)
+                        #kcore_size = len(cores_labels[cores_labels == k_val])
+                        #kcores_patterns.append(kcore_size / subgraph.shape[0])
+                        kcores_patterns.append(cores_labels)
+
+                kcores_summaries = []
+                for i in range(nb_cc):
+                    mask_cc = labels_cc_summarized == i
+                    subgraph = summarized_adjacency[mask, :][:, mask][mask_cc, :][:, mask_cc]
+                    cores_labels = kcore_decomposition(subgraph)
+                    #kcore_size = len(cores_labels[cores_labels == k_val])
+                    #kcores_summaries.append(kcore_size / subgraph.shape[0])
+                    kcores_summaries.append(cores_labels)
+
+                kcores_louvain = []
+                for i in range(nb_louvain):
+                    mask_cc = labels_louvain == i
+                    subgraph = adjacency[mask_cc, :][:, mask_cc]
+                    cores_labels = kcore_decomposition(subgraph)
+                    #kcore_size = len(cores_labels[cores_labels == k_val])
+                    #kcores_louvain.append(kcore_size / subgraph.shape[0])
+                    kcores_louvain.append(cores_labels)
+
+                kcores_gnn_kmeans = []
+                for i in range(nb_cc):
+                    mask_cc = kmeans_gnn_labels == i
+                    subgraph = adjacency[mask_cc, :][:, mask_cc]
+                    cores_labels = kcore_decomposition(subgraph)
+                    #kcore_size = len(cores_labels[cores_labels == k_val])
+                    #kcores_gnn_kmeans.append(kcore_size / subgraph.shape[0])
+                    kcores_gnn_kmeans.append(cores_labels)
+
+                kcores_kmeans_spectral = []
+                for i in range(nb_cc):
+                    mask_cc = kmeans_spectral_labels == i
+                    subgraph = adjacency[mask_cc, :][:, mask_cc]
+                    cores_labels = kcore_decomposition(subgraph)
+                    #kcore_size = len(cores_labels[cores_labels == k_val])
+                    #kcores_kmeans_spectral.append(kcore_size / subgraph.shape[0])
+                    kcores_kmeans_spectral.append(cores_labels)
+
+                kcores_d2v = []
+                for i in range(nb_cc):
+                    mask_cc = kmeans_doc2vec_labels == i
+                    subgraph = adjacency[mask_cc, :][:, mask_cc]
+                    cores_labels = kcore_decomposition(subgraph)
+                    #kcore_size = len(cores_labels[cores_labels == k_val])
+                    #kcores_d2v.append(kcore_size / subgraph.shape[0])
+                    kcores_d2v.append(cores_labels)
+                
+                kcores_dict[dataset][b][s]['patterns'] = [x for elem in kcores_patterns for x in elem]
+                kcores_dict[dataset][b][s]['summaries'] = [x for elem in kcores_summaries for x in elem]
+                kcores_dict[dataset][b][s]['louvain'] = [x for elem in kcores_louvain for x in elem]
+                kcores_dict[dataset][b][s]['gnn'] = [x for elem in kcores_gnn_kmeans for x in elem]
+                kcores_dict[dataset][b][s]['spectral'] = [x for elem in kcores_kmeans_spectral for x in elem]
+                kcores_dict[dataset][b][s]['doc2vec'] = [x for elem in kcores_d2v for x in elem]
 
 # Save result
 if extent_size:
@@ -286,3 +355,6 @@ if intent_size:
 if densities:
     with open(f'output/result/densities.pkl', 'wb') as f:
         pickle.dump(densities_dict, f)
+if kcores:
+    with open(f'output/result/kcores.pkl', 'wb') as f:
+        pickle.dump(kcores_dict, f)
