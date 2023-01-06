@@ -23,7 +23,7 @@ from sknetwork.utils import get_degrees, KMeansDense
 from corpus import MyCorpus
 from distances import pairwise_wd_distance
 from summarization import get_summarized_graph
-from utils import build_pattern_attributes
+from utils import build_pattern_attributes, density
 
 
 def load_result(path, filename):
@@ -39,6 +39,7 @@ ss = [8, 7, 6, 5]
 betas = [5]
 extent_sizes_dict = defaultdict(dict)
 intent_sizes_dict = defaultdict(dict)
+densities_dict = defaultdict(dict)
 outpath = 'output/result'
 resolutions = {'wikivitals-fr': {1: 0, 3: 0, 5: 0.3, 6: 0.4, 10: 0.8, 12: 0.9, 15: 1.1, 47: 3, 27: 1.89}, 
                 'wikivitals': {4: 0.5, 7: 0.8, 11: 1, 13: 1.3, 14: 1.18, 16: 1.5, 19: 1.6, 21: 1.76, 29: 2.4, 31: 2.5, 34: 2.7, 47: 3.903, 49: 3.95, 65: 4.70, 101: 6.4}, 
@@ -46,6 +47,7 @@ resolutions = {'wikivitals-fr': {1: 0, 3: 0, 5: 0.3, 6: 0.4, 10: 0.8, 12: 0.9, 1
 
 extent_size = False
 intent_size = True
+densities = True
 # ====================================================================
 
 
@@ -54,12 +56,15 @@ intent_size = True
 for dataset in datasets:
     extent_sizes_dict[dataset] = defaultdict(dict)
     intent_sizes_dict[dataset] = defaultdict(dict)
+    densities_dict[dataset] = defaultdict(dict)
     for b in betas:
         extent_sizes_dict[dataset][b] = defaultdict(dict)
         intent_sizes_dict[dataset][b] = defaultdict(dict)
+        densities_dict[dataset][b] = defaultdict(dict)
         for s in ss:
             extent_sizes_dict[dataset][b][s] = defaultdict(dict)
             intent_sizes_dict[dataset][b][s] = defaultdict(dict)
+            densities_dict[dataset][b][s] = defaultdict(dict)
 
             print(f'* Dataset: {dataset} - beta={b} - s={s}')
             
@@ -205,27 +210,27 @@ for dataset in datasets:
                 intent_size_summaries = []
                 for i in range(nb_cc):
                     mask_cc = labels_cc_summarized == i
-                    intent_size_summaries.append(mask_cc.sum())
+                    intent_size_summaries.append(len(concept_summarized_attributes[mask_cc, :].indices))
 
                 intent_size_louvain = []
                 for i in range(nb_louvain):
                     mask_cc = labels_louvain == i
-                    intent_size_louvain.append(mask_cc.sum())
+                    intent_size_louvain.append(len(concept_louvain_attributes[mask_cc, :].indices))
 
                 intent_size_gnn_kmeans = []
                 for i in range(nb_cc):
                     mask_cc = kmeans_gnn_labels == i
-                    intent_size_gnn_kmeans.append(mask_cc.sum())
+                    intent_size_gnn_kmeans.append(len(concept_gnn_kmeans_attributes[mask_cc, :].indices))
 
                 intent_size_kmeans_spectral = []
                 for i in range(nb_cc):
                     mask_cc = kmeans_spectral_labels == i
-                    intent_size_kmeans_spectral.append(mask_cc.sum())
+                    intent_size_kmeans_spectral.append(len(concept_spectral_kmeans_attributes[mask_cc, :].indices))
 
                 intent_size_d2v = []
                 for i in range(nb_cc):
                     mask_cc = kmeans_doc2vec_labels == i
-                    intent_size_d2v.append(mask_cc.sum())
+                    intent_size_d2v.append(len(concept_doc2vec_kmeans_attributes[mask_cc, :].indices))
                 
                 intent_sizes_dict[dataset][b][s]['patterns'] = intent_size_patterns
                 intent_sizes_dict[dataset][b][s]['summaries'] = intent_size_summaries
@@ -234,6 +239,50 @@ for dataset in datasets:
                 intent_sizes_dict[dataset][b][s]['spectral'] = intent_size_kmeans_spectral
                 intent_sizes_dict[dataset][b][s]['doc2vec'] = intent_size_d2v
 
+            if densities:
+                densities_patterns = []
+                for p in result:
+                    if len(p[1]) > 0:
+                        subgraph = adjacency[p[0], :][:, p[0]]
+                        densities_patterns.append(density(subgraph))
+
+                densities_summaries = []
+                for i in range(nb_cc):
+                    mask_cc = labels_cc_summarized == i
+                    subgraph = summarized_adjacency[mask_cc, :][:, mask_cc]
+                    densities_summaries.append(density(subgraph))
+
+                densities_louvain = []
+                for i in range(nb_louvain):
+                    mask_cc = labels_louvain == i
+                    subgraph = summarized_adjacency[mask_cc, :][:, mask_cc]
+                    densities_louvain.append(density(subgraph))
+
+                densities_gnn_kmeans = []
+                for i in range(nb_cc):
+                    mask_cc = kmeans_gnn_labels == i
+                    subgraph = summarized_adjacency[mask_cc, :][:, mask_cc]
+                    densities_gnn_kmeans.append(density(subgraph))
+
+                densities_kmeans_spectral = []
+                for i in range(nb_cc):
+                    mask_cc = kmeans_spectral_labels == i
+                    subgraph = summarized_adjacency[mask_cc, :][:, mask_cc]
+                    densities_kmeans_spectral.append(density(subgraph))
+
+                densities_d2v = []
+                for i in range(nb_cc):
+                    mask_cc = kmeans_doc2vec_labels == i
+                    subgraph = summarized_adjacency[mask_cc, :][:, mask_cc]
+                    densities_d2v.append(density(subgraph))
+                
+                densities_dict[dataset][b][s]['patterns'] = densities_patterns
+                densities_dict[dataset][b][s]['summaries'] = densities_summaries
+                densities_dict[dataset][b][s]['louvain'] = densities_louvain
+                densities_dict[dataset][b][s]['gnn'] = densities_gnn_kmeans
+                densities_dict[dataset][b][s]['spectral'] = densities_kmeans_spectral
+                densities_dict[dataset][b][s]['doc2vec'] = densities_d2v
+
 # Save result
 if extent_size:
     with open(f'output/result/extent_sizes.pkl', 'wb') as f:
@@ -241,3 +290,6 @@ if extent_size:
 if intent_size:
     with open(f'output/result/intent_sizes.pkl', 'wb') as f:
         pickle.dump(intent_sizes_dict, f)
+if densities:
+    with open(f'output/result/densities.pkl', 'wb') as f:
+        pickle.dump(densities_dict, f)
