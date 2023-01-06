@@ -75,3 +75,4 @@ for dataset in datasets:
 
 with open(f'number_of_patterns_history.pkl', 'wb') as f:
     pickle.dump(nb_pattern_dict, f)
+    
