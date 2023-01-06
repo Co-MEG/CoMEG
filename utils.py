@@ -1,6 +1,9 @@
 import numpy as np
 from scipy import sparse
 
+from sknetwork.topology import CoreDecomposition
+from sknetwork.utils import directed2undirected
+
 def pattern_attributes(biadjacency, labels):
     """Build pattern x attributes matrix. Column values are count of occurrences of attributes for each pattern/community.
     
@@ -64,3 +67,25 @@ def density(g: sparse.csr_matrix) -> float:
     d = m / (n * (n - 1))
 
     return d
+
+def kcore_decomposition(g: sparse.csr_matrix) -> np.ndarray:
+    """K-core decomposition algorithm.
+    
+    Parameters
+    ----------
+    g: sparse.csr_matrix
+        Graph
+
+    Returns
+    -------
+        Array of corresponding k-core for each node in the graph.
+    """
+    
+    # Remove self-nodes
+    g.setdiag(np.zeros(g.shape[0]))
+    g.eliminate_zeros()
+
+    core = CoreDecomposition()
+    cores_labels = core.fit_transform(directed2undirected(g))
+
+    return cores_labels
