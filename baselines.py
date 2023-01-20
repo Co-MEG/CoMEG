@@ -2,6 +2,8 @@ import numpy as np
 from scipy import sparse
 
 from sknetwork.clustering import Louvain
+from sknetwork.gnn import GNNClassifier
+from sknetwork.utils import KMeansDense
 
 
 # Louvain
@@ -31,6 +33,45 @@ def get_louvain(dataset: str, adjacency: sparse.csr_matrix, nb_cc: int) -> np.nd
     nb_louvain = len(np.unique(labels_louvain))
     
     return labels_louvain
+
+def get_gnn(dataset: str, adjacency: sparse.csr_matrix, biadjacency: sparse.csr_matrix, labels: np.ndarray, hidden_dim: int, nb_cc: int) -> np.ndarray:
+    """GNN embedding + KMeans clustering. Returns labels of the nodes.
+    
+    Parameters
+    ----------
+    dataset: str
+        Name of dataset on netset.
+    adjacency: sparse.csr_matrix
+        Adjacency matrix of the graph
+    biadjacency: sparse.csr_matrix
+        Biadjacency matrix of the graph
+    labels: np.ndarray
+        Node labels
+    hidden_dim: int
+        Hidden layer dimension
+    nb_cc: int
+        Number of communities (for KMeans clustering)
+    
+    Outputs
+    -------
+        Array of node labels.
+    """
+    features = biadjacency
+    n_labels = len(np.unique(labels))
+    gnn = GNNClassifier(dims=[hidden_dim, n_labels],
+                        layer_types='conv',
+                        activations=['Relu', 'Softmax'],
+                        verbose=False)
+
+    # Train GNN model
+    gnn.fit(adjacency, features, labels, train_size=0.8, val_size=0.1, test_size=0.1, n_epochs=50)
+    
+    # KMeans on GNN node embedding
+    gnn_embedding = gnn.layers[-1].embedding
+    kmeans = KMeansDense(n_clusters=nb_cc) # k = number of connected components in summarized graph
+    kmeans_gnn_labels = kmeans.fit_transform(gnn_embedding)
+
+    return kmeans_gnn_labels
 
 def get_community_graph(adjacency: sparse.csr_matrix, labels_communities: np.ndarray) -> sparse.csr_matrix:
     """Equivalent of summarized graph but for community-based methods. Returns the adjacency matrix of the graph made of the union of all communities. 
