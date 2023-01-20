@@ -14,12 +14,15 @@ from utils import pattern_attributes
 # =================================================================
 
 datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
-methods = ['summaries', 'louvain', 'gnn']
 betas = [8, 7, 6, 5]
 ss = [8, 7, 6, 5]
 with_order = [True]
 delta = 0.2
 informations = defaultdict()
+
+# =================================================================
+# Evaluation
+# =================================================================
 
 for d, dataset in enumerate(datasets):
     informations[dataset] = defaultdict(dict)
@@ -50,7 +53,7 @@ for d, dataset in enumerate(datasets):
             louvain_adj = get_community_graph(adjacency, louvain_labels)
 
             # GNN
-            gnn_labels = get_gnn(dataset, adjacency, biadjacency, labels, 16, n_p_summaries)
+            gnn_labels = get_gnn(adjacency, biadjacency, labels, 16, n_p_summaries)
             pattern_gnn_attributes = pattern_attributes(biadjacency, gnn_labels)
             gnn_adj = get_community_graph(adjacency, gnn_labels)
 
@@ -60,7 +63,7 @@ for d, dataset in enumerate(datasets):
             spectral_adj = get_community_graph(adjacency, spectral_labels)
 
             # Doc2Vec
-            d2v_labels = get_doc2vec(adjacency, n_p_summaries)
+            d2v_labels = get_doc2vec(biadjacency, names_col, n_p_summaries)
             pattern_d2v_attributes = pattern_attributes(biadjacency, d2v_labels)
             d2v_adj = get_community_graph(adjacency, d2v_labels)
             
