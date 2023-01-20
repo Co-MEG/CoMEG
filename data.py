@@ -73,7 +73,7 @@ def load_patterns(dataset: str, beta: int, s: int, order: bool) -> list:
     -------
         List of patterns. 
     """
-    with open(f"../output/result/result_{dataset}_{beta}_{s}_order{str(order)}.bin", "rb") as data:
+    with open(f"output/result/result_{dataset}_{beta}_{s}_order{str(order)}.bin", "rb") as data:
         patterns = pickle.load(data)
     
     return patterns
@@ -96,7 +96,7 @@ def get_pw_distance_matrix(dataset: str, beta: int, s: int, method: str='summari
     -------
         Matrix of pairwise distances.
     """
-    with open(f'../output/result/wasserstein_distances_{dataset}_{beta}_{s}_{method}.pkl', 'rb') as data:
+    with open(f'output/result/wasserstein_distances_{dataset}_{beta}_{s}_{method}.pkl', 'rb') as data:
         pw_distances = np.load(data)
     
     return pw_distances
