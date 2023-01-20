@@ -2,7 +2,7 @@ from collections import defaultdict
 import numpy as np
 import pickle
 
-from baselines import get_louvain, get_community_graph, get_gnn
+from baselines import get_louvain, get_community_graph, get_gnn, get_spectral, get_doc2vec
 from data import load_data, preprocess_data, load_patterns, get_pw_distance_matrix
 from metrics import information
 from summarization import get_summarized_graph, get_summarized_biadjacency, get_pattern_summaries
@@ -53,20 +53,37 @@ for d, dataset in enumerate(datasets):
             gnn_labels = get_gnn(dataset, adjacency, biadjacency, labels, 16, n_p_summaries)
             pattern_gnn_attributes = pattern_attributes(biadjacency, gnn_labels)
             gnn_adj = get_community_graph(adjacency, gnn_labels)
+
+            # Spectral
+            spectral_labels = get_spectral(adjacency, n_p_summaries)
+            pattern_spectral_attributes = pattern_attributes(biadjacency, spectral_labels)
+            spectral_adj = get_community_graph(adjacency, spectral_labels)
+
+            # Doc2Vec
+            d2v_labels = get_doc2vec(adjacency, n_p_summaries)
+            pattern_d2v_attributes = pattern_attributes(biadjacency, d2v_labels)
+            d2v_adj = get_community_graph(adjacency, d2v_labels)
             
             # Pariwise distances 
             pw_distances_summaries = get_pw_distance_matrix(dataset, b, s, method='summaries')
             pw_distances_louvain = get_pw_distance_matrix(dataset, b, s, method='louvain')
             pw_distances_gnn = get_pw_distance_matrix(dataset, b, s, method='gnn_kmeans')
+            pw_distances_spectral = get_pw_distance_matrix(dataset, b, s, method='spectral_kmeans')
+            pw_distances_d2v = get_pw_distance_matrix(dataset, b, s, method='d2v_kmeans')
             
             # SG information
             information_summaries = information(summarized_adj, summarized_biadj, pw_distances_summaries)
             information_louvain = information(louvain_adj, pattern_louvain_attributes, pw_distances_louvain)
             information_gnn = information(gnn_adj, pattern_gnn_attributes, pw_distances_gnn)
+            information_spectral = information(spectral_adj, pattern_spectral_attributes, pw_distances_spectral)
+            information_d2v = information(d2v_adj, pattern_d2v_attributes, pw_distances_d2v)
             
+            # Save information in dict
             informations[dataset][b]['summaries'].append(information_summaries)
             informations[dataset][b]['louvain'].append(information_louvain)
             informations[dataset][b]['gnn'].append(information_gnn)
+            informations[dataset][b]['spectral'].append(information_spectral)
+            informations[dataset][b]['doc2vec'].append(information_d2v)
 
 # Save result
 with open(f'informations_evaluation.pkl', 'wb') as f:

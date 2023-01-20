@@ -1,7 +1,10 @@
+import gensim
 import numpy as np
 from scipy import sparse
 
-from sknetwork.clustering import Louvain
+from corpus import MyCorpus
+
+from sknetwork.clustering import Louvain, KMeans
 from sknetwork.gnn import GNNClassifier
 from sknetwork.utils import KMeansDense
 
@@ -34,13 +37,11 @@ def get_louvain(dataset: str, adjacency: sparse.csr_matrix, nb_cc: int) -> np.nd
     
     return labels_louvain
 
-def get_gnn(dataset: str, adjacency: sparse.csr_matrix, biadjacency: sparse.csr_matrix, labels: np.ndarray, hidden_dim: int, nb_cc: int) -> np.ndarray:
+def get_gnn(adjacency: sparse.csr_matrix, biadjacency: sparse.csr_matrix, labels: np.ndarray, hidden_dim: int, nb_cc: int) -> np.ndarray:
     """GNN embedding + KMeans clustering. Returns labels of the nodes.
     
     Parameters
     ----------
-    dataset: str
-        Name of dataset on netset.
     adjacency: sparse.csr_matrix
         Adjacency matrix of the graph
     biadjacency: sparse.csr_matrix
@@ -72,6 +73,57 @@ def get_gnn(dataset: str, adjacency: sparse.csr_matrix, biadjacency: sparse.csr_
     kmeans_gnn_labels = kmeans.fit_transform(gnn_embedding)
 
     return kmeans_gnn_labels
+
+def get_spectral(adjacency: sparse.csr_matrix,  nb_cc: int) -> np.ndarray:
+    """Spectral embedding + KMeans clustering. Returns labels of the nodes.
+    
+    Parameters
+    ----------
+    adjacency: sparse.csr_matrix
+        Adjacency matrix of the graph
+    nb_cc: int
+        Number of communities (for KMeans clustering)
+    
+    Outputs
+    -------
+        Array of node labels.
+    """
+    # Spectral + KMeans
+    kmeans = KMeans(n_clusters=nb_cc) # k = number of connected components in summarized graph
+    kmeans_spectral_labels = kmeans.fit_transform(adjacency)
+
+    return kmeans_spectral_labels
+
+def get_doc2vec(biadjacency: sparse.csr_matrix, names_col: np.ndarray, nb_cc: int)->np.ndarray:
+    """Doc2Vec embedding + KMeans clustering. Returns labels of the nodes.
+    
+    Parameters
+    ----------
+    biadjacency: sparse.csr_matrix
+        Biadjacency matrix of the graph
+    names_col: np.ndarray
+        Array of feature names.
+    nb_cc: int
+        Number of communities (for KMeans clustering)
+    
+    Outputs
+    -------
+        Array of node labels.
+    """
+    # Build corpus
+    corpus = list(MyCorpus(biadjacency, names_col))
+    # Build model
+    model = gensim.models.doc2vec.Doc2Vec(vector_size=50, min_count=10, epochs=50)
+    model.build_vocab(corpus)
+    # Train model
+    model.train(corpus, total_examples=model.
+    corpus_count, epochs=model.epochs)
+
+    # Kmeans on embeddings
+    kmeans = KMeansDense(n_clusters=nb_cc) # k = number of connected components in summarized graph
+    kmeans_doc2vec_labels = kmeans.fit_transform(model.dv.vectors)
+
+    return kmeans_doc2vec_labels
 
 def get_community_graph(adjacency: sparse.csr_matrix, labels_communities: np.ndarray) -> sparse.csr_matrix:
     """Equivalent of summarized graph but for community-based methods. Returns the adjacency matrix of the graph made of the union of all communities. 
