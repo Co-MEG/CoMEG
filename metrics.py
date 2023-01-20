@@ -84,7 +84,7 @@ def information(summarized_adjacency: sparse.csr_matrix, summarized_biadjacency:
     div = diversity(pw_distances)
     cov = coverage(summarized_adjacency)
     conc = conciseness(summarized_adjacency, summarized_biadjacency) 
-    information = (div * cov) / conc
-    #print(f'inf: {information*100} - div: {div} - cov: {cov} - conc: {conc}')
+    information = (div * cov) / np.sqrt(conc)
+    print(f'inf: {information*100} - div: {div} - cov: {cov} - conc: {conc}')
 
     return information * 100
