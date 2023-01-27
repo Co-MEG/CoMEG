@@ -59,9 +59,9 @@ def conciseness(summarized_adjacency: sparse.csr_matrix, summarized_biadjacency:
     n, m = summarized_adjacency.shape[1], summarized_biadjacency.shape[1]
 
     out_deg_nodes = summarized_adjacency.dot(np.ones(n))
-    nb_nodes_ps = np.median(out_deg_nodes[out_deg_nodes > 0])
+    nb_nodes_ps = out_deg_nodes[out_deg_nodes > 0]
     out_deg_attrs = summarized_biadjacency.dot(np.ones(m))
-    nb_attrs_ps = np.median(out_deg_attrs[out_deg_attrs > 0])
+    nb_attrs_ps = out_deg_attrs[out_deg_attrs > 0]
     
     return np.median(nb_nodes_ps) + np.median(nb_attrs_ps)
 
@@ -85,6 +85,6 @@ def information(summarized_adjacency: sparse.csr_matrix, summarized_biadjacency:
     cov = coverage(summarized_adjacency)
     conc = conciseness(summarized_adjacency, summarized_biadjacency) 
     information = (div * cov) / np.sqrt(conc)
-    print(f'inf: {information*100} - div: {div} - cov: {cov} - conc: {conc}')
+    print(f'inf: {information*100} - div: {div} - cov: {cov} - conc: {np.sqrt(conc)}')
 
     return information * 100

@@ -1,4 +1,5 @@
 from contextlib import redirect_stdout
+import gensim
 from line_profiler import LineProfiler
 import numpy as np
 import pickle
@@ -52,7 +53,9 @@ def init_unex_patterns(context) -> tuple:
     extents.append(extents_init) # Initalize extents with all objects from context
     intents.append(intents_init) # Initialize intents with empty set attributes
 
-    return extents, intents
+    unexs = [0]
+
+    return extents, intents, unexs
 
 def unex_patterns(adjacency, context, context_csc, extents, intents, r=0, y=0, min_support=0, max_support=np.inf, beta=0, 
             degs=[], unexs_g=[], unexs_a=[], unexs=[], names_col=[], comp_gen_graph=None) -> List:
@@ -120,7 +123,7 @@ def unex_patterns(adjacency, context, context_csc, extents, intents, r=0, y=0, m
             # In other words, we only enter the loop if the new extent still has "space" to welcome enough new attributes
             # Using this, we can trim all patterns with not enough attributes from the recursion tree
             size_intention = len(intention(extents[r_new], context))
-            if size_intention >= beta:
+            if size_intention >= beta: 
                     
                 new_intent = list(sorted(set(intents[r]).union(set([j]))))
                 
@@ -139,14 +142,14 @@ def unex_patterns(adjacency, context, context_csc, extents, intents, r=0, y=0, m
                 print(f'  U(G): {unex_g}')
                 print(f'  U(A): {unex_a}')
                 print(f'  U: {unex}')
-                print(f'unexs: {unexs} r_new: {r_new} - r: {r} - ptr: {ptr}')
+                print(f'unexs: {unexs} r_new: {r_new} - r: {r} - ptr: {ptr}')
                 # ------------------------------------------------------------------------------------------------------------
                 
                 if len_new_extent - len(extents[r]) == 0:
                     print(f' == comparing unex={unex} and unexs[{ptr}]={unexs[ptr]}')
-                    #if unex - unexs[ptr] >= -np.inf:
-                    if unex - unexs[ptr] >= 0:
                     
+                    #if unex - unexs[ptr] >= 0:
+                    if True:
                         print(f'  Extent size did not change -> attribute {names_col[j]} is added to intent.')
                         intents[r] = new_intent
                         unexs[-1] = unex
@@ -173,9 +176,10 @@ def unex_patterns(adjacency, context, context_csc, extents, intents, r=0, y=0, m
 
                         print(f'r:{r} rnew:{r_new}')
                         print(f' ISCANNO comparing unex={unex} and unexs[{ptr}]=={unexs[ptr]}')
-                        #if unex - unexs[ptr] >= -np.inf:
-                        if unex - unexs[ptr] >= 0 or r == 0:
-                           
+                        
+                        #if unex - unexs[ptr] >= 0 or r == 0:
+                        if True:
+                        
                             intents[r_new] = new_intent 
                             len_new_intent = len(intents[r_new])
 
@@ -192,16 +196,16 @@ def unex_patterns(adjacency, context, context_csc, extents, intents, r=0, y=0, m
                     else:
                         print(f'IsCannonical: False --> do not enter recursion.')
                     
-    print(f'inexs: {unexs}')        
+    #print(f'inexs: {unexs}')        
     print(f'r:{r} - r_new:{r_new}')
     unexs.pop(-1)
     ptr -= 1
-    print(f'inexs after pop: {unexs}')        
+    #print(f'inexs after pop: {unexs}')        
     print(f'**END FUNCTION')
     
     return [*zip(extents, intents)]
 
-def run_unex_patterns(adjacency, biadjacency, words, complexity_gen_graphs, order_attributes, s, beta, outfile):
+def run_unex_patterns(adjacency, biadjacency, words, complexity_gen_graphs, order_attributes, s, beta, outfile, names):
     """Run pattern mining algorithm.
     
     Parameters
@@ -224,7 +228,7 @@ def run_unex_patterns(adjacency, biadjacency, words, complexity_gen_graphs, orde
         Output filename.
     """
     # Initialization
-    extents, intents = init_unex_patterns(biadjacency)
+    extents, intents, unexs = init_unex_patterns(biadjacency)
     degs = get_degrees(biadjacency, transpose=True)
     global r_new
     r_new = 0
@@ -261,13 +265,13 @@ def run_unex_patterns(adjacency, biadjacency, words, complexity_gen_graphs, orde
             lp = LineProfiler()
             lp_wrapper = lp(unex_patterns)
             lp_wrapper(adjacency, filt_biadjacency, filt_biadjacency_csc, extents, intents, r=0, y=0, 
-                                    min_support=s, max_support=100, beta=beta,
-                                    degs=sorted_degs, unexs_g=[0], unexs_a=[0], unexs=[0], names_col=sorted_names_col,
+                                    min_support=s, max_support=np.inf, beta=beta,
+                                    degs=sorted_degs, unexs_g=[0], unexs_a=[0], unexs=unexs, names_col=sorted_names_col,
                                     comp_gen_graph=complexity_gen_graphs)
             lp.print_stats()
 
     res = [*zip(extents, intents)]
-
+    
     # Save result
     with open(f"result_{outfile}.bin", "wb") as output:
         pickle.dump(res, output)
