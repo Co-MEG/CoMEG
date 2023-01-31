@@ -89,3 +89,19 @@ def kcore_decomposition(g: sparse.csr_matrix) -> np.ndarray:
     cores_labels = core.fit_transform(directed2undirected(g))
 
     return cores_labels
+
+def smoothing(x, alpha=0.5, delta=10):
+    return (1 / (1 + np.exp(-alpha * (x - delta)))) 
+
+def shuffle_columns(X, indexes):
+    x = X.copy() 
+    start = np.min(indexes)
+    end = np.max(indexes) + 1
+
+    if isinstance(X, sparse.csr_matrix):
+        x[:, [np.arange(start, end)]] = X[:, indexes]
+        x.eliminate_zeros()
+    elif isinstance(X, np.ndarray):
+        x[np.arange(start, end)] = X[indexes]    
+
+    return x
