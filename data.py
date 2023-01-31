@@ -14,12 +14,19 @@ def load_data(dataset: str):
     dataset: str
         Name of dataset on netset.
     """
-    graph = load_netset(dataset)
+    netset = ['wikivitals-fr', 'wikischools', 'wikivitals']
+    
+    if dataset in netset:
+        graph = load_netset(dataset)
+        labels = graph.labels
+    elif dataset == 'lastfm':
+        with open(f'data/{dataset}', 'br') as f:
+            graph = pickle.load(f)
+        labels = ''
     adjacency = graph.adjacency
     biadjacency = graph.biadjacency
     names = graph.names
     names_col = graph.names_col
-    labels = graph.labels
     
     return adjacency, biadjacency, names, names_col, labels
 
