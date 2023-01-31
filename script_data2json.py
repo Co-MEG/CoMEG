@@ -7,7 +7,7 @@ from data import load_data
 from sknetwork.utils import get_degrees
 
 
-def dataset2json(dataset: str, outpath: str):
+def dataset2json(dataset: str, outpath: str, min_support=0, max_support=np.inf):
     """Save sknetwork dataset to SIAS-Miner JSON format.
     
     Parameters
@@ -16,6 +16,10 @@ def dataset2json(dataset: str, outpath: str):
         Dataset name
     outpath: str
         Output path
+    min_support: int
+        Minimum support for number of attributes
+    max_support: int
+        Maximum support for number of attributes
     """
         
     adjacency, biadjacency, names, names_col, _ = load_data(dataset)
@@ -63,8 +67,12 @@ def dataset2json(dataset: str, outpath: str):
 
 
 # ==================================================================
+MIN_SUPPORT = 5
+MAX_SUPPORT = 1000
+DATASETS = ['lastfm'] #['wikivitals', 'wikivitals-fr', 'wikischools']
+
 if __name__=='__main__':
-    datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
-    for dataset in datasets:
-        dataset2json(dataset, f'data/graph_{dataset}_new.json')
+
+    for dataset in DATASETS:
+        dataset2json(dataset, f'data/graph_{dataset}_new.json', min_support=MIN_SUPPORT, max_support=MAX_SUPPORT)
         print(f'{dataset} done!')
