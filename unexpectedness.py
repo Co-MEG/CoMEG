@@ -19,7 +19,14 @@ def graph_unexpectedness(adjacency, gen_complexities) -> float:
         Unexpectedness of a graph structure as a float value. """
     n = adjacency.shape[0]
     complexity_desc_g = mdl_graph(adjacency.astype(bool) + sparse.identity(n).astype(bool))
-    complexity_gen_g = np.mean(gen_complexities.get(n))
+    try:
+        avg = np.mean(gen_complexities.get(n))
+    except TypeError:
+        print(f'Number of nodes missing in dict: {n}')
+        print(gen_complexities.keys())
+        avg = 0
+    
+    complexity_gen_g = avg
     return complexity_gen_g - complexity_desc_g
 
 def attr_unexpectedness(biadjacency, attributes, degrees) -> float:
