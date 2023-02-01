@@ -7,22 +7,25 @@ from sknetwork.data import load_netset
 from sknetwork.utils import get_degrees
 
 def load_data(dataset: str):
-    """Load data from netset and return loaded elements as a tuple.
+    """Load data and return loaded elements as a tuple.
     
     Parameters
     ----------
     dataset: str
-        Name of dataset on netset.
+        Name of dataset (on netset or local).
     """
-    netset = ['wikivitals-fr', 'wikischools', 'wikivitals']
-    
+    netset = ['wikivitals-fr', 'wikischools', 'wikivitals', 'wikihumans']
+    labels = ''
+
     if dataset in netset:
         graph = load_netset(dataset)
-        labels = graph.labels
+        if dataset != 'wikihumans':
+            labels = graph.labels
+
     elif dataset == 'lastfm':
         with open(f'data/{dataset}', 'br') as f:
             graph = pickle.load(f)
-        labels = ''
+
     adjacency = graph.adjacency
     biadjacency = graph.biadjacency
     names = graph.names
