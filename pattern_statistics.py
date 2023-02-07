@@ -33,21 +33,22 @@ def load_result(path, filename):
 # ====================================================================
 datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
 sorted_attributes = True
-ss = [8, 7, 6, 5]
+ss = [5]
 betas = [5]
 extent_sizes_dict = defaultdict(dict)
 intent_sizes_dict = defaultdict(dict)
 densities_dict = defaultdict(dict)
 kcores_dict = defaultdict(dict)
-outpath = 'output/result'
-resolutions = {'wikivitals-fr': {1: 0, 3: 0, 5: 0.3, 6: 0.4, 10: 0.8, 12: 0.9, 15: 1.1, 47: 3, 27: 1.89}, 
-                'wikivitals': {4: 0.5, 7: 0.8, 11: 1, 13: 1.3, 14: 1.18, 16: 1.5, 19: 1.6, 21: 1.76, 29: 2.4, 31: 2.5, 34: 2.7, 47: 3.903, 49: 3.95, 65: 4.70, 101: 6.4}, 
-                'wikischools': {4: 0.45, 8: 1, 3: 0.4, 8: 0.58, 9: 0.9, 10: 1.18, 13: 1.4, 15: 1.5, 18: 1.69, 22: 1.95, 39: 2.75, 40: 2.75,  46: 2.99, 58: 3.7, 73: 4.41}}
+outpath = 'output/result/with_prob'
+resolutions = {'wikivitals-fr': {1: 0, 3: 0, 5: 0.3, 6: 0.4, 8: 0.6, 10: 0.8, 12: 0.9, 14: 1.05, 15: 1.1, 20: 1.4, 47: 3, 27: 1.89, 85: 5.58}, 
+                'wikivitals': {4: 0.5, 7: 0.8, 11: 1, 13: 1.3, 14: 1.18, 16: 1.5, 19: 1.6, 21: 1.76, 23: 1.83, 28: 2.3, 29: 2.4, 31: 2.5, 34: 2.7, 47: 3.903, 49: 3.95, 65: 4.70, 85: 5.58, 101: 6.4}, 
+                'wikischools': {3: 0.4, 4: 0.45, 8: 1, 3: 0.4, 8: 0.58, 9: 0.9, 10: 1.18, 13: 1.4, 15: 1.5, 18: 1.69, 22: 1.95, 32: 2.51, 37: 2.6, 39: 2.75, 40: 2.75,  46: 2.99, 57: 3.7, 58: 3.7, 70: 4.2, 73: 4.41},
+                'lastfm': {60: 2.74, 32: 0.65}}
 
 extent_size = False
-intent_size = False
+intent_size = True
 densities = False
-kcores = True
+kcores = False
 # ====================================================================
 
 
@@ -73,7 +74,7 @@ for dataset in datasets:
             
             # Load result
             # ------------------------------------------------------------------
-            filename = f'result_{dataset}_{b}_{s}_order{str(sorted_attributes)}'
+            filename = f'result_{dataset}_{b}_{s}_order{str(sorted_attributes)}_prob'
             result = load_result(outpath, filename)
             
             # Load and preprocess data
@@ -347,14 +348,14 @@ for dataset in datasets:
 
 # Save result
 if extent_size:
-    with open(f'output/result/extent_sizes.pkl', 'wb') as f:
+    with open(f'{outpath}/extent_sizes.pkl', 'wb') as f:
         pickle.dump(extent_sizes_dict, f)
 if intent_size:
-    with open(f'output/result/intent_sizes.pkl', 'wb') as f:
+    with open(f'{outpath}/intent_sizes.pkl', 'wb') as f:
         pickle.dump(intent_sizes_dict, f)
 if densities:
-    with open(f'output/result/densities.pkl', 'wb') as f:
+    with open(f'{outpath}/densities.pkl', 'wb') as f:
         pickle.dump(densities_dict, f)
 if kcores:
-    with open(f'output/result/kcores.pkl', 'wb') as f:
+    with open(f'{outpath}/kcores.pkl', 'wb') as f:
         pickle.dump(kcores_dict, f)
