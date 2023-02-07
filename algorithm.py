@@ -183,7 +183,7 @@ def unex_patterns(adjacency, context, context_csc, extents, intents, r=0, y=0, m
                         
                         #if True:
                         if unex - unexs[ptr] >= 0 or r == 0:
-
+                            
                             intents[r_new] = new_intent 
                             len_new_intent = len(intents[r_new])
 
@@ -194,36 +194,37 @@ def unex_patterns(adjacency, context, context_csc, extents, intents, r=0, y=0, m
                             # New: if recursion depth is above a threshold, reorder attributes (randomly) to break the redundancy in patterns
                             p = smoothing(len(unexs))
                             X = stats.bernoulli(p)
-                            if False:
-                                if not shuf and X.rvs(1)[0] == 1:
-                                    print(f'Entering smoothing, val={smoothing(len(unexs))}')
-                                    start = j+1
-                                    end = len(names_col)
-                                    rand_idxs = np.random.choice(np.arange(start, end), size=(end - start), replace=False)
-                                    if len(rand_idxs) > 0:
-                                        context = shuffle_columns(context, rand_idxs)
-                                        context_csc = context.tocsc()
-                                        new_names_col = shuffle_columns(names_col, rand_idxs)
-                                        print(start, end)
-                                        print(len(rand_idxs), rand_idxs, j)
-                                        print(new_names_col[j-1:j+5], names_col[j-1:j+5])
-                                        degs = shuffle_columns(degs, rand_idxs)
-                                        print(f"Next attr will be: {new_names_col[j+1]} instead of {names_col[j+1]}")
-                                        print(f'degs: {degs[j-2:j+10]}')
-                                        names_col = new_names_col
-                                        shuf = True
-                                elif shuf:
-                                    print(f'no smoothing, Reorder attributes according to degrees')
-                                    sort_index = np.argsort(get_degrees(context.astype(bool), transpose=True))
-                                    new_degs = degs[sort_index]
-                                    new_context = context[:, sort_index]
-                                    new_names_col = names_col[sort_index]
-                                    context_csc = new_context.tocsc()
-                                    degs = new_degs.copy()
-                                    context = new_context.copy()
-                                    names_col = new_names_col.copy()
-                                    print(f'degs: {degs[j-2:j+5]}')
-                                    shuf = False
+
+                            #if False:
+                            if not shuf and X.rvs(1)[0] == 1:
+                                print(f'Entering smoothing, val={smoothing(len(unexs))}')
+                                start = j+1
+                                end = len(names_col)
+                                rand_idxs = np.random.choice(np.arange(start, end), size=(end - start), replace=False)
+                                if len(rand_idxs) > 0:
+                                    context = shuffle_columns(context, rand_idxs)
+                                    context_csc = context.tocsc()
+                                    new_names_col = shuffle_columns(names_col, rand_idxs)
+                                    print(start, end)
+                                    print(len(rand_idxs), rand_idxs, j)
+                                    print(new_names_col[j-1:j+5], names_col[j-1:j+5])
+                                    degs = shuffle_columns(degs, rand_idxs)
+                                    print(f"Next attr will be: {new_names_col[j+1]} instead of {names_col[j+1]}")
+                                    print(f'degs: {degs[j-2:j+10]}')
+                                    names_col = new_names_col
+                                    shuf = True
+                            elif shuf:
+                                print(f'no smoothing, Reorder attributes according to degrees')
+                                sort_index = np.argsort(get_degrees(context.astype(bool), transpose=True))
+                                new_degs = degs[sort_index]
+                                new_context = context[:, sort_index]
+                                new_names_col = names_col[sort_index]
+                                context_csc = new_context.tocsc()
+                                degs = new_degs.copy()
+                                context = new_context.copy()
+                                names_col = new_names_col.copy()
+                                print(f'degs: {degs[j-2:j+5]}')
+                                shuf = False
 
                             unex_patterns(adjacency, context, context_csc, extents, intents, r=r_new, y=j+1, min_support=min_support, 
                                         max_support=max_support, beta=beta, degs=degs, unexs_g=unexs_g, 
@@ -245,7 +246,7 @@ def unex_patterns(adjacency, context, context_csc, extents, intents, r=0, y=0, m
     
     return [*zip(extents, intents)]
 
-def run_unex_patterns(adjacency, biadjacency, words, complexity_gen_graphs, order_attributes, s, beta, outfile, names):
+def run_unex_patterns(adjacency, biadjacency, words, complexity_gen_graphs, order_attributes, s, beta, outfile):
     """Run pattern mining algorithm.
     
     Parameters
@@ -299,7 +300,7 @@ def run_unex_patterns(adjacency, biadjacency, words, complexity_gen_graphs, orde
     print(f'Context: {filt_biadjacency.shape}')
 
     # Algorithm
-    with open(f'log_{outfile}_with_u_without_prob', 'w') as f:
+    with open(f'log_{outfile}_prob', 'w') as f:
         with redirect_stdout(f):
             print('starts profiling...')
             lp = LineProfiler()
@@ -313,7 +314,7 @@ def run_unex_patterns(adjacency, biadjacency, words, complexity_gen_graphs, orde
     res = [*zip(extents, intents)]
     
     # Save result
-    with open(f"result_{outfile}_with_u_without_prob.bin", "wb") as output:
+    with open(f"result_{outfile}_prob.bin", "wb") as output:
         pickle.dump(res, output)
 
     return len(res) 
