@@ -14,8 +14,10 @@ from utils import pattern_attributes
 # =================================================================
 
 datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
+#datasets = ['lastfm']
 betas = [8, 7, 6, 5]
 ss = [8, 7, 6, 5]
+
 with_order = [True]
 delta = 0.2
 informations = defaultdict()
@@ -28,11 +30,13 @@ for d, dataset in enumerate(datasets):
     informations[dataset] = defaultdict(dict)
     # Load data
     adjacency, biadjacency, names, names_col, labels = load_data(dataset)
-    print(f'Dataset: {dataset}...')
+    print(f'**Dataset: {dataset}...')
         
     for i, b in enumerate(betas):
+        print(f' ==Beta: {b}')
         informations[dataset][b] = defaultdict(list)
         for k, s in enumerate(ss):
+            print(f'  ---s: {s}')
             
             new_biadjacency, words = preprocess_data(biadjacency, names_col, s)
             
@@ -75,10 +79,15 @@ for d, dataset in enumerate(datasets):
             pw_distances_d2v = get_pw_distance_matrix(dataset, b, s, method='d2v_kmeans')
             
             # SG information
+            print(f'    Summaries')
             information_summaries = information(summarized_adj, summarized_biadj, pw_distances_summaries)
+            print(f'    Louvain')
             information_louvain = information(louvain_adj, pattern_louvain_attributes, pw_distances_louvain)
+            print(f'    GNN')
             information_gnn = information(gnn_adj, pattern_gnn_attributes, pw_distances_gnn)
+            print(f'    Spectral')
             information_spectral = information(spectral_adj, pattern_spectral_attributes, pw_distances_spectral)
+            print(f'    Doc2Vec')
             information_d2v = information(d2v_adj, pattern_d2v_attributes, pw_distances_d2v)
             
             # Save information in dict
@@ -89,6 +98,6 @@ for d, dataset in enumerate(datasets):
             informations[dataset][b]['doc2vec'].append(information_d2v)
 
 # Save result
-with open(f'informations_evaluation.pkl', 'wb') as f:
+with open(f'informations_evaluation_new.pkl', 'wb') as f:
     pickle.dump(informations, f)
     

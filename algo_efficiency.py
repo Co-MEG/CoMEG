@@ -19,10 +19,10 @@ from derivation import extension_csc
 # -------------------------------------------------------
 # Parameters
 #datasets = ['wikihumans']
-#datasets = ['wikivitals-fr', 'wikischools', 'wikivitals']
-datasets = ['lastfm']
+datasets = ['wikivitals-fr', 'wikischools', 'wikivitals']
+#datasets = ['lastfm']
 
-betas = [8, 7, 6, 5]
+betas = [5]
 ss = [8, 7, 6, 5]
 
 order_attributes = [True]
@@ -50,7 +50,7 @@ for dataset in datasets:
                 complexity_gen_graphs = generation_complexity(adjacency, biadjacency, n_attrs=15, n_iter=300)
                 
                 # Run algorithm
-                nb_patterns = run_unex_patterns(adjacency, biadjacency, words, complexity_gen_graphs, order_attr, s, beta, outfile, names)
+                nb_patterns = run_unex_patterns(adjacency, biadjacency, words, complexity_gen_graphs, order_attr, s, beta, outfile)
 
                 # Save number of patterns
                 nb_pattern_dict[dataset][order_attr][beta].append(nb_patterns)
