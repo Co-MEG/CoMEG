@@ -21,6 +21,7 @@ from sknetwork.topology import get_connected_components
 from sknetwork.utils import get_degrees, KMeansDense
 
 from corpus import MyCorpus
+from data import load_data
 from distances import pairwise_wd_distance
 from summarization import get_summarized_graph
 from utils import build_pattern_attributes
@@ -32,14 +33,22 @@ def load_result(path, filename):
     return result
 
 datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
+#datasets = ['lastfm']
 sorted_attributes = True
+with_prob = True
 ss = [8, 7, 6, 5]
 betas = [8, 7, 6, 5]
+#ss = [1]
+#betas = [] 
 avgs = defaultdict(dict)
-outpath = 'output/result'
-resolutions = {'wikivitals-fr': {1: 0, 3: 0, 5: 0.3, 6: 0.4, 10: 0.8, 12: 0.9, 15: 1.1, 47: 3, 27: 1.89}, 
-                'wikivitals': {4: 0.5, 7: 0.8, 11: 1, 13: 1.3, 14: 1.18, 16: 1.5, 19: 1.6, 21: 1.76, 29: 2.4, 31: 2.5, 34: 2.7, 47: 3.903, 49: 3.95, 65: 4.70, 101: 6.4}, 
-                'wikischools': {4: 0.45, 8: 1, 3: 0.4, 8: 0.58, 9: 0.9, 10: 1.18, 13: 1.4, 15: 1.5, 18: 1.69, 22: 1.95, 39: 2.75, 40: 2.75,  46: 2.99, 58: 3.7, 73: 4.41}}
+if with_prob:
+    outpath = 'output/result/with_prob'
+else:
+    outpath = 'output/result'
+resolutions = {'wikivitals-fr': {1: 0, 3: 0, 5: 0.3, 6: 0.4, 8: 0.6, 10: 0.8, 12: 0.9, 14: 1.05, 15: 1.1, 20: 1.4, 47: 3, 27: 1.89, 85: 5.58}, 
+                'wikivitals': {4: 0.5, 7: 0.8, 11: 1, 13: 1.3, 14: 1.18, 16: 1.5, 19: 1.6, 21: 1.76, 23: 1.83, 28: 2.3, 29: 2.4, 31: 2.5, 34: 2.7, 47: 3.903, 49: 3.95, 65: 4.70, 85: 5.58, 101: 6.4}, 
+                'wikischools': {3: 0.4, 4: 0.45, 8: 1, 3: 0.4, 8: 0.58, 9: 0.9, 10: 1.18, 13: 1.4, 15: 1.5, 18: 1.69, 22: 1.95, 32: 2.51, 37: 2.6, 39: 2.75, 40: 2.75,  46: 2.99, 57: 3.7, 58: 3.7, 70: 4.2, 73: 4.41},
+                'lastfm': {60: 2.74, 32: 0.65}}
 
 # Run experiment
 # ------------------------------------------------------------------
@@ -54,17 +63,14 @@ for dataset in datasets:
             
             # Load result
             # ------------------------------------------------------------------
-            filename = f'result_{dataset}_{b}_{s}_order{str(sorted_attributes)}'
+            if with_prob:
+                filename = f'result_{dataset}_{b}_{s}_order{str(sorted_attributes)}_prob'
+            else:
+                filename = f'result_{dataset}_{b}_{s}_order{str(sorted_attributes)}'
             result = load_result(outpath, filename)
             
             # Load and preprocess data
-            graph = load_netset(dataset)
-            adjacency = graph.adjacency
-            biadjacency = graph.biadjacency
-            names = graph.names
-            words = graph.names_col
-            labels = graph.labels
-            names_labels = graph.names_labels
+            adjacency, biadjacency, names, words, labels = load_data(dataset)
             orig_words = words.copy()
             
             # Degree of attribute = # articles in which it appears
@@ -123,11 +129,12 @@ for dataset in datasets:
                                 activations=['Relu', 'Softmax'],
                                 verbose=False)
 
-            gnn.fit(adjacency, features, labels, train_size=0.8, val_size=0.1, test_size=0.1, n_epochs=50)
-            # KMeans on GNN node embedding
-            gnn_embedding = gnn.layers[-1].embedding
-            kmeans = KMeansDense(n_clusters=nb_cc) # k = number of connected components in summarized graph
-            kmeans_gnn_labels = kmeans.fit_transform(gnn_embedding)
+            if len(labels) > 0:
+                gnn.fit(adjacency, features, labels, train_size=0.8, val_size=0.1, test_size=0.1, n_epochs=50)
+                # KMeans on GNN node embedding
+                gnn_embedding = gnn.layers[-1].embedding
+                kmeans = KMeansDense(n_clusters=nb_cc) # k = number of connected components in summarized graph
+                kmeans_gnn_labels = kmeans.fit_transform(gnn_embedding)
 
             # Spectral + KMeans
             kmeans = KMeans(n_clusters=nb_cc) # k = number of connected components in summarized graph
@@ -135,7 +142,7 @@ for dataset in datasets:
             
             # Doc2Vec model on whole biadjacency matrix
             corpus = list(MyCorpus(biadjacency, orig_words))
-            model = gensim.models.doc2vec.Doc2Vec(vector_size=50, min_count=10, epochs=50)
+            model = gensim.models.doc2vec.Doc2Vec(vector_size=15, min_count=5, epochs=300)
             model.build_vocab(corpus)
             # Training model
             model.train(corpus, total_examples=model.corpus_count, epochs=model.epochs)
@@ -146,28 +153,34 @@ for dataset in datasets:
             
             # Concept x attributes matrices for each method
             # ------------------------------------------------------------------
-            concept_attributes, concept_summarized_attributes, concept_louvain_attributes, concept_gnn_kmeans_attributes, concept_spectral_kmeans_attributes, concept_doc2vec_kmeans_attributes = build_pattern_attributes(result, 
+            if len(labels) > 0:
+                concept_attributes, concept_summarized_attributes, concept_louvain_attributes, concept_gnn_kmeans_attributes, concept_spectral_kmeans_attributes, concept_doc2vec_kmeans_attributes = build_pattern_attributes(result, 
                                                                                                     biadjacency, labels_cc_summarized, labels_louvain, kmeans_gnn_labels, kmeans_spectral_labels, kmeans_doc2vec_labels)
+            else:     
+                concept_attributes, concept_summarized_attributes, concept_louvain_attributes, _, concept_spectral_kmeans_attributes, concept_doc2vec_kmeans_attributes = build_pattern_attributes(result, 
+                                                                                                    biadjacency, labels_cc_summarized, labels_louvain, labels_louvain, kmeans_spectral_labels, kmeans_doc2vec_labels)                                                                               
             
             # Pairwise Wassertein distances between embeddings
             # ------------------------------------------------------------------
             d2v_wd_matrix_concepts = pairwise_wd_distance(concept_attributes, nb_cc, model, sorted_names_col)
             d2v_wd_matrix_summarized = pairwise_wd_distance(concept_summarized_attributes, nb_cc, model, sorted_names_col)
             d2v_wd_matrix_louvain = pairwise_wd_distance(concept_louvain_attributes, nb_louvain, model, words)
-            d2v_wd_matrix_gnn_kmeans = pairwise_wd_distance(concept_gnn_kmeans_attributes, nb_cc, model, words)
+            if len(labels) > 0:
+                d2v_wd_matrix_gnn_kmeans = pairwise_wd_distance(concept_gnn_kmeans_attributes, nb_cc, model, words)
             d2v_wd_matrix_spectral_kmeans = pairwise_wd_distance(concept_spectral_kmeans_attributes, nb_cc, model, words)
             d2v_wd_matrix_d2v_kmeans = pairwise_wd_distance(concept_doc2vec_kmeans_attributes, nb_cc, model, words)
 
             # Save result
-            with open(f'output/result/wasserstein_distances_{dataset}_{b}_{s}_concepts.pkl', 'wb') as f:
+            with open(f'{outpath}/wasserstein_distances_{dataset}_{b}_{s}_patterns.pkl', 'wb') as f:
                 np.save(f, d2v_wd_matrix_concepts)
-            with open(f'output/result/wasserstein_distances_{dataset}_{b}_{s}_summaries.pkl', 'wb') as f:
+            with open(f'{outpath}/wasserstein_distances_{dataset}_{b}_{s}_summaries.pkl', 'wb') as f:
                 np.save(f, d2v_wd_matrix_summarized)
-            with open(f'output/result/wasserstein_distances_{dataset}_{b}_{s}_louvain.pkl', 'wb') as f:
+            with open(f'{outpath}/wasserstein_distances_{dataset}_{b}_{s}_louvain.pkl', 'wb') as f:
                 np.save(f, d2v_wd_matrix_louvain)
-            with open(f'output/result/wasserstein_distances_{dataset}_{b}_{s}_gnn_kmeans.pkl', 'wb') as f:
-                np.save(f, d2v_wd_matrix_gnn_kmeans)
-            with open(f'output/result/wasserstein_distances_{dataset}_{b}_{s}_spectral_kmeans.pkl', 'wb') as f:
+            if len(labels) > 0:
+                with open(f'{outpath}/wasserstein_distances_{dataset}_{b}_{s}_gnn_kmeans.pkl', 'wb') as f:
+                    np.save(f, d2v_wd_matrix_gnn_kmeans)
+            with open(f'{outpath}/wasserstein_distances_{dataset}_{b}_{s}_spectral_kmeans.pkl', 'wb') as f:
                 np.save(f, d2v_wd_matrix_spectral_kmeans)
-            with open(f'output/result/wasserstein_distances_{dataset}_{b}_{s}_d2v_kmeans.pkl', 'wb') as f:
+            with open(f'{outpath}/wasserstein_distances_{dataset}_{b}_{s}_d2v_kmeans.pkl', 'wb') as f:
                 np.save(f, d2v_wd_matrix_d2v_kmeans)
