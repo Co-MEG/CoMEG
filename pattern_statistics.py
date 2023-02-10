@@ -348,7 +348,7 @@ for dataset in datasets:
 
 # Save result
 if extent_size:
-    with open(f'{outpath}/extent_sizes_new.pkl', 'wb') as f:
+    with open(f'{outpath}/extent_sizes.pkl', 'wb') as f:
         pickle.dump(extent_sizes_dict, f)
 if intent_size:
     with open(f'{outpath}/intent_sizes.pkl', 'wb') as f:

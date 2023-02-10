@@ -43,7 +43,7 @@ def coverage(summarized_adjacency: sparse.csr_matrix) -> float:
     return cov
 
 def conciseness(summarized_adjacency: sparse.csr_matrix, summarized_biadjacency: sparse.csr_matrix) -> float:
-    """Conciseness of summarized graph, i.e. sum of the median of node outdegrees and median of number of attributes per node.
+    """Conciseness of summarized graph, i.e. sum of the median of number of nodes and median of number of attributes per pattern/community.
     
     Parameters
     ----------

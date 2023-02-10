@@ -22,8 +22,8 @@ from derivation import extension_csc
 datasets = ['wikivitals-fr', 'wikischools', 'wikivitals']
 #datasets = ['lastfm']
 
-betas = [5]
-ss = [8, 7, 6, 5]
+betas = [8, 7, 6, 5, 4]
+ss = [4]
 
 order_attributes = [True]
 
