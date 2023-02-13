@@ -65,7 +65,7 @@ def preprocess_data(biadjacency: sparse.csr_matrix, names_col: np.ndarray, s: in
 
     return sorted_biadjacency, words
 
-def load_patterns(dataset: str, beta: int, s: int, order: bool) -> list:
+def load_patterns(dataset: str, beta: int, s: int, order: bool, inpath: str) -> list:
     """Load patterns.
     
     Parameters
@@ -83,7 +83,7 @@ def load_patterns(dataset: str, beta: int, s: int, order: bool) -> list:
     -------
         List of patterns. 
     """
-    with open(f"output/result/result_{dataset}_{beta}_{s}_order{str(order)}.bin", "rb") as data:
+    with open(f"{inpath}/result_{dataset}_{beta}_{s}_order{str(order)}.bin", "rb") as data:
         patterns = pickle.load(data)
     
     return patterns
