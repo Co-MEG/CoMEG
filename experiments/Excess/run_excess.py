@@ -61,7 +61,7 @@ if __name__=='__main__':
 
             # Wasserstein distances
             wd_filename = f'wasserstein_distances_{dataset}_5_{s_param}_excess_patterns.pkl'
-            if os.path.exists(f'{INPATH}/{dataset}'):
+            if os.path.exists(f'{INPATH}/{dataset}/{wd_filename}'):
                 wd_distances_excess = get_pw_distance_matrix(dataset, beta=5, s=s_param, path=os.path.join(INPATH, dataset), method='excess_patterns')
             else:
                 wd_distances_excess = pairwise_wd_distance(excess_patterns_attributes, nb_excess_patterns_filt, model, names_col)
@@ -72,10 +72,10 @@ if __name__=='__main__':
             # Information metric
             div = diversity(wd_distances_excess, gamma=parameters.get('gamma'))
             cov = coverage_excess(excess_patterns_filt, adjacency.shape[0])
-            conc = width_excess(adjacency, biadjacency, nb_excess_patterns, excess_patterns)
+            conc = width_excess(excess_patterns_filt)
             information = (div * cov) / conc
             informations_excess[dataset].append(information)
             
-            with open(f"{INPATH}/{dataset}/information_details_{dataset}_5_{s_param}_{parameters.get('gamma')}excess.txt", 'w') as f:
+            with open(f"{INPATH}/{dataset}/information_details_{dataset}_5_{s_param}_{parameters.get('gamma')}_excess.txt", 'w') as f:
                 f.write(f'{div}, {cov}, {conc}, {information}')
             print(f'{div}, {cov}, {conc}, {information}')
