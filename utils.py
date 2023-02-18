@@ -1,10 +1,14 @@
+import gensim
+import os
 import numpy as np
 from scipy import sparse
 
 from sknetwork.topology import CoreDecomposition
 from sknetwork.utils import directed2undirected
 
-def pattern_attributes(biadjacency, labels):
+from experiments.pattern_information import MyCorpus
+
+def pattern_attributes(biadjacency, labels, mask=None):
     """Build pattern x attributes matrix. Column values are count of occurrences of attributes for each pattern/community.
     
     Parameters
@@ -13,6 +17,8 @@ def pattern_attributes(biadjacency, labels):
         Biadjacency matrix of the graph
     labels: np.ndarray
         Belonging community for each node in the graph, e.g Louvain labels or KMeans labels
+    mask: np.ndarray (default=None)
+        Mask for nodes in connected components
         
     Outputs
     -------
@@ -22,7 +28,10 @@ def pattern_attributes(biadjacency, labels):
     matrix = np.zeros((nb_cc, biadjacency.shape[1]))
     for c in range(nb_cc):
         mask_cc = labels == c
-        indices_attr = biadjacency[mask_cc].indices
+        if mask is not None:
+            indices_attr = np.unique(biadjacency[mask, :][mask_cc, :].indices)
+        else:
+            indices_attr = np.unique(biadjacency[mask_cc, :].indices)
         for ind in indices_attr:
             matrix[c, ind] += 1
 
@@ -105,3 +114,30 @@ def shuffle_columns(X, indexes):
         x[np.arange(start, end)] = X[indexes]    
 
     return x
+
+def save_gensim_model(model, inpath, name):
+    model.save(f"{inpath}/{name}.model")
+
+def load_gensim_model(inpath, name):
+    model = gensim.models.Doc2Vec.load(f'{inpath}/{name}.model')
+    return model
+
+def get_gensim_model(inpath, name, biadjacency, names_col):
+
+    if not os.path.exists(f'{inpath}/{name}.model'):
+        corpus = list(MyCorpus(biadjacency, names_col))
+        model = gensim.models.doc2vec.Doc2Vec(vector_size=15, min_count=5, epochs=300)
+        model.build_vocab(corpus)
+        # Training model
+        print('Training gensim model...')
+        model.train(corpus, total_examples=model.corpus_count, epochs=model.epochs)
+        # Save model
+        save_gensim_model(model, inpath, name)
+    else:
+        model = load_gensim_model(inpath, name)
+        print(f'Pre-trained gensim model loaded from {inpath}/{name}.model')
+
+def get_root_directory():
+    """Return root directory."""
+    return os.path.dirname(os.path.realpath(__file__))
+    
