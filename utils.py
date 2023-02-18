@@ -136,7 +136,8 @@ def get_gensim_model(inpath, name, biadjacency, names_col):
     else:
         model = load_gensim_model(inpath, name)
         print(f'Pre-trained gensim model loaded from {inpath}/{name}.model')
-
+    return model
+    
 def get_root_directory():
     """Return root directory."""
     return os.path.dirname(os.path.realpath(__file__))
