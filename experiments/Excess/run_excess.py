@@ -76,6 +76,6 @@ if __name__=='__main__':
             information = (div * cov) / conc
             informations_excess[dataset].append(information)
             
-            with open(f'{INPATH}/{dataset}/information_details_{dataset}_5_{s_param}_excess.txt', 'w') as f:
+            with open(f"{INPATH}/{dataset}/information_details_{dataset}_5_{s_param}_{parameters.get('gamma')}excess.txt", 'w') as f:
                 f.write(f'{div}, {cov}, {conc}, {information}')
             print(f'{div}, {cov}, {conc}, {information}')
