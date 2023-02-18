@@ -5,6 +5,8 @@ from scipy import sparse
 from sknetwork.data import load_netset
 from sknetwork.utils import get_degrees
 
+from utils import get_root_directory
+
 def load_data(dataset: str):
     """Load data and return loaded elements as a tuple.
     
@@ -22,7 +24,8 @@ def load_data(dataset: str):
             labels = graph.labels
 
     else:
-        with open(f'data/{dataset}Graph', 'br') as f:
+        ROOT_DIR = get_root_directory()
+        with open(f'{ROOT_DIR}/data/{dataset}Graph', 'br') as f:
             graph = pickle.load(f)
 
     adjacency = graph.adjacency
