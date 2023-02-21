@@ -72,7 +72,7 @@ def preprocess_data(biadjacency: sparse.csr_matrix, names_col: np.ndarray, s: in
 
     return sorted_biadjacency, words
 
-def load_patterns(dataset: str, beta: int, s: int, order: bool, inpath: str, with_prob: bool) -> list:
+def load_patterns(dataset: str, beta: int, s: int, order: bool, inpath: str, with_prob: bool, delta=None) -> list:
     """Load patterns.
     
     Parameters
@@ -91,15 +91,19 @@ def load_patterns(dataset: str, beta: int, s: int, order: bool, inpath: str, wit
         List of patterns. 
     """
     if with_prob:
-        with open(f"{inpath}/result_{dataset}_{beta}_{s}_order{str(order)}_delta_0.bin", "rb") as data:
-            patterns = pickle.load(data)
+        if delta is not None:
+            with open(f"{inpath}/result_{dataset}_{beta}_{s}_order{str(order)}_delta_{delta}.bin", "rb") as data:
+                patterns = pickle.load(data)
+        else:
+            with open(f"{inpath}/result_{dataset}_{beta}_{s}_order{str(order)}_delta_0.bin", "rb") as data:
+                patterns = pickle.load(data)
     else:
         with open(f"{inpath}/result_{dataset}_{beta}_{s}_order{str(order)}.bin", "rb") as data:
             patterns = pickle.load(data)
 
     return patterns
 
-def get_pw_distance_matrix(dataset: str, beta: int, s: int, path: str, method: str='summaries') -> np.ndarray:
+def get_pw_distance_matrix(dataset: str, beta: int, s: int, path: str, method: str='summaries', delta=None) -> np.ndarray:
     """Load distances matrices.
     
     Parameters
@@ -117,8 +121,12 @@ def get_pw_distance_matrix(dataset: str, beta: int, s: int, path: str, method: s
     -------
         Matrix of pairwise distances.
     """
-    with open(f'{path}/wasserstein_distances_{dataset}_{beta}_{s}_{method}.pkl', 'rb') as data:
-        pw_distances = np.load(data)
+    if delta is not None:
+        with open(f'{path}/wasserstein_distances_{dataset}_{beta}_{s}_delta_{delta}_{method}.pkl', 'rb') as data:
+            pw_distances = np.load(data)
+    else:
+        with open(f'{path}/wasserstein_distances_{dataset}_{beta}_{s}_{method}.pkl', 'rb') as data:
+            pw_distances = np.load(data)
     
     return pw_distances
 
@@ -150,16 +158,29 @@ def read_parameters(filename: str):
             raise ValueError(f'{name} is not a valid parameter.')
     return parameters
 
-def get_sias_pattern(pattern: dict):
-    
+def get_sias_pattern(pattern: dict, names=None, names_col=None):
     # get subgraph
-    subgraph_nodes = np.asarray(list(map(int, pattern.get('subgraph'))))
+    if names is not None:
+        subgraph_nodes = np.asarray(list(map(int, [np.where(names==x)[0][0] for x in pattern.get('subgraph') if x in names])))
+    else:
+        subgraph_nodes = np.asarray(list(map(int, pattern.get('subgraph'))))
     
     # get attributes
     pos_attrs = set(pattern.get('characteristic').get('positiveAttributes'))
     neg_attrs = set(pattern.get('characteristic').get('negativeAttributes'))
-    attrs = np.asarray([int(x.split('>=')[0]) for x in pos_attrs.union(neg_attrs)])
     
+    attrs_list = []
+    for x in pos_attrs.union(neg_attrs):
+        if '>=' in x:
+            attr_value = x.split('>=')[0]
+        elif '<=' in x:
+            attr_value = x.split('<=')[0]
+        attrs_list.append(attr_value)
+    if names_col is not None:
+        attrs = np.asarray(list(map(int, [np.where(names_col==x)[0][0] for x in attrs_list if x in names_col])))
+    else:
+        attrs = attrs_list.copy()
+    #attrs = np.asarray([int(x.split('>=')[0]) for x in pos_attrs.union(neg_attrs)])
     return subgraph_nodes, attrs
     
 def get_excess_pattern(pattern: dict, names, names_col):
