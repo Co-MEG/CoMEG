@@ -61,6 +61,10 @@ def generation_complexity(adjacency: sparse.csr_matrix, biadjacency: sparse.csr_
     print(f'Generation complexities for graph structure...')
     complexity_gen_graphs = defaultdict(list)
 
+    # Correction if n_attrs > number of attributes in biadjacency
+    if n_attrs > biadjacency.shape[1]:
+        n_attrs = biadjacency.shape[1]
+
     attrs_degrees_prob = get_degrees(biadjacency, transpose=True) / sum(get_degrees(biadjacency, transpose=True))
     attrs_indexes = np.arange(0, biadjacency.shape[1])
     biadjacency_csc = biadjacency.tocsc()
