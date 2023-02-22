@@ -120,7 +120,7 @@ def get_doc2vec(biadjacency: sparse.csr_matrix, d: str, names_col: np.ndarray, n
         # Build corpus
         corpus = list(MyCorpus(biadjacency, names_col))
         # Build model
-        model = gensim.models.doc2vec.Doc2Vec(vector_size=50, min_count=10, epochs=50)
+        model = gensim.models.doc2vec.Doc2Vec(vector_size=15, min_count=5, epochs=300)
         model.build_vocab(corpus)
         # Train model
         model.train(corpus, total_examples=model.corpus_count, epochs=model.epochs)
