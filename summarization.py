@@ -1,3 +1,4 @@
+from collections import defaultdict
 import numpy as np
 from scipy import sparse
 
@@ -82,9 +83,58 @@ def get_pattern_summaries(summarized_adjacency: sparse.csr_matrix):
     -------
         Array of labels, node mask. """
     # Summarized graph filtered on used nodes
-    mask = np.flatnonzero(summarized_adjacency.dot(np.ones(summarized_adjacency.shape[1])))
+    mask = np.flatnonzero(summarized_adjacency.astype(bool).dot(np.ones(summarized_adjacency.shape[1])))
     
     # Number of connected components (NOT considering isolated nodes)
     labels_cc_summarized = get_connected_components(summarized_adjacency[mask, :][:, mask])
     
     return labels_cc_summarized, mask   
+
+def get_pattern_summaries_new(patterns: list) -> list:
+    """Pattern summaries are the union of pattern nodes and attributes which share at least one common node.
+    
+    Parameters
+    ----------
+    patterns: list
+        List of patterns (X,Q).
+        
+    Outputs
+    -------
+        List of pattern summaries. """
+
+    nodes_p = defaultdict(set)
+    attrs_p = defaultdict(set)
+
+    for i, p1 in enumerate(patterns):
+        improved = True 
+        if len(p1[1]) > 0:
+            nodes_p[i] = set(p1[0])
+            attrs_p[i] = set(p1[1])
+            
+            # For a given pattern, loop over patterns until no more pattern can be merged
+            while improved:
+                improved = False
+                for j, p2 in enumerate(patterns):
+                    if len(p2[1]) > 0:
+                        # Find common nodes between patterns
+                        common_nodes = nodes_p[i].intersection(p2[0])
+                        if len(common_nodes) > 0 :
+                            # Merge patterns
+                            union = nodes_p[i].union(set(p2[0]))
+                            if len(union) > len(nodes_p[i]):
+                                improved=True
+                                nodes_p[i] |= set(p2[0])
+                                attrs_p[i] |= set(p2[1])
+    
+    # Remove duplicate pattern summaries
+    p_s_nodes = []
+    indexes = []
+    for i, s in nodes_p.items():
+        if s not in p_s_nodes:
+            p_s_nodes.append(s)
+            indexes.append(i)
+    
+    # Build deduplicated list of pattern summaries with nodes and attributes
+    pattern_summaries = [(list(n), list(attrs_p.get(i))) for n, i in zip(p_s_nodes, indexes)]
+    
+    return pattern_summaries
