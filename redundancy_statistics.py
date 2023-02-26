@@ -36,9 +36,9 @@ def load_result(path, filename):
 
 #datasets = ['ingredients']
 #datasets = ['london']
-datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
+#datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
 #datasets = ['wikivitals']
-#datasets = ['sanFranciscoCrimes']
+datasets = ['sanFranciscoCrimes']
 #datasets = ['ingredientsGraph']
 #datasets = ['lastfm']
 sorted_attributes = True
@@ -50,8 +50,7 @@ delta = 0
 #betas = [] 
 avgs = defaultdict(dict)
 if with_prob:
-    #outpath = 'output/result/with_prob'
-    outpath = 'experiments/Algo_modified'
+    outpath = 'output/result/with_prob'
 else:
     outpath = 'output/result'
 resolutions = {'wikivitals-fr': {1: 0, 3: 0, 5: 0.3, 6: 0.4, 8: 0.6, 9: 0.7, 10: 0.8, 11: 0.9, 12: 0.9, 14: 1.05, 15: 1.1, 20: 1.4, 26: 1.86, 27: 1.89, 47: 3, 53: 3.8, 58: 3.87, 64: 4, 85: 5.58}, 
