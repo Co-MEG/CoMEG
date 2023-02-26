@@ -60,7 +60,7 @@ def init_unex_patterns(context) -> tuple:
     return extents, intents, unexs
 
 def unex_patterns(adjacency, context, context_csc, extents, intents, r=0, y=0, min_support=0, max_support=np.inf, beta=0, 
-            degs=[], unexs_g=[], unexs_a=[], unexs=[], names_col=[], comp_gen_graph=None, shuf=False) -> List:
+            delta=0, degs=[], unexs_g=[], unexs_a=[], unexs=[], names_col=[], comp_gen_graph=None, shuf=False) -> List:
     """InClose algorithm using Unexpectedness + IsCannonical function. 
     
     Parameters
@@ -85,6 +85,8 @@ def unex_patterns(adjacency, context, context_csc, extents, intents, r=0, y=0, m
         Maximum support value for extent.
     beta: int (default=0)
         Minimum support value for intent.
+    delta: int (default=0)
+        Minimum value for Unexpectedness difference between patterns.
     degs, unexs_g, unexs_a, unexs, names_col: list
         Lists for value storage over recursion.
     comp_gen_graph: dict (default=None)
@@ -148,11 +150,12 @@ def unex_patterns(adjacency, context, context_csc, extents, intents, r=0, y=0, m
                 print(f'unexs: {unexs} r_new: {r_new} - r: {r} - ptr: {ptr}')
                 # ------------------------------------------------------------------------------------------------------------
                 
+                #if set(extents[r_new]) == set(extents[r]):
                 if len_new_extent - len(extents[r]) == 0:
                     print(f' == comparing unex={unex} and unexs[{ptr}]={unexs[ptr]}')
                     
                     #if True:
-                    if unex - unexs[ptr] >= 0:
+                    if unex - unexs[ptr] >= delta:
                     
                         print(f'  Extent size did not change -> attribute {names_col[j]} is added to intent.')
                         intents[r] = new_intent
@@ -182,7 +185,7 @@ def unex_patterns(adjacency, context, context_csc, extents, intents, r=0, y=0, m
                         print(f' ISCANNO comparing unex={unex} and unexs[{ptr}]=={unexs[ptr]}')
                         
                         #if True:
-                        if unex - unexs[ptr] >= 0 or r == 0:
+                        if unex - unexs[ptr] >= delta or r == 0:
                             
                             intents[r_new] = new_intent 
                             len_new_intent = len(intents[r_new])
@@ -227,7 +230,7 @@ def unex_patterns(adjacency, context, context_csc, extents, intents, r=0, y=0, m
                                 shuf = False
 
                             unex_patterns(adjacency, context, context_csc, extents, intents, r=r_new, y=j+1, min_support=min_support, 
-                                        max_support=max_support, beta=beta, degs=degs, unexs_g=unexs_g, 
+                                        max_support=max_support, beta=beta, delta=delta, degs=degs, unexs_g=unexs_g, 
                                         unexs_a=unexs_a, unexs=unexs, names_col=names_col, comp_gen_graph=comp_gen_graph, shuf=shuf)
                         else:
                             print(f'IsCANNO but no U improvement')
@@ -246,7 +249,8 @@ def unex_patterns(adjacency, context, context_csc, extents, intents, r=0, y=0, m
     
     return [*zip(extents, intents)]
 
-def run_unex_patterns(adjacency, biadjacency, words, complexity_gen_graphs, order_attributes, s, beta, outfile):
+def run_unex_patterns(adjacency, biadjacency, words, complexity_gen_graphs, order_attributes, s, beta, delta, outfile,
+outpath):
     """Run pattern mining algorithm.
     
     Parameters
@@ -265,6 +269,8 @@ def run_unex_patterns(adjacency, biadjacency, words, complexity_gen_graphs, orde
         Minimum extent support.
     beta: int
         Minimum intent support.
+    delta: int 
+        Minimum value for Unexpectedness difference between patterns.
     outfile: str
         Output filename.
     """
@@ -300,13 +306,13 @@ def run_unex_patterns(adjacency, biadjacency, words, complexity_gen_graphs, orde
     print(f'Context: {filt_biadjacency.shape}')
 
     # Algorithm
-    with open(f'log_{outfile}_prob', 'w') as f:
+    with open(f'{outpath}/log_{outfile}', 'w') as f:
         with redirect_stdout(f):
             print('starts profiling...')
             lp = LineProfiler()
             lp_wrapper = lp(unex_patterns)
             lp_wrapper(adjacency, filt_biadjacency, filt_biadjacency_csc, extents, intents, r=0, y=0, 
-                                    min_support=s, max_support=np.inf, beta=beta,
+                                    min_support=s, max_support=np.inf, beta=beta, delta=delta,
                                     degs=sorted_degs, unexs_g=[0], unexs_a=[0], unexs=unexs, names_col=sorted_names_col,
                                     comp_gen_graph=complexity_gen_graphs, shuf=False)
             lp.print_stats()
@@ -314,7 +320,7 @@ def run_unex_patterns(adjacency, biadjacency, words, complexity_gen_graphs, orde
     res = [*zip(extents, intents)]
     
     # Save result
-    with open(f"result_{outfile}_prob.bin", "wb") as output:
+    with open(f"{outpath}/result_{outfile}.bin", "wb") as output:
         pickle.dump(res, output)
 
     return len(res) 
