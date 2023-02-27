@@ -115,14 +115,22 @@ def conciseness_summaries(adjacency, biadjacency, nb_cc, labels_cc_summarized, c
     print(f"# patterns: {nb_cc}")
     return nb_cc * np.sqrt(np.mean(extent_size_summaries) * np.mean(intent_size_summaries))
 
-def conciseness_summaries_new(labels_cc_summarized, pattern_summarized_attributes):
-    nb_nodes_ps, nb_attrs_ps = [], []
-    nb_cc = len(np.unique(labels_cc_summarized))
-
-    nb_nodes_ps = np.mean([len(labels_cc_summarized==i) for i in range(nb_cc)])
+def conciseness_summaries_new(labels_cc_summarized, pattern_summarized_attributes, nb_cc, pattern_summaries=None):
+    
+    nb_nodes_ps = np.mean([np.sum(labels_cc_summarized==i) for i in range(nb_cc)])
     nb_attrs_ps = np.mean(pattern_summarized_attributes.sum(axis=1))
 
-    print(f'Avg subgraph size: {np.mean(nb_attrs_ps)} ')
+    # NEW
+    if pattern_summaries is not None:
+        nodes_ps, attrs_ps = [], []
+        for ps in pattern_summaries:
+            nodes_ps.append(len(ps[0]))
+            attrs_ps.append(len(ps[1]))
+        nb_nodes_ps = np.mean(nodes_ps)
+        nb_attrs_ps = np.mean(attrs_ps)
+        nb_cc = len(pattern_summaries)
+
+    print(f'Avg subgraph size: {nb_nodes_ps}')
     print(f'Avg subgraph attributes: {nb_attrs_ps}')
     print(f"# patterns: {nb_cc}")
 
@@ -177,7 +185,7 @@ def information(adjacency, biadjacency, summarized_adjacency: sparse.csr_matrix,
 
     return information 
 
-def information_summaries(adjacency, biadjacency, summarized_adjacency: sparse.csr_matrix, labels_cc_summarized, nb_cc, concept_summarized_attributes, pw_distances: np.ndarray, dataset, b, s, method, inpath: str) -> float:
+def information_summaries(adjacency, biadjacency, summarized_adjacency: sparse.csr_matrix, labels_cc_summarized, nb_cc, concept_summarized_attributes, pw_distances: np.ndarray, dataset, b, s, gamma, method, inpath: str, pattern_summaries=None) -> float:
     """Information of summarized graph, i.e. (diversity x corevage) / conciseness.
     
     Parameters
@@ -193,14 +201,14 @@ def information_summaries(adjacency, biadjacency, summarized_adjacency: sparse.c
     -------
         Summarized graph information.
     """
-    div = diversity(pw_distances)
+    div = diversity(pw_distances, gamma)
     cov = coverage(summarized_adjacency)
-    #conc = conciseness_summaries(adjacency, biadjacency, nb_cc, labels_cc_summarized, concept_summarized_attributes) 
-    conc = conciseness_summaries_new(labels_cc_summarized, concept_summarized_attributes)
+    conc = conciseness_summaries_new(labels_cc_summarized, concept_summarized_attributes, nb_cc, pattern_summaries=pattern_summaries)
+    
     information = (div * cov) / (conc)
     print(f'inf: {information} - div: {div} - cov: {cov} - conc: {(conc)}')
 
-    with open(f'{inpath}/new/information_details_{dataset}_{b}_{s}_{method}_new_conc.txt', 'w') as f:
+    with open(f'{inpath}/information_details_{dataset}_{b}_{s}_{method}_{gamma}_new_conc.txt', 'w') as f:
         f.write(f'{div}, {cov}, {(conc)}, {information}')
 
     return information 
