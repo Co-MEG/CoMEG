@@ -19,6 +19,9 @@ def diversity(pw_distances: np.ndarray, gamma: float=0.2) -> float:
         Diversity. 
     """
     n = pw_distances.shape[0]
+    print(f'n:{n}')
+    if n == 1:
+        return 0
     upper = pw_distances[np.triu_indices(n)]
     nb_ps = np.sum(upper > gamma)
     
@@ -116,19 +119,20 @@ def conciseness_summaries(adjacency, biadjacency, nb_cc, labels_cc_summarized, c
     return nb_cc * np.sqrt(np.mean(extent_size_summaries) * np.mean(intent_size_summaries))
 
 def conciseness_summaries_new(labels_cc_summarized, pattern_summarized_attributes, nb_cc, pattern_summaries=None):
-    
-    nb_nodes_ps = np.mean([np.sum(labels_cc_summarized==i) for i in range(nb_cc)])
-    nb_attrs_ps = np.mean(pattern_summarized_attributes.sum(axis=1))
 
     # NEW
     if pattern_summaries is not None:
         nodes_ps, attrs_ps = [], []
         for ps in pattern_summaries:
-            nodes_ps.append(len(ps[0]))
-            attrs_ps.append(len(ps[1]))
+            if len(ps[1]) > 0:
+                nodes_ps.append(len(ps[0]))
+                attrs_ps.append(len(ps[1]))
         nb_nodes_ps = np.mean(nodes_ps)
         nb_attrs_ps = np.mean(attrs_ps)
         nb_cc = len(pattern_summaries)
+    else:
+        nb_nodes_ps = np.mean([np.sum(labels_cc_summarized==i) for i in range(nb_cc)])
+        nb_attrs_ps = np.mean(pattern_summarized_attributes.sum(axis=1))
 
     print(f'Avg subgraph size: {nb_nodes_ps}')
     print(f'Avg subgraph attributes: {nb_attrs_ps}')
@@ -155,7 +159,8 @@ def width_excess(patterns_excess) -> float:
 
     nb_e_patterns = len(patterns_excess)
     print(f'# patterns: {nb_e_patterns}')
-    
+    print(f'Avg nb nodes: {np.mean(nb_nodes)} - Avg nb attrs: {np.mean(nb_attrs)}')
+    print(f'func result: {nb_e_patterns * np.sqrt(np.mean(nb_nodes) * np.mean(nb_attrs))}')
     return nb_e_patterns * np.sqrt(np.mean(nb_nodes) * np.mean(nb_attrs))
 
 def information(adjacency, biadjacency, summarized_adjacency: sparse.csr_matrix, summarized_biadjacency: sparse.csr_matrix, nb_cc, pw_distances: np.ndarray, dataset, b, s, method, inpath: str) -> float:
@@ -208,7 +213,7 @@ def information_summaries(adjacency, biadjacency, summarized_adjacency: sparse.c
     information = (div * cov) / (conc)
     print(f'inf: {information} - div: {div} - cov: {cov} - conc: {(conc)}')
 
-    with open(f'{inpath}/information_details_{dataset}_{b}_{s}_{method}_{gamma}_new_conc.txt', 'w') as f:
+    with open(f'{inpath}/information_details_{dataset}_{b}_{s}_{method}_{gamma}_new_conc_new2.txt', 'w') as f:
         f.write(f'{div}, {cov}, {(conc)}, {information}')
 
     return information 
