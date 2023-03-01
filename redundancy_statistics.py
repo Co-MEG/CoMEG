@@ -1,13 +1,3 @@
-# Analysis of pattern redundancy (RQ2)
-
-# **************************************************************************
-#   1. Consider each node as a document containing words, and train a document 
-#      embedding model using `Doc2Vec`  
-#   2. Use trained model to infer embeddings for new documents, 
-#      i.e patterns/concepts/communities  
-#   3. Compute Wasserstein distances between these embeddings
-# **************************************************************************
-
 from collections import defaultdict
 import os
 import numpy as np
@@ -22,6 +12,10 @@ from distances import pairwise_wd_distance
 from summarization import get_pattern_summaries, get_summarized_biadjacency, get_summarized_graph
 from utils import build_pattern_attributes, get_gensim_model, get_root_directory, pattern_attributes
 
+
+# =================================================================
+# Parameters
+# =================================================================
 
 #datasets = ['ingredients']
 #datasets = ['london']
@@ -52,6 +46,7 @@ resolutions = {'wikivitals-fr': {1: 0, 3: 0, 5: 0.3, 6: 0.4, 8: 0.6, 9: 0.7, 10:
 
 # Run experiment
 # ------------------------------------------------------------------
+
 for dataset in datasets:
     avgs[dataset] = defaultdict(dict)
 
