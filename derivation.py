@@ -75,4 +75,4 @@ def extension(attributes, context):
             if len(ext) == 0:
                 break
         return np.array(list(ext))
-                    
+        
