@@ -175,12 +175,15 @@ def get_sias_pattern(pattern: dict, names=None, names_col=None):
             attr_value = x.split('>=')[0]
         elif '<=' in x:
             attr_value = x.split('<=')[0]
+        else:
+            attr_value = x
         attrs_list.append(attr_value)
     if names_col is not None:
         attrs = np.asarray(list(map(int, [np.where(names_col==x)[0][0] for x in attrs_list if x in names_col])))
     else:
-        attrs = attrs_list.copy()
-    #attrs = np.asarray([int(x.split('>=')[0]) for x in pos_attrs.union(neg_attrs)])
+        attrs = np.asarray(list(map(int, attrs_list)))
+        #attrs = attrs_list.copy()
+        #attrs = np.asarray([int(x.split('>=')[0]) for x in pos_attrs.union(neg_attrs)])
     return subgraph_nodes, attrs
     
 def get_excess_pattern(pattern: dict, names, names_col):
