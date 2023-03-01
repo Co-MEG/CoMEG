@@ -7,6 +7,7 @@ from sknetwork.utils import get_degrees
 
 from utils import get_root_directory
 
+
 def load_data(dataset: str):
     """Load data and return loaded elements as a tuple.
     
@@ -116,6 +117,8 @@ def get_pw_distance_matrix(dataset: str, beta: int, s: int, path: str, method: s
         Minimum support value for extent.
     method: str
         Name of baseline method.
+    delta: int (default=None)
+        Delta threshold for unexpectedness difference.
         
     Outputs
     -------
@@ -158,7 +161,23 @@ def read_parameters(filename: str):
             raise ValueError(f'{name} is not a valid parameter.')
     return parameters
 
-def get_sias_pattern(pattern: dict, names=None, names_col=None):
+def get_sias_pattern(pattern: dict, names=None, names_col=None) -> tuple:
+    """Convert result from SIAS paper format to pattern, i.e. tuple of nodes and attributes.
+
+    Parameters
+    ----------
+    pattern : dict
+        Sias pattern
+    names : _type_, optional
+        Node names from original data, by default None
+    names_col : _type_, optional
+        Attribute names from original data, by default None
+
+    Returns
+    -------
+    tuple
+        Arrays of nodes and attributes
+    """
     # get subgraph
     if names is not None:
         subgraph_nodes = np.asarray(list(map(int, [np.where(names==x)[0][0] for x in pattern.get('subgraph') if x in names])))
@@ -186,7 +205,23 @@ def get_sias_pattern(pattern: dict, names=None, names_col=None):
         #attrs = np.asarray([int(x.split('>=')[0]) for x in pos_attrs.union(neg_attrs)])
     return subgraph_nodes, attrs
     
-def get_excess_pattern(pattern: dict, names, names_col):
+def get_excess_pattern(pattern: dict, names: np.ndarray, names_col: np.ndarray) -> tuple:
+    """Convert result from Excess paper format to pattern, i.e. tuple of nodes and attributes.
+
+    Parameters
+    ----------
+    pattern : dict
+        Excess pattern
+    names : np.ndarray
+        Node names from original data
+    names_col : np.ndarray
+        Attribute names from original data
+
+    Returns
+    -------
+    tuple
+        Arrays of nodes and attributes
+    """
     
     # get subgraph
     try:

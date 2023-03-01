@@ -1,23 +1,18 @@
 from collections import defaultdict
-import numpy as np
-import pickle
-from scipy import sparse
-from tqdm import tqdm
-
-from sknetwork.utils import get_degrees
 
 from algorithm import run_unex_patterns
-from compressors import mdl_graph, generation_complexity
+from compressors import generation_complexity
 from data import load_data
-from derivation import extension_csc
 
 
 # ******************************************************** #
-# Run experiments
+# Mine unexpected patterns
 # ******************************************************** #
 
-# -------------------------------------------------------
+# =================================================================
 # Parameters
+# =================================================================
+
 #datasets = ['wikihumans']
 #datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
 datasets = ['ingredients']

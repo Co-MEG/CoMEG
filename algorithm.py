@@ -1,5 +1,4 @@
 from contextlib import redirect_stdout
-import gensim
 from line_profiler import LineProfiler
 import numpy as np
 import pickle

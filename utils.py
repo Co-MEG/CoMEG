@@ -8,7 +8,8 @@ from sknetwork.utils import directed2undirected
 
 from experiments.pattern_information import MyCorpus
 
-def pattern_attributes(biadjacency, labels, mask=None):
+
+def pattern_attributes(biadjacency: sparse.csr_matrix, labels: np.ndarray, mask=None):
     """Build pattern x attributes matrix. Column values are count of occurrences of attributes for each pattern/community.
     
     Parameters
@@ -37,38 +38,61 @@ def pattern_attributes(biadjacency, labels, mask=None):
 
     return matrix
 
-def build_pattern_attributes(result, biadjacency, labels_cc_summarized, labels_louvain, kmeans_gnn_labels, 
+def get_s_pattern_attributes(pattern_summaries: list, m: int) -> np.ndarray:
+    """Build pattern summaries x attributes matrix. 
+    
+    Parameters
+    ----------
+    pattern_summaries: list
+        List of pattern summaries as tuples.
+    m: int
+        Number of attributes in original data.
+        
+    Output
+    ------
+        Matrix with pattern summaries in rows and attributes they contain in columns. 
+    """
+    nb_p_s = len(pattern_summaries)
+    pattern_summaries_attributes = np.zeros((nb_p_s, m))
+    for i, p_s in enumerate(pattern_summaries):
+        for attr in p_s[1]:
+            pattern_summaries_attributes[i, attr] += 1
+    
+    return pattern_summaries_attributes
+
+# TODO: Clean this function
+def build_pattern_attributes(biadjacency, labels_louvain, kmeans_gnn_labels, 
                                 kmeans_spectral_labels, kmeans_doc2vec_labels):
     """Build pattern x attributes matrix for all methods. """
 
     # patterns from Unexpectedness algorithm 
-    patterns_attributes = np.zeros((len(result), biadjacency.shape[1]))
-    for i, c in enumerate(result[1:]):
-        patterns_attributes[i, c[1]] = 1
+    #patterns_attributes = np.zeros((len(result), biadjacency.shape[1]))
+    #for i, c in enumerate(result[1:]):
+    #    patterns_attributes[i, c[1]] = 1
     
     # Pattern x attributes matrices for all methods
-    pattern_summarized_attributes = pattern_attributes(biadjacency, labels_cc_summarized)
+    #pattern_summarized_attributes = pattern_attributes(biadjacency, labels_cc_summarized)
     pattern_louvain_attributes = pattern_attributes(biadjacency, labels_louvain)
     pattern_gnn_kmeans_attributes = pattern_attributes(biadjacency, kmeans_gnn_labels)
     pattern_spectral_kmeans_attributes = pattern_attributes(biadjacency, kmeans_spectral_labels)
     pattern_doc2vec_kmeans_attributes = pattern_attributes(biadjacency, kmeans_doc2vec_labels)
 
-    return patterns_attributes, pattern_summarized_attributes, pattern_louvain_attributes, pattern_gnn_kmeans_attributes, pattern_spectral_kmeans_attributes, pattern_doc2vec_kmeans_attributes
+    return pattern_louvain_attributes, pattern_gnn_kmeans_attributes, pattern_spectral_kmeans_attributes, pattern_doc2vec_kmeans_attributes
 
-def density(g: sparse.csr_matrix) -> float:
+def density(adjacency: sparse.csr_matrix) -> float:
     """Density of directed graph. 
     
     Parameters
     ----------
-    g: sparse.csr_matrix
-        Graph
+    adjacency: sparse.csr_matrix
+        Ajdacency matrix of the graph
     """
     # Remove self-nodes
-    g.setdiag(np.zeros(g.shape[0]))
-    g.eliminate_zeros()
+    adjacency.setdiag(np.zeros(adjacency.shape[0]))
+    adjacency.eliminate_zeros()
 
-    m = g.nnz
-    n = g.shape[0]
+    m = adjacency.nnz
+    n = adjacency.shape[0]
     
     if n == 1:
         return 0
@@ -77,13 +101,13 @@ def density(g: sparse.csr_matrix) -> float:
 
     return d
 
-def kcore_decomposition(g: sparse.csr_matrix) -> np.ndarray:
+def kcore_decomposition(adjacency: sparse.csr_matrix) -> np.ndarray:
     """K-core decomposition algorithm.
     
     Parameters
     ----------
-    g: sparse.csr_matrix
-        Graph
+    adjacency: sparse.csr_matrix
+        Adjacency matrix of the graph
 
     Returns
     -------
@@ -91,18 +115,48 @@ def kcore_decomposition(g: sparse.csr_matrix) -> np.ndarray:
     """
     
     # Remove self-nodes
-    g.setdiag(np.zeros(g.shape[0]))
-    g.eliminate_zeros()
+    adjacency.setdiag(np.zeros(adjacency.shape[0]))
+    adjacency.eliminate_zeros()
 
     core = CoreDecomposition()
-    cores_labels = core.fit_transform(directed2undirected(g))
+    cores_labels = core.fit_transform(directed2undirected(adjacency))
 
     return cores_labels
 
-def smoothing(x, alpha=0.5, delta=10):
+def smoothing(x: int, alpha: float=0.5, delta: int=10):
+    """Smoothing function.
+
+    Parameters
+    ----------
+    x : int
+        Value to smoothen
+    alpha : float, optional
+        Smoothing parameter, by default 0.5
+    delta : int, optional
+        Smoothing parameter, by default 10
+
+    Returns
+    -------
+    Float
+        Smoothen value for x 
+    """
     return (1 / (1 + np.exp(-alpha * (x - delta)))) 
 
 def shuffle_columns(X, indexes):
+    """Shuffle columns
+
+    Parameters
+    ----------
+    X : 
+        Either the biadjacency matrix of the attributed graph or an array of attributes.
+    indexes : _type_
+        Indexes of attributes
+
+    Returns
+    -------
+    _type_
+        Shuffled columns 
+    """
     x = X.copy() 
     start = np.min(indexes)
     end = np.max(indexes) + 1
@@ -122,8 +176,24 @@ def load_gensim_model(inpath, name):
     model = gensim.models.Doc2Vec.load(f'{inpath}/{name}.model')
     return model
 
-def get_gensim_model(inpath, name, biadjacency, names_col):
+def get_gensim_model(inpath: str, name: str, biadjacency: sparse.csr_matrix, names_col: np.ndarray):
+    """Load gensim model if exists, otherwise train a new gensim model and save it.
 
+    Parameters
+    ----------
+    inpath : str
+        Path for existing model
+    name : str
+        Model name
+    biadjacency : sparse.csr_matrix
+        Biadjacency matrix of the graph
+    names_col : np.ndarray
+        Array of attribute names
+
+    Returns
+    -------
+        Trained Gensim model
+    """
     if not os.path.exists(f'{inpath}/{name}.model'):
         corpus = list(MyCorpus(biadjacency, names_col))
         model = gensim.models.doc2vec.Doc2Vec(vector_size=15, min_count=5, epochs=300)
@@ -136,6 +206,7 @@ def get_gensim_model(inpath, name, biadjacency, names_col):
     else:
         model = load_gensim_model(inpath, name)
         print(f'Pre-trained gensim model loaded from {inpath}/{name}.model')
+
     return model
     
 def get_root_directory():
