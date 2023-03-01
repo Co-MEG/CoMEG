@@ -19,11 +19,15 @@ from derivation import extension_csc
 # -------------------------------------------------------
 # Parameters
 #datasets = ['wikihumans']
-datasets = ['wikivitals-fr', 'wikischools', 'wikivitals']
+#datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
+datasets = ['ingredients']
+#datasets = ['sanFranciscoCrimes']
 #datasets = ['lastfm']
 
-betas = [8, 7, 6, 5, 4]
-ss = [4]
+betas = [4]
+ss = [8, 7, 6, 5]
+deltas = [0]
+OUTPATH = '/Users/simondelarue/Documents/PhD/Research/Co-Meg/CoMEG/output/result/with_prob/old'
 
 order_attributes = [True]
 
@@ -40,22 +44,23 @@ for dataset in datasets:
             print(f'== {beta}')
             for s in ss:
                 print(f'- {s}')
+                for delt in deltas:
                             
-                outfile = f'{dataset}_{str(beta)}_{str(s)}_order{str(order_attr)}'
+                    outfile = f'{dataset}_{str(beta)}_{str(s)}_order{str(order_attr)}_delta_{delt}'
 
-                # Load data
-                adjacency, biadjacency, names, words, labels = load_data(dataset)
+                    # Load data
+                    adjacency, biadjacency, names, words, labels = load_data(dataset)
 
-                # Compute generation complexities
-                complexity_gen_graphs = generation_complexity(adjacency, biadjacency, n_attrs=15, n_iter=300)
-                
-                # Run algorithm
-                nb_patterns = run_unex_patterns(adjacency, biadjacency, words, complexity_gen_graphs, order_attr, s, beta, outfile)
+                    # Compute generation complexities
+                    complexity_gen_graphs = generation_complexity(adjacency, biadjacency, n_attrs=15, n_iter=300)
+                    
+                    # Run algorithm
+                    nb_patterns = run_unex_patterns(adjacency, biadjacency, words, complexity_gen_graphs, order_attr, s, beta, delt, outfile, OUTPATH)
 
-                # Save number of patterns
-                nb_pattern_dict[dataset][order_attr][beta].append(nb_patterns)
-                print(nb_pattern_dict)  
+                    # Save number of patterns
+                    nb_pattern_dict[dataset][order_attr][beta].append(nb_patterns)
+                    print(nb_pattern_dict)  
 
-with open(f'number_of_patterns_history.pkl', 'wb') as f:
-    pickle.dump(nb_pattern_dict, f)
+#with open(f'number_of_patterns_history.pkl', 'wb') as f:
+#   pickle.dump(nb_pattern_dict, f)
     
