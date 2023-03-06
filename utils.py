@@ -6,8 +6,7 @@ from scipy import sparse
 from sknetwork.topology import CoreDecomposition
 from sknetwork.utils import directed2undirected
 
-from experiments.pattern_information import MyCorpus
-
+from corpus import MyCorpus
 
 def pattern_attributes(biadjacency: sparse.csr_matrix, labels: np.ndarray, mask=None):
     """Build pattern x attributes matrix. Column values are count of occurrences of attributes for each pattern/community.
