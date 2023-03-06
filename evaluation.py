@@ -5,7 +5,7 @@ import pickle
 
 from baselines import get_louvain, get_community_graph, get_gnn, get_spectral, get_doc2vec
 from data import load_data, preprocess_data, load_patterns, get_pw_distance_matrix
-from metrics import information, information_summaries
+from metrics import information_summaries
 from summarization import get_pattern_summaries_new, get_summarized_graph, get_summarized_biadjacency, get_pattern_summaries
 from utils import get_root_directory, pattern_attributes
 
@@ -23,8 +23,10 @@ datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
 betas = [4] # Beta: 4 for all datasets, except beta=1 for ingredients
 gamma = 0.8 # Wikipedia datasets: 0.8, sanFranciscoCrimes: 0.2, ingredients: 0.05
 ss = [8, 7, 6, 5]
-INPATH = os.path.join(get_root_directory(), 'output/result/with_prob')
-OUTPATH = os.path.join(INPATH, 'new')
+#INPATH = os.path.join(get_root_directory(), 'output/result/with_prob')
+#OUTPATH = os.path.join(INPATH, 'new')
+INPATH = os.path.join(get_root_directory(), 'output/result/with_prob/final')
+OUTPATH = INPATH
 
 with_order = [True]
 with_prob = True
@@ -96,7 +98,7 @@ for d, dataset in enumerate(datasets):
             d2v_adj = get_community_graph(adjacency, d2v_labels)
             
             # Pariwise distances 
-            pw_distances_patterns = get_pw_distance_matrix(dataset, b, s, OUTPATH, method='patterns')
+            #pw_distances_patterns = get_pw_distance_matrix(dataset, b, s, OUTPATH, method='patterns')
             pw_distances_summaries = get_pw_distance_matrix(dataset, b, s, OUTPATH, method='summaries')
             if n_p_summaries > 1 and dataset != 'ingredients':
                 pw_distances_louvain = get_pw_distance_matrix(dataset, b, s, OUTPATH, method='louvain')
@@ -106,9 +108,9 @@ for d, dataset in enumerate(datasets):
             pw_distances_d2v = get_pw_distance_matrix(dataset, b, s, OUTPATH, method='d2v_kmeans')
             
             # SG information
-            if new_summaries:
-                print(f'    Patterns')
-                information_patterns = information_summaries(adjacency, biadjacency, summarized_adj, pattern_summary_labels, n_p_summaries, pattern_summarized_attributes, pw_distances_patterns, dataset, b, s, gamma, 'patterns', OUTPATH, patterns)
+            #if new_summaries:
+            #    print(f'    Patterns')
+            #    information_patterns = information_summaries(adjacency, biadjacency, summarized_adj, pattern_summary_labels, n_p_summaries, #pattern_summarized_attributes, pw_distances_patterns, dataset, b, s, gamma, 'patterns', OUTPATH, patterns)
 
             print(f'    Summaries')
             if new_summaries:
@@ -143,6 +145,6 @@ for d, dataset in enumerate(datasets):
             informations[dataset][b]['doc2vec'].append(information_d2v)
 
 # Save result
-with open(f'{INPATH}/new_summaries/informations_evaluation_new_conc.pkl', 'wb') as f:
+with open(f'{OUTPATH}/informations_evaluation_new_conc.pkl', 'wb') as f:
     pickle.dump(informations, f)
     
