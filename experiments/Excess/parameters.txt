@@ -1,4 +1,4 @@
-datasets: wikivitals
-s: 8, 7, 6, 5
+datasets: wikischools
+s: 8, 7, 6
 patterns_path: results
 gamma: 0.8
