@@ -29,7 +29,7 @@ if __name__=='__main__':
 
         # Gensim model
         model = get_gensim_model(MODEL_PATH, f'gensim_model_{dataset}', biadjacency, names_col)
-
+        
         for s_param in parameters.get('s'):
             print(f'--s={s_param}')
 
@@ -37,36 +37,46 @@ if __name__=='__main__':
             new_biadjacency, words = preprocess_data(biadjacency, names_col, s_param, sort_data=False)
 
             # Load Excess patterns
-            with open(f'{INPATH}/{dataset}/retrievedPatterns_{s_param}.json', 'rb') as f:
+            #with open(f'{INPATH}/{dataset}/retrievedPatterns_{s_param}.json', 'rb') as f:
+            #    data = json.load(f)
+            with open(f'{INPATH}/{dataset}/new/retrievedPatterns_{s_param}.json', 'rb') as f:
                 data = json.load(f)
 
             nb_excess_patterns = len(data.get('patterns'))
 
             # Preprocess Excess patterns
             if dataset != 'sanFranciscoCrimes':
-                excess_patterns = [get_sias_pattern(data.get('patterns')[idx]) for idx in range(nb_excess_patterns)]
-                excess_patterns_filt = [p for p in excess_patterns if len(p[0]) >= s_param]
+                if dataset == 'london' or dataset == 'ingredients':
+                    excess_patterns = [get_excess_pattern(data.get('patterns')[idx], names, names_col) for idx in range(nb_excess_patterns)]
+                    excess_patterns_filt = [p for p in excess_patterns if len(p[0]) >= s_param]
+                else:
+                    excess_patterns = [get_sias_pattern(data.get('patterns')[idx]) for idx in range(nb_excess_patterns)]
+                    excess_patterns_filt = [p for p in excess_patterns if len(p[0]) >= s_param]
             else:
                 excess_patterns = [get_excess_pattern(data.get('patterns')[idx], names, names_col) for idx in range(nb_excess_patterns)]
                 excess_patterns_filt = [p for p in excess_patterns if len(p[0]) >= s_param]
             
             # Pattern x attributes matrix
             nb_excess_patterns_filt = len(excess_patterns_filt)
-            if dataset != 'sanFranciscoCrimes':
+            if dataset != 'sanFranciscoCrimes' and dataset != 'ingredients':
                 excess_patterns_attributes = np.zeros((nb_excess_patterns_filt, new_biadjacency.shape[1]))
             else:
                 excess_patterns_attributes = np.zeros((nb_excess_patterns_filt, biadjacency.shape[1]))
             for i, p in enumerate(excess_patterns_filt):
                 excess_patterns_attributes[i, p[1]] = 1
-
+                    
             # Wasserstein distances
             wd_filename = f'wasserstein_distances_{dataset}_5_{s_param}_excess_patterns.pkl'
-            if os.path.exists(f'{INPATH}/{dataset}/{wd_filename}'):
-                wd_distances_excess = get_pw_distance_matrix(dataset, beta=5, s=s_param, path=os.path.join(INPATH, dataset), method='excess_patterns')
+            #if os.path.exists(f'{INPATH}/{dataset}/{wd_filename}'):
+            #    wd_distances_excess = get_pw_distance_matrix(dataset, beta=5, s=s_param, path=os.path.join(INPATH, dataset), method='excess_patterns')
+            if os.path.exists(f'{INPATH}/{dataset}/new/{wd_filename}'):
+                wd_distances_excess = get_pw_distance_matrix(dataset, beta=5, s=s_param, path=os.path.join(INPATH, dataset, 'new'), method='excess_patterns')
             else:
                 wd_distances_excess = pairwise_wd_distance(excess_patterns_attributes, nb_excess_patterns_filt, model, names_col)
                 # Save distances
-                with open(f'{INPATH}/{dataset}/{wd_filename}', 'wb') as f:
+                #with open(f'{INPATH}/{dataset}/{wd_filename}', 'wb') as f:
+                #    np.save(f, wd_distances_excess)
+                with open(f'{INPATH}/{dataset}/new/{wd_filename}', 'wb') as f:
                     np.save(f, wd_distances_excess)
 
             # Information metric
@@ -76,6 +86,9 @@ if __name__=='__main__':
             information = (div * cov) / conc
             informations_excess[dataset].append(information)
             
-            with open(f"{INPATH}/{dataset}/information_details_{dataset}_5_{s_param}_{parameters.get('gamma')}_excess.txt", 'w') as f:
+            # Save results
+            #with open(f"{INPATH}/{dataset}/information_details_{dataset}_5_{s_param}_{parameters.get('gamma')}_excess.txt", 'w') as f:
+            #    f.write(f'{div}, {cov}, {conc}, {information}')
+            with open(f"{INPATH}/{dataset}/new/information_details_{dataset}_5_{s_param}_{parameters.get('gamma')}_excess.txt", 'w') as f:
                 f.write(f'{div}, {cov}, {conc}, {information}')
             print(f'{div}, {cov}, {conc}, {information}')
