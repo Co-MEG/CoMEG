@@ -31,10 +31,11 @@ def load_result(path, filename):
         result = pickle.load(data)
     return result
 
-datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
+#datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
+datasets = ['london']
 sorted_attributes = True
 ss = [8, 7, 6, 5]
-betas = [8, 7, 6, 5]
+betas = [1]
 avgs = defaultdict(dict)
 outpath = 'output/result'
 resolutions = {'wikivitals-fr': {1: 0, 3: 0, 5: 0.3, 6: 0.4, 10: 0.8, 12: 0.9, 15: 1.1, 47: 3, 27: 1.89}, 
