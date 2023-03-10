@@ -15,14 +15,15 @@ from data import load_data
 
 #datasets = ['wikihumans']
 #datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
-datasets = ['ingredients']
+datasets = ['wikischools']
+#datasets = ['ingredients']
 #datasets = ['sanFranciscoCrimes']
 #datasets = ['lastfm']
 
-betas = [4]
-ss = [8, 7, 6, 5]
+betas = [5]
+ss = [5]
 deltas = [0]
-OUTPATH = '/Users/simondelarue/Documents/PhD/Research/Co-Meg/CoMEG/output/result/with_prob/old'
+OUTPATH = '/Users/simondelarue/Documents/PhD/Research/Co-Meg/CoMEG/output/result/with_prob'
 
 order_attributes = [True]
 
