@@ -1,7 +1,7 @@
 import numpy as np
 from scipy import sparse, special
 
-from compressors import mdl_graph
+from compressors import mdl_graph, mdl_bigraph
 
 
 def graph_unexpectedness(adjacency, gen_complexities) -> float:
@@ -49,6 +49,32 @@ def attr_unexpectedness(biadjacency, attributes, degrees) -> float:
     for a in attributes:
         complexity_desc_a += np.log2(degrees[a])
     return complexity_gen_a - complexity_desc_a
+
+
+def attr_unexpectedness_modif(biadjacency, gen_attrs) -> float:
+    """Unexpectedness of a list of attributes.
+
+    Parameters
+    ----------
+    biadjacency: sparse.csr_matrix
+        Features matrix of the graph. Contains nodes x attributes.
+
+    Outputs
+    -------
+        Unexpectedness of list of attributes as a float value. """
+
+    n, m = biadjacency.shape
+    complexity_desc_a = mdl_bigraph(biadjacency.astype(bool))
+    try:
+        avg = np.mean(gen_attrs.get(m))
+    except TypeError:
+        print(f'Number of attributes missing in dict: {m}')
+        print(gen_attrs.keys())
+        avg = 0
+
+    complexity_gen_a = avg
+    return complexity_gen_a - complexity_desc_a
+
 
 def pattern_unexpectedness(adjacency, biadjacency, gen_complexities, attributes, degrees) -> float:
     """Pattern unexpectedness, as the sum of the unexpectedness of its elements.
