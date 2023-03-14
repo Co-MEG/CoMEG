@@ -8,7 +8,7 @@ from typing import List
 from sknetwork.utils import get_degrees
 
 from derivation import extension, intention
-from unexpectedness import graph_unexpectedness, attr_unexpectedness
+from unexpectedness import graph_unexpectedness, attr_unexpectedness, attr_unexpectedness_modif
 from utils import smoothing, shuffle_columns
 
 
@@ -58,8 +58,9 @@ def init_unex_patterns(context) -> tuple:
 
     return extents, intents, unexs
 
-def unex_patterns(adjacency, context, context_csc, extents, intents, r=0, y=0, min_support=0, max_support=np.inf, beta=0, 
-            delta=0, degs=[], unexs_g=[], unexs_a=[], unexs=[], names_col=[], comp_gen_graph=None, shuf=False) -> List:
+def unex_patterns(adjacency, context, context_csc, extents, intents, r=0, y=0, min_support=0, max_support=np.inf,
+                  beta=0,delta=0, degs=[], unexs_g=[], unexs_a=[], unexs=[], names_col=[], comp_gen_graph=None,
+                  com_gen_attr=None, shuf=False) -> List:
     """InClose algorithm using Unexpectedness + IsCannonical function. 
     
     Parameters
@@ -89,7 +90,9 @@ def unex_patterns(adjacency, context, context_csc, extents, intents, r=0, y=0, m
     degs, unexs_g, unexs_a, unexs, names_col: list
         Lists for value storage over recursion.
     comp_gen_graph: dict (default=None)
-        Dictionnary with number of nodes as keys and list of graph generation complexities as values.
+        Dictionary with number of nodes as keys and list of graph generation complexities as values.
+    com_gen_attr: dict (default=None)
+        Dictionary with number of attributes as keys and list of bipartite graph generation complexities as values.
         
     Returns
     -------
@@ -105,7 +108,7 @@ def unex_patterns(adjacency, context, context_csc, extents, intents, r=0, y=0, m
     print(f'|extents[r]|: {len(extents[r])} - intents[r]: {names_col[intents[r]]}')
     
     for j in np.arange(context.shape[1])[y:]:
-        print(f"new attribute: {j} - {names_col[j]}")
+        #print(f"new attribute: {j} - {names_col[j]}")
         try:
             extents[r_new] = []
             unexs_g[r_new] = 0
@@ -131,14 +134,17 @@ def unex_patterns(adjacency, context, context_csc, extents, intents, r=0, y=0, m
                     
                 new_intent = list(sorted(set(intents[r]).union(set([j]))))
                 
-                # Compute Unexpectedness on pattern (i.e on graph and attributes)
+                # Compute Unexpectedness on pattern (i.e. on graph and attributes)
                 # ------------------------------------------------------------------------------------------------------------
                 print(f'  Extent size {len(extents[r_new])} - intent {new_intent}')
                 size = len(new_intent)
                 unex_g = graph_unexpectedness(adjacency[extents[r_new], :][:, extents[r_new]], comp_gen_graph)
                 unexs_g[r_new] = unex_g
                 # Attributes unexpectedness
-                unex_a = attr_unexpectedness(context, new_intent, degs)
+                #unex_a = attr_unexpectedness(context, new_intent, degs)
+                print(f'Shape context: {context[extents[r_new], :][:, new_intent].shape}')
+                unex_a = attr_unexpectedness_modif(context[extents[r_new], :][:, new_intent], com_gen_attr)
+                print(f'Unex a: {unex_a}')
                 unexs_a[r_new] = unex_a
                 # Total unexpectedness
                 unex = unex_g + unex_a
@@ -228,9 +234,10 @@ def unex_patterns(adjacency, context, context_csc, extents, intents, r=0, y=0, m
                                 print(f'degs: {degs[j-2:j+5]}')
                                 shuf = False
 
-                            unex_patterns(adjacency, context, context_csc, extents, intents, r=r_new, y=j+1, min_support=min_support, 
-                                        max_support=max_support, beta=beta, delta=delta, degs=degs, unexs_g=unexs_g, 
-                                        unexs_a=unexs_a, unexs=unexs, names_col=names_col, comp_gen_graph=comp_gen_graph, shuf=shuf)
+                            unex_patterns(adjacency, context, context_csc, extents, intents, r=r_new, y=j+1,
+                                          min_support=min_support,max_support=max_support, beta=beta, delta=delta,
+                                          degs=degs, unexs_g=unexs_g, unexs_a=unexs_a, unexs=unexs, names_col=names_col,
+                                          comp_gen_graph=comp_gen_graph, com_gen_attr=com_gen_attr, shuf=shuf)
                         else:
                             print(f'IsCANNO but no U improvement')
                             break
@@ -248,7 +255,9 @@ def unex_patterns(adjacency, context, context_csc, extents, intents, r=0, y=0, m
     
     return [*zip(extents, intents)]
 
-def run_unex_patterns(adjacency, biadjacency, words, complexity_gen_graphs, order_attributes, s, beta, delta, outfile,
+
+def run_unex_patterns(adjacency, biadjacency, words, complexity_gen_graphs, complexity_gen_attrs, order_attributes, s,
+                      beta, delta, outfile,
 outpath):
     """Run pattern mining algorithm.
     
@@ -260,8 +269,10 @@ outpath):
         Features matrix of the graph. Contains nodes x attributes.
     words: np.ndarray
         Features names.
-    complexity_gen_graph: dict
-        Dictionnary with number of nodes as keys and list of graph generation complexities as values.
+    complexity_gen_graphs: dict
+        Dictionary with number of nodes as keys and list of graph generation complexities as values.
+    complexity_gen_attrs: dict
+        Dictionary with number of attributes as keys and list of bipartite graph generation complexities as values.
     order_attributes: bool
         If True, order attributes according to their ascending degree.
     s: int
@@ -313,7 +324,7 @@ outpath):
             lp_wrapper(adjacency, filt_biadjacency, filt_biadjacency_csc, extents, intents, r=0, y=0, 
                                     min_support=s, max_support=np.inf, beta=beta, delta=delta,
                                     degs=sorted_degs, unexs_g=[0], unexs_a=[0], unexs=unexs, names_col=sorted_names_col,
-                                    comp_gen_graph=complexity_gen_graphs, shuf=False)
+                                    comp_gen_graph=complexity_gen_graphs, com_gen_attr=complexity_gen_attrs, shuf=False)
             lp.print_stats()
 
     res = [*zip(extents, intents)]
