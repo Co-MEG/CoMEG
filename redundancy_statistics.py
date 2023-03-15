@@ -33,9 +33,10 @@ delta = 0
 avgs = defaultdict(dict)
 INPATH = os.path.join(get_root_directory(), 'output/result')
 if with_prob:
-    INPATH += '/with_prob'
+    INPATH += '/with_prob/simpl_algo'
 MODEL_PATH = os.path.join(get_root_directory(), 'models/new_models')
-OUTPATH = os.path.join(INPATH, 'final')
+#OUTPATH = os.path.join(INPATH, 'simpl_algo')
+OUTPATH = INPATH
 
 resolutions = {'wikivitals-fr': {1: 0, 3: 0, 5: 0.3, 6: 0.4, 8: 0.6, 9: 0.7, 10: 0.8, 11: 0.9, 12: 0.9, 14: 1.05, 15: 1.1, 20: 1.4, 24: 1.8, 26: 1.86, 27: 1.89, 46: 2.95, 47: 3, 52: 3.5, 53: 3.8, 58: 3.87, 64: 4, 85: 5.58}, 
                 'wikivitals': {4: 0.5, 7: 0.8, 11: 1, 13: 1.3, 14: 1.18, 15: 1.4, 16: 1.5, 18: 1.6, 19: 1.6, 21: 1.76, 23: 1.83, 28: 2.3, 29: 2.4, 31: 2.5, 34: 2.7, 36: 2.8, 39: 3.1, 40: 3.2, 46: 3.7, 47: 3.903, 49: 3.95, 57: 4.2, 61: 4.5, 64: 4.6, 65: 4.70, 85: 5.58, 89: 5.7, 101: 6.4, 109: 6.7, 118: 7.25}, 
