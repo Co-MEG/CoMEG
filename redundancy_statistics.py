@@ -17,16 +17,15 @@ from utils import build_pattern_attributes, get_gensim_model, get_root_directory
 # Parameters
 # =================================================================
 
-#datasets = ['ingredients']
+datasets = ['ingredients']
 #datasets = ['london']
-datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
+#datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
 #datasets = ['sanFranciscoCrimes']
-#datasets = ['ingredientsGraph']
 #datasets = ['lastfm']
 sorted_attributes = True
 with_prob = True
 ss = [8, 7, 6, 5]
-betas = [4]
+betas = [1]
 delta = 0
 #ss = [1]
 #betas = [] 

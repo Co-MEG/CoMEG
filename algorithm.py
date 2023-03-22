@@ -45,10 +45,6 @@ def is_cannonical(context, extents, intents, r, y):
 def is_cannonical_new(context, extents, intents, r, y, new_extent):
     """Verify if an extent has already been seen (part of InClose original algorithm)."""
 
-    # global r_new
-    r_new = len(extents) - 1
-    print(f'r={r} - r_new={r_new}')
-
     for k in range(len(intents[r]) - 1, -1, -1):
         for j in range(y, intents[r][k], -1):
             for h in range(len(new_extent)):
@@ -58,14 +54,12 @@ def is_cannonical_new(context, extents, intents, r, y, new_extent):
             if h == len(new_extent) - 1:
                 return False
         y = intents[r][k] - 1
+
     for j in reversed(range(y, -1, -1)):
-        print(f'j:{j}')
         for h in range(len(new_extent)):
-            print(f'h:{h} - context[extents[r_new][h], j]:{context[new_extent[h], j]}')
             if context[new_extent[h], j] == 0:
                 h -= 1  # Necessary for next test in case last interaction of h for-loop returns False
                 break
-        print(len(new_extent) - 1)
         if h == len(new_extent) - 1:
             return False
 
@@ -381,13 +375,13 @@ def unex_patterns_modif(adjacency, context, context_csc, extents, intents, r=0, 
                 size = len(new_intent)
                 #unex_g = graph_unexpectedness(adjacency[extents[r + 1], :][:, extents[r + 1]], comp_gen_graph)
                 unex_g = graph_unexpectedness(adjacency[X_g, :][:, X_g], comp_gen_graph)
-                unexs_g[r + 1] = unex_g
+                #unexs_g[r + 1] = unex_g
                 # Attributes unexpectedness
                 unex_a = attr_unexpectedness(context, new_intent, degs)
                 # print(f'Shape context: {context[extents[r_new], :][:, new_intent].shape}')
                 # unex_a = attr_unexpectedness_modif(context[extents[r_new], :][:, new_intent], com_gen_attr)
                 print(f'Unex a: {unex_a}')
-                unexs_a[r + 1] = unex_a
+                #unexs_a[r + 1] = unex_a
                 # Total unexpectedness
                 unex = unex_g + unex_a
                 # unexs[r_new] = unex
@@ -417,7 +411,6 @@ def unex_patterns_modif(adjacency, context, context_csc, extents, intents, r=0, 
                         break
 
                 else:
-                    print(f'BEFORE IS CANNO; {len(extents)}')
                     is_canno = is_cannonical_new(context, extents, intents, r, j - 1, X_g)
                     if is_canno:
                         print(f'extents {extents[r]} intents {intents[r]} r {r} rnew {r + 1}')
@@ -444,10 +437,6 @@ def unex_patterns_modif(adjacency, context, context_csc, extents, intents, r=0, 
                             #extents[r + 1] = X_g
                             extents.append(X_g)
 
-                            print(f'Taille de extents; {len(extents)} - taille de intents: {len(intents)}')
-                            print(f'Taille ext[r]: {len(extents[r])} - taille int[r]: {len(intents[r])}')
-                            print(f'Taille ext[r+1]: {len(extents[r+1])} - taille int[r+1]: {len(intents[r+1])}')
-                            #print(f'taille int[r+2]: {len(intents[r + 2])}')
                             unexs.append(unex)
                             ptr += 1
                             #print(f'  --> Enter recursion with Intent: {names_col[intents[r + 1]]}...')
@@ -507,9 +496,7 @@ def unex_patterns_modif(adjacency, context, context_csc, extents, intents, r=0, 
     # print(f'inexs: {unexs}')
     print(f'r:{r} - r_new:{r + 1}')
     r += 1
-    print(f'Extension: {extents}')
     print(f'Taille extent: {len(extents)} - taille intent: {len(intents)}')
-    print(f'Intension: {intents}')
     unexs.pop(-1)
     ptr -= 1
     shuf = False

@@ -14,18 +14,17 @@ from utils import get_root_directory, pattern_attributes
 # Parameters
 # =================================================================
 
-#datasets = ['ingredients']
-datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
+#datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
 #datasets = ['london']
-#datasets = ['ingredients']
+datasets = ['ingredients']
 #datasets = ['lastfm']
 #datasets = ['sanFranciscoCrimes']
-betas = [4] # Beta: 4 for all datasets, except beta=1 for ingredients
-gamma = 0.8 # Wikipedia datasets: 0.8, sanFranciscoCrimes: 0.2, ingredients: 0.05
+betas = [1] # Beta: 4 for all datasets, except beta=1 for ingredients
+gamma = 0.05 # Wikipedia datasets: 0.8, sanFranciscoCrimes: 0.2, ingredients: 0.05
 ss = [8, 7, 6, 5]
 #INPATH = os.path.join(get_root_directory(), 'output/result/with_prob')
 #OUTPATH = os.path.join(INPATH, 'new')
-INPATH = os.path.join(get_root_directory(), 'output/result/with_prob/final')
+INPATH = os.path.join(get_root_directory(), 'output/result/with_prob/simpl_algo')
 OUTPATH = INPATH
 
 with_order = [True]
@@ -145,6 +144,6 @@ for d, dataset in enumerate(datasets):
             informations[dataset][b]['doc2vec'].append(information_d2v)
 
 # Save result
-with open(f'{OUTPATH}/informations_evaluation_new_conc.pkl', 'wb') as f:
+with open(f'{OUTPATH}/informations_evaluation.pkl', 'wb') as f:
     pickle.dump(informations, f)
     
