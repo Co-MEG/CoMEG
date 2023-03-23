@@ -51,6 +51,14 @@ def attr_unexpectedness(biadjacency, attributes, degrees) -> float:
     return complexity_gen_a - complexity_desc_a
 
 
+def attr_unexpectedness_diff(attribute, extent_prev, extent, degrees) -> float:
+    cw_a = np.log2(1 / (degrees[attribute] / np.sum(degrees)))  # Generation complexity relates to a number of nodes
+    cd_a = np.log2((len(extent_prev) - len(extent)) + 1)  # Description complexity also relates to a number of nodes (actually a difference in number of nodes)
+    print(f'# nodes in X_prev: {len(extent)} - # nodes in X: {len(extent)}')
+    print(f'cw_a: {cw_a} - cd_a: {cd_a}')
+    return cw_a - cd_a
+
+
 def attr_unexpectedness_modif(biadjacency, gen_attrs) -> float:
     """Unexpectedness of a list of attributes.
 
@@ -66,13 +74,19 @@ def attr_unexpectedness_modif(biadjacency, gen_attrs) -> float:
     n, m = biadjacency.shape
     complexity_desc_a = mdl_bigraph(biadjacency.astype(bool))
     try:
-        avg = np.mean(gen_attrs.get(m))
+        #avg = np.mean(gen_attrs.get(m))
+        med = np.median(gen_attrs.get(m))
     except TypeError:
         print(f'Number of attributes missing in dict: {m}')
         print(gen_attrs.keys())
-        avg = 0
+        #avg = 0
+        med = 0
 
-    complexity_gen_a = avg
+    #complexity_gen_a = avg
+    complexity_gen_a = med
+    #print(f'Gen comp (avg): {avg}')
+    print(f'Gen comp (med): {med}')
+    print(f'Comp desc a: {complexity_desc_a}')
     return complexity_gen_a - complexity_desc_a
 
 

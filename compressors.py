@@ -49,12 +49,13 @@ def mdl_bigraph(biadjacency: sparse.csr_matrix) -> float:
     -------
         Minimum description length of bipartite graph structure."""
     n, m = biadjacency.shape
+    n_tot = n + m
 
     if n == 0:
         return 0
 
     # nodes
-    nodes_mdl = np.log2(n + 1)
+    nodes_mdl = np.log2(n_tot)
 
     # edges
     degrees = get_degrees(biadjacency)
