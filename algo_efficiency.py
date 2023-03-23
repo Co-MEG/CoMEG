@@ -14,16 +14,16 @@ from data import load_data
 # =================================================================
 
 #datasets = ['wikihumans']
-#datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
+datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
 #datasets = ['wikischools']
-datasets = ['ingredients']
+#datasets = ['ingredients']
 #datasets = ['sanFranciscoCrimes']
 #datasets = ['lastfm']
 
-betas = [1]
+betas = [4]
 ss = [8, 7, 6, 5]
 deltas = [0]
-OUTPATH = '/Users/simondelarue/Documents/PhD/Research/Co-Meg/CoMEG/output/result/with_prob/simpl_algo'
+OUTPATH = '/Users/simondelarue/Documents/PhD/Research/Co-Meg/CoMEG/output/result/with_prob/attr_compressor'
 
 order_attributes = [True]
 
