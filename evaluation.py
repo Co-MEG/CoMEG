@@ -14,17 +14,18 @@ from utils import get_root_directory, pattern_attributes
 # Parameters
 # =================================================================
 
-#datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
+datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
 #datasets = ['london']
-datasets = ['ingredients']
+#datasets = ['ingredients']
 #datasets = ['lastfm']
 #datasets = ['sanFranciscoCrimes']
-betas = [1] # Beta: 4 for all datasets, except beta=1 for ingredients
-gamma = 0.05 # Wikipedia datasets: 0.8, sanFranciscoCrimes: 0.2, ingredients: 0.05
+betas = [4]  # Beta: 4 for all datasets, except beta=1 for ingredients
+gamma = 0.8  # Wikipedia datasets: 0.8, sanFranciscoCrimes: 0.2, ingredients: 0.05
 ss = [8, 7, 6, 5]
 #INPATH = os.path.join(get_root_directory(), 'output/result/with_prob')
 #OUTPATH = os.path.join(INPATH, 'new')
-INPATH = os.path.join(get_root_directory(), 'output/result/with_prob/simpl_algo')
+#INPATH = os.path.join(get_root_directory(), 'output/result/with_prob/simpl_algo')
+INPATH = os.path.join(get_root_directory(), 'output/result/with_prob/attr_compressor')
 OUTPATH = INPATH
 
 with_order = [True]
@@ -109,31 +110,45 @@ for d, dataset in enumerate(datasets):
             # SG information
             #if new_summaries:
             #    print(f'    Patterns')
-            #    information_patterns = information_summaries(adjacency, biadjacency, summarized_adj, pattern_summary_labels, n_p_summaries, #pattern_summarized_attributes, pw_distances_patterns, dataset, b, s, gamma, 'patterns', OUTPATH, patterns)
+            #    information_patterns = information_summaries(adjacency, biadjacency, summarized_adj,
+            #    pattern_summary_labels, n_p_summaries, #pattern_summarized_attributes, pw_distances_patterns,
+            #    dataset, b, s, gamma, 'patterns', OUTPATH, patterns)
 
             print(f'    Summaries')
             if new_summaries:
-                information_p_summaries = information_summaries(adjacency, biadjacency, summarized_adj, pattern_summary_labels, n_p_summaries, pattern_summarized_attributes, pw_distances_summaries, dataset, b, s, gamma, 'summaries', OUTPATH, pattern_summaries)
+                information_p_summaries = information_summaries(adjacency, biadjacency, summarized_adj,
+                                                                pattern_summary_labels, n_p_summaries,
+                                                                pattern_summarized_attributes, pw_distances_summaries,
+                                                                dataset, b, s, gamma, 'summaries', OUTPATH,
+                                                                pattern_summaries)
             else:
-                information_p_summaries = information_summaries(adjacency, biadjacency, summarized_adj, pattern_summary_labels, n_p_summaries, pattern_summarized_attributes, pw_distances_summaries, dataset, b, s, gamma, 'summaries', OUTPATH)
-            #information_summaries = information(summarized_adj, summarized_biadj, pw_distances_summaries)
-            
+                information_p_summaries = information_summaries(adjacency, biadjacency, summarized_adj,
+                                                                pattern_summary_labels, n_p_summaries,
+                                                                pattern_summarized_attributes, pw_distances_summaries,
+                                                                dataset, b, s, gamma, 'summaries', OUTPATH)
+
             if n_p_summaries > 1 and dataset != 'ingredients':
                 print(f'    Louvain')
-                information_louvain = information_summaries(adjacency, biadjacency, louvain_adj, louvain_labels, n_p_louvain, pattern_louvain_attributes, pw_distances_louvain, dataset, b, s, gamma, 'louvain', OUTPATH)
-                #information_louvain = information(louvain_adj, pattern_louvain_attributes, pw_distances_louvain)
-            
+                information_louvain = information_summaries(adjacency, biadjacency, louvain_adj, louvain_labels,
+                                                            n_p_louvain, pattern_louvain_attributes,
+                                                            pw_distances_louvain, dataset, b, s, gamma, 'louvain',
+                                                            OUTPATH)
+
             if len(labels) > 0:
                 print(f'    GNN')
-                information_gnn = information_summaries(adjacency, biadjacency, gnn_adj, gnn_labels, n_p_summaries, pattern_gnn_attributes, pw_distances_gnn, dataset, b, s, gamma, 'gnn', OUTPATH)
-            #information_gnn = information(gnn_adj, pattern_gnn_attributes, pw_distances_gnn)
+                information_gnn = information_summaries(adjacency, biadjacency, gnn_adj, gnn_labels, n_p_summaries,
+                                                        pattern_gnn_attributes, pw_distances_gnn, dataset, b, s, gamma,
+                                                        'gnn', OUTPATH)
             print(f'    Spectral')
-            information_spectral = information_summaries(adjacency, biadjacency, spectral_adj, spectral_labels, n_p_summaries, pattern_spectral_attributes, pw_distances_spectral, dataset, b, s, gamma, 'spectral', OUTPATH)
-            #information_spectral = information(spectral_adj, pattern_spectral_attributes, pw_distances_spectral)
+            information_spectral = information_summaries(adjacency, biadjacency, spectral_adj, spectral_labels,
+                                                         n_p_summaries, pattern_spectral_attributes,
+                                                         pw_distances_spectral, dataset, b, s, gamma, 'spectral',
+                                                         OUTPATH)
             print(f'    Doc2Vec')
-            information_d2v = information_summaries(adjacency, biadjacency, d2v_adj, d2v_labels, n_p_summaries, pattern_d2v_attributes, pw_distances_d2v, dataset, b, s, gamma, 'd2v', OUTPATH)
-            #information_d2v = information(d2v_adj, pattern_d2v_attributes, pw_distances_d2v)
-            
+            information_d2v = information_summaries(adjacency, biadjacency, d2v_adj, d2v_labels, n_p_summaries,
+                                                    pattern_d2v_attributes, pw_distances_d2v, dataset, b, s, gamma,
+                                                    'd2v', OUTPATH)
+
             # Save information in dict
             informations[dataset][b]['summaries'].append(information_p_summaries)
             if n_p_summaries > 1 and dataset != 'ingredients':
