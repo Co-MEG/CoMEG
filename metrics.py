@@ -69,7 +69,8 @@ def coverage_excess(patterns: list, n: int) -> float:
 
     return cov
 
-def conciseness(adjacency, biadjacency, summarized_adjacency: sparse.csr_matrix, summarized_biadjacency: sparse.csr_matrix, nb_cc) -> float:
+def conciseness(adjacency, biadjacency, summarized_adjacency: sparse.csr_matrix,
+                summarized_biadjacency: sparse.csr_matrix, nb_cc) -> float:
     """Conciseness of summarized graph, i.e. sum of the median of number of nodes and median of number of attributes per pattern/community.
     
     Parameters
@@ -163,7 +164,9 @@ def width_excess(patterns_excess) -> float:
     print(f'func result: {nb_e_patterns * np.sqrt(np.mean(nb_nodes) * np.mean(nb_attrs))}')
     return nb_e_patterns * np.sqrt(np.mean(nb_nodes) * np.mean(nb_attrs))
 
-def information(adjacency, biadjacency, summarized_adjacency: sparse.csr_matrix, summarized_biadjacency: sparse.csr_matrix, nb_cc, pw_distances: np.ndarray, dataset, b, s, method, inpath: str) -> float:
+def information(adjacency, biadjacency, summarized_adjacency: sparse.csr_matrix,
+                summarized_biadjacency: sparse.csr_matrix, nb_cc, pw_distances: np.ndarray, dataset, b, s,
+                method, inpath: str) -> float:
     """Information of summarized graph, i.e. (diversity x corevage) / conciseness.
     
     Parameters
@@ -190,7 +193,9 @@ def information(adjacency, biadjacency, summarized_adjacency: sparse.csr_matrix,
 
     return information 
 
-def information_summaries(adjacency, biadjacency, summarized_adjacency: sparse.csr_matrix, labels_cc_summarized, nb_cc, concept_summarized_attributes, pw_distances: np.ndarray, dataset, b, s, gamma, method, inpath: str, pattern_summaries=None) -> float:
+def information_summaries(adjacency, biadjacency, summarized_adjacency: sparse.csr_matrix, labels_cc_summarized, nb_cc,
+                          concept_summarized_attributes, pw_distances: np.ndarray, dataset, b, s, gamma, method,
+                          inpath: str, pattern_summaries=None) -> float:
     """Information of summarized graph, i.e. (diversity x corevage) / conciseness.
     
     Parameters
@@ -208,7 +213,8 @@ def information_summaries(adjacency, biadjacency, summarized_adjacency: sparse.c
     """
     div = diversity(pw_distances, gamma)
     cov = coverage(summarized_adjacency)
-    conc = conciseness_summaries_new(labels_cc_summarized, concept_summarized_attributes, nb_cc, pattern_summaries=pattern_summaries)
+    conc = conciseness_summaries_new(labels_cc_summarized, concept_summarized_attributes, nb_cc,
+                                     pattern_summaries=pattern_summaries)
     
     information = (div * cov) / (conc)
     print(f'inf: {information} - div: {div} - cov: {cov} - conc: {(conc)}')
