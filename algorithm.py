@@ -8,7 +8,8 @@ from typing import List
 from sknetwork.utils import get_degrees
 
 from derivation import extension, intention
-from unexpectedness import graph_unexpectedness, attr_unexpectedness, attr_unexpectedness_modif
+from unexpectedness import graph_unexpectedness, attr_unexpectedness, attr_unexpectedness_modif,\
+    attr_unexpectedness_diff
 from utils import smoothing, shuffle_columns
 
 
@@ -377,7 +378,7 @@ def unex_patterns_modif(adjacency, context, context_csc, extents, intents, r=0, 
                 unex_g = graph_unexpectedness(adjacency[X_g, :][:, X_g], comp_gen_graph)
                 #unexs_g[r + 1] = unex_g
                 # Attributes unexpectedness
-                unex_a = attr_unexpectedness(context, new_intent, degs)
+                unex_a = attr_unexpectedness_diff(j, extents[r], X_g, degs)
                 # print(f'Shape context: {context[extents[r_new], :][:, new_intent].shape}')
                 # unex_a = attr_unexpectedness_modif(context[extents[r_new], :][:, new_intent], com_gen_attr)
                 print(f'Unex a: {unex_a}')
