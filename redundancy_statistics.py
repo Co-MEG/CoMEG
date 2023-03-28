@@ -26,13 +26,13 @@ sorted_attributes = True
 with_prob = True
 ss = [8, 7, 6, 5]
 betas = [4]
-delta = 0
+delta = 10
 #ss = [1]
 #betas = [] 
 avgs = defaultdict(dict)
 INPATH = os.path.join(get_root_directory(), 'output/result')
 if with_prob:
-    INPATH += '/with_prob/attr_compressor'
+    INPATH += '/with_prob/attr_compressor_ratio'
 MODEL_PATH = os.path.join(get_root_directory(), 'models/new_models')
 #OUTPATH = os.path.join(INPATH, 'simpl_algo')
 OUTPATH = INPATH
