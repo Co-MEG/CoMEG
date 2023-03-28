@@ -342,12 +342,14 @@ def unex_patterns_modif(adjacency, context, context_csc, extents, intents, r=0, 
         # print(f"new attribute: {j} - {names_col[j]}")
         try:
             #extents[r + 1] = []
-            unexs_g[r + 1] = 0
-            unexs_a[r + 1] = 0
+            #unexs_g[r + 1] = 0
+            #unexs_a[r + 1] = 0
+            test = True
         except IndexError:
+            test = False
             #extents.append([])
-            unexs_g.append(0)
-            unexs_a.append(0)
+            #unexs_g.append(0)
+            #unexs_a.append(0)
 
         # Form a new extent by adding extension of attribute j to current pattern extent
         ext_j = set(extension([j], context_csc))
@@ -381,7 +383,8 @@ def unex_patterns_modif(adjacency, context, context_csc, extents, intents, r=0, 
                 unex_a = attr_unexpectedness_diff(j, extents[r], X_g, degs)
                 # print(f'Shape context: {context[extents[r_new], :][:, new_intent].shape}')
                 # unex_a = attr_unexpectedness_modif(context[extents[r_new], :][:, new_intent], com_gen_attr)
-                print(f'Unex a: {unex_a}')
+                print(f'Unex a: {unex_a} - unex_a prec: {unexs_a[ptr]}')
+                unex_a += unexs_a[ptr]
                 #unexs_a[r + 1] = unex_a
                 # Total unexpectedness
                 unex = unex_g + unex_a
@@ -396,6 +399,8 @@ def unex_patterns_modif(adjacency, context, context_csc, extents, intents, r=0, 
                 # if len_new_extent - len(extents[r]) == 0:
                 if len(X_g) - len(extents[r]) == 0:
                     print(f' == comparing unex={unex} and unexs[{ptr}]={unexs[ptr]}')
+                    print(f' == comparing unex_a={unex_a} and unexs_a[{ptr}]={unexs_a[ptr]}')
+                    print(unexs_a)
 
                     # if True:
                     if unex - unexs[ptr] >= delta:
@@ -403,6 +408,7 @@ def unex_patterns_modif(adjacency, context, context_csc, extents, intents, r=0, 
                         print(f'  Extent size did not change -> attribute {names_col[j]} is added to intent.')
                         intents[r] = new_intent
                         unexs[-1] = unex
+                        unexs_a[-1] = unex_a
                     else:
                         print(f'STOP rec, unexpectedness difference is {unex - unexs[ptr]}')
                         print(f'Attribute {names_col[j]} ({j}) does not add any unexpectedness to pattern')
@@ -439,6 +445,7 @@ def unex_patterns_modif(adjacency, context, context_csc, extents, intents, r=0, 
                             extents.append(X_g)
 
                             unexs.append(unex)
+                            unexs_a.append(unex_a)
                             ptr += 1
                             #print(f'  --> Enter recursion with Intent: {names_col[intents[r + 1]]}...')
                             print(f'  --> Enter recursion with Intent: {names_col[new_intent]}...')
@@ -499,6 +506,7 @@ def unex_patterns_modif(adjacency, context, context_csc, extents, intents, r=0, 
     r += 1
     print(f'Taille extent: {len(extents)} - taille intent: {len(intents)}')
     unexs.pop(-1)
+    unexs_a.pop(-1)
     ptr -= 1
     shuf = False
     # print(f'inexs after pop: {unexs}')
