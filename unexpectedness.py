@@ -53,7 +53,15 @@ def attr_unexpectedness(biadjacency, attributes, degrees) -> float:
 
 def attr_unexpectedness_diff(attribute, extent_prev, extent, degrees) -> float:
     cw_a = np.log2(1 / (degrees[attribute] / np.sum(degrees)))  # Generation complexity relates to a number of nodes
-    cd_a = np.log2((len(extent_prev) - len(extent)) + 1)  # Description complexity also relates to a number of nodes (actually a difference in number of nodes)
+
+    # Description complexity also relates to a number of nodes (actually a difference in number of nodes)
+    #cd_a = np.log2((len(extent_prev) - len(extent)) + 1)
+
+    # Description complexity is a ratio between the size of extent of pattern with new attribute and the size of the
+    # extent of pattern without this attribute. This ratio is closer to a probability than a difference, which
+    # suits more the computation of complexity (?).
+    cd_a = np.log2((1 / (len(extent) / len(extent_prev))) + 1)
+
     print(f'# nodes in X_prev: {len(extent)} - # nodes in X: {len(extent)}')
     print(f'cw_a: {cw_a} - cd_a: {cd_a}')
     return cw_a - cd_a
