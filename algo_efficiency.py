@@ -14,16 +14,17 @@ from data import load_data
 # =================================================================
 
 #datasets = ['wikihumans']
-#datasets = ['wikivitals']#, 'wikivitals-fr', 'wikischools']
-datasets = ['wikivitals-fr', 'wikischools']
+datasets = ['wikischools']#, 'wikivitals-fr', 'wikischools']
+#datasets = ['wikivitals-fr', 'wikischools']
 #datasets = ['wikischools']
 #datasets = ['ingredients']
 #datasets = ['sanFranciscoCrimes']
 #datasets = ['lastfm']
 
-betas = [4]
-ss = [8, 7, 6, 5]
-deltas = [10]
+betas = [5]
+#ss = [8, 7, 6, 5]
+ss = [5]
+deltas = [0]
 OUTPATH = '/Users/simondelarue/Documents/PhD/Research/Co-Meg/CoMEG/output/result/with_prob/attr_compressor_ratio'
 
 order_attributes = [True]
@@ -46,7 +47,6 @@ for dataset in datasets:
 
         for beta in betas:
             print(f'== {beta}')
-
             for s in ss:
                 print(f'- {s}')
 
