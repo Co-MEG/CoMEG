@@ -402,8 +402,8 @@ def unex_patterns_modif(adjacency, context, context_csc, extents, intents, r=0, 
                     print(f' == comparing unex_a={unex_a} and unexs_a[{ptr}]={unexs_a[ptr]}')
                     print(unexs_a)
 
-                    # if True:
-                    if unex - unexs[ptr] >= delta:
+                    #if True:
+                            if unex - unexs[ptr] >= delta:
 
                         print(f'  Extent size did not change -> attribute {names_col[j]} is added to intent.')
                         intents[r] = new_intent
@@ -433,7 +433,7 @@ def unex_patterns_modif(adjacency, context, context_csc, extents, intents, r=0, 
                         print(f'r:{r} rnew:{r + 1}')
                         print(f' ISCANNO comparing unex={unex} and unexs[{ptr}]=={unexs[ptr]}')
 
-                        # if True:
+                        #if True:
                         if unex - unexs[ptr] >= delta or r == 0:
 
                             #intents[r + 1] = new_intent
