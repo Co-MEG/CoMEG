@@ -14,7 +14,8 @@ from utils import get_root_directory, pattern_attributes
 # Parameters
 # =================================================================
 
-datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
+#datasets = ['wikivitals', 'wikivitals-fr', 'wikischools']
+datasets = ['wikivitals-fr']
 #datasets = ['london']
 #datasets = ['ingredients']
 #datasets = ['lastfm']
@@ -25,13 +26,14 @@ ss = [8, 7, 6, 5]
 #INPATH = os.path.join(get_root_directory(), 'output/result/with_prob')
 #OUTPATH = os.path.join(INPATH, 'new')
 #INPATH = os.path.join(get_root_directory(), 'output/result/with_prob/simpl_algo')
-INPATH = os.path.join(get_root_directory(), 'output/result/with_prob/attr_compressor')
+INPATH = os.path.join(get_root_directory(), 'output/result/with_prob/attr_compressor_ratio')
 OUTPATH = INPATH
 
 with_order = [True]
 with_prob = True
 informations = defaultdict()
 new_summaries = False
+delta = 10
 
 # =================================================================
 # Evaluation
@@ -52,7 +54,7 @@ for d, dataset in enumerate(datasets):
             new_biadjacency, words = preprocess_data(biadjacency, names_col, s)
             
             # Load patterns
-            patterns = load_patterns(dataset, b, s, with_order[0], INPATH, with_prob)
+            patterns = load_patterns(dataset, b, s, with_order[0], INPATH, with_prob, delta=delta)
             
             # Summarized graph + features
             summarized_adj = get_summarized_graph(adjacency, patterns)
